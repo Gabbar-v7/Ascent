@@ -38,6 +38,9 @@ dependencies:
   # Visuals
   fluentui_system_icons: ^1.1.273
 
+  # Native Support
+  url_launcher: ^6.3.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

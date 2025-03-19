@@ -1,7 +1,8 @@
+import 'package:ascent/visuals/screens/in_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:ascent/visuals/components/app_style.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:ascent/screens/todo.dart';
+import 'package:ascent/visuals/screens/todo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,8 +17,8 @@ class HomePageState extends State<HomePage> {
   int _pageIndex = 0;
   late List<Widget> pageList = [
     const ToDoPage(),
-    const Text("Page2"),
-    const Text("page3"),
+    InProgressPage(),
+    InProgressPage(),
   ];
 
   @override
@@ -29,17 +30,14 @@ class HomePageState extends State<HomePage> {
   void _showModalBottomSheet() {
     showModalBottomSheet(
       context: context,
-      constraints: BoxConstraints(
-        maxWidth: double.infinity,
-        maxHeight: MediaQuery.of(context).size.height / 3.5,
-      ),
+      constraints: BoxConstraints(maxWidth: double.infinity),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       builder: (context) {
         return const Padding(
           padding: EdgeInsets.all(20),
-          child: Center(child: Text("data", style: TextStyle(fontSize: 28))),
+          child: InProgressPage(),
         );
       },
     );
