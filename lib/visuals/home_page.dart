@@ -31,7 +31,7 @@ class HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       builder: (context) {
-        return Padding(padding: EdgeInsets.all(20), child: InProgressPage());
+        return Padding(padding: EdgeInsets.all(10), child: InProgressPage());
       },
     );
   }

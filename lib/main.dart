@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:ascent/visuals/home_page.dart';
 import 'package:ascent/visuals/components/themes.dart';
@@ -21,15 +20,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    updateStatusBarColor(
-      SchedulerBinding.instance.platformDispatcher.platformBrightness,
-    );
     return MaterialApp(
       title: 'Ascent',
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      home: SafeArea(child: const HomePage()),
+      home: const HomePage(),
     );
   }
 }
