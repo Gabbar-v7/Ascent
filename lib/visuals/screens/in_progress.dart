@@ -1,24 +1,12 @@
-import 'package:ascent/visuals/components/app_style.dart';
+import 'package:ascent/visuals/components/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class InProgressPage extends StatefulWidget {
-  const InProgressPage({super.key});
+class InProgressPage extends StatelessWidget {
+  InProgressPage({super.key});
 
-  @override
-  State createState() => _InProgressPageState();
-}
-
-class _InProgressPageState extends State<InProgressPage> {
   // GitHub URL to open
   final Uri githubUrl = Uri.parse('https://github.com/Gabbar-v7/Ascent');
-  late final AppStyle appStyle = AppStyle(context: context);
-
-  @override
-  void initState() {
-    super.initState();
-    appStyle;
-  }
 
   // Function to launch the GitHub URL
   Future<void> _launchGithubUrl() async {
@@ -32,7 +20,7 @@ class _InProgressPageState extends State<InProgressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appStyle.appBar("In Progress"),
+      appBar: AppStyles.appBar("In Progress", context),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

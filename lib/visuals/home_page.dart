@@ -1,8 +1,6 @@
 import 'package:ascent/visuals/screens/in_progress.dart';
 import 'package:flutter/material.dart';
-import 'package:ascent/visuals/components/app_style.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:ascent/visuals/screens/todo.dart';
+import 'package:ascent/visuals/screens/tasks_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,11 +10,9 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  late final AppStyle appStyle = AppStyle(context: context);
-
   int _pageIndex = 0;
   late List<Widget> pageList = [
-    const ToDoPage(),
+    const TasksPage(),
     InProgressPage(),
     InProgressPage(),
   ];
@@ -35,10 +31,7 @@ class HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       builder: (context) {
-        return const Padding(
-          padding: EdgeInsets.all(20),
-          child: InProgressPage(),
-        );
+        return Padding(padding: EdgeInsets.all(20), child: InProgressPage());
       },
     );
   }
@@ -47,29 +40,23 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(index: _pageIndex, children: pageList),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(FluentIcons.apps_list_detail_20_regular, size: 25),
-            activeIcon: Icon(FluentIcons.apps_list_detail_20_filled, size: 25),
-            label: "Home",
+      bottomNavigationBar: NavigationBar(
+        destinations: const <Widget>[
+          NavigationDestination(icon: Icon(Icons.checklist), label: "Tasks"),
+          NavigationDestination(
+            icon: Icon(Icons.timer_outlined, size: 23),
+            label: "Timer",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(FluentIcons.timer_48_regular, size: 23),
-            activeIcon: Icon(FluentIcons.timer_48_filled),
-            label: "Pomodoro Timer",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FluentIcons.edit_12_regular, size: 21),
-            activeIcon: Icon(FluentIcons.edit_12_filled, size: 21),
+          NavigationDestination(
+            icon: Icon(Icons.sticky_note_2_outlined, size: 21),
             label: "Notes",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bubble_chart, size: 27),
+          NavigationDestination(
+            icon: Icon(Icons.bubble_chart_outlined, size: 27),
             label: "Menu",
           ),
         ],
-        onTap: (value) {
+        onDestinationSelected: (value) {
           if (value == 3) {
             _showModalBottomSheet();
           } else {
@@ -78,12 +65,7 @@ class HomePageState extends State<HomePage> {
             });
           }
         },
-        currentIndex: _pageIndex,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-        enableFeedback: false,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        selectedIndex: _pageIndex,
       ),
     );
   }

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ascent/visuals/utils/nav_manager.dart';
 
-class AppStyle {
-  BuildContext context;
-
-  AppStyle({required this.context});
-
-  AppBar appBar(
-    String title, {
+class AppStyles {
+  static AppBar appBar(
+    String title,
+    BuildContext context, {
     IconData icon = Icons.arrow_back_ios_rounded,
     List<Widget> actions = const [],
   }) {
@@ -21,7 +18,7 @@ class AppStyle {
     );
   }
 
-  FloatingActionButton floatingActionButton(
+  static FloatingActionButton floatingActionButton(
     IconData icon,
     VoidCallback onPress,
   ) {
