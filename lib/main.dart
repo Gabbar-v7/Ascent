@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       SchedulerBinding.instance.platformDispatcher.platformBrightness,
     );
     return MaterialApp(
-      title: 'ascent',
+      title: 'Ascent',
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
