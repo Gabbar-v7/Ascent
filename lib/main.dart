@@ -5,6 +5,7 @@ import 'package:ascent/visuals/components/themes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   // Lock the app to portrait mode
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

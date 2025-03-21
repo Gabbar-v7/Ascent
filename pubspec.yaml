@@ -40,6 +40,11 @@ dependencies:
   # Native Support
   url_launcher: ^6.3.1
 
+  # Database and Storage
+  drift: ^2.26.0
+  drift_flutter: ^0.2.4
+  path_provider: ^2.1.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -50,6 +55,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+
+  # Development dependencies.
+  # Generator =>  dart run build_runner build
+  drift_dev: ^2.26.0
+  build_runner: ^2.4.15
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

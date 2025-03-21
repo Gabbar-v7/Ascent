@@ -11,6 +11,6 @@ class TasksPage extends StatefulWidget {
 class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppStyles.appBar("Tasks", context));
+    return Scaffold(appBar: AppStyles.appBar("ToDo List", context));
   }
 }
