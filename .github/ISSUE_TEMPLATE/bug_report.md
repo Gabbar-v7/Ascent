@@ -35,7 +35,7 @@ Alternatively, add images by position the cursor on the next line and either dra
 
 - Device: <!-- [e.g. iPhone 12, Samsung Galaxy S21] -->
 - OS Version: <!-- [e.g. iOS 14.4, Android 14] -->
-- App Version: <!-- [e.g. Chrome 10.0, Safari 15.2, NA] -->
+- App Version: <!-- Check app Settings [e.g. 0.2.0 beta, 1.2.0] -->
 
 **Additional context :**
 
