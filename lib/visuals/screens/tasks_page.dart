@@ -1,5 +1,8 @@
+import 'package:ascent/database/tables/tasks_table.dart';
 import 'package:ascent/visuals/components/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:ascent/database/app_database.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({super.key});
@@ -9,9 +12,33 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> {
+  final database = AppDatabase();
+  TextEditingController controller = TextEditingController();
+  late List<Task> allTasks;
+
+  void initialise() async {
+    await database
+        .into(database.tasks)
+        .insert(
+          TasksCompanion.insert(
+            task: 'todo: finish drift setup',
+            dueDate: DateTime.now(),
+          ),
+        );
+    allTasks = await database.select(database.tasks).get();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initialise();
+  }
+
   Widget _taskTile() {
     return GestureDetector(
-      onTap: () {},
+      onLongPress: () {
+        print("asdasdad");
+      },
       onHorizontalDragEnd: (details) {
         if (details.primaryVelocity! > 0) {
           print("Right");
@@ -39,20 +66,40 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-  void _showModalBottomSheet() {
+  void _showModalBottomSheet(Task task, String label) {
     showModalBottomSheet(
       context: context,
-      constraints: BoxConstraints(maxWidth: double.infinity),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
+      isScrollControlled: true,
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.all(10),
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: Text('asd'),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              AppStyles.appBar(label, context),
+              TextField(
+                controller: ,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(hintText: "Enter Task:"),
+              ),
+              const Gap(20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                spacing: 20,
+                children: <Widget>[
+                  ElevatedButton(onPressed: () {}, child: Text("27/02")),
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    label: Icon(Icons.send),
+                  ),
+                ],
+              ),
+              const Gap(30),
+              Gap(MediaQuery.of(context).viewInsets.bottom),
+            ],
           ),
         );
       },
@@ -65,8 +112,7 @@ class _TasksPageState extends State<TasksPage> {
       appBar: AppStyles.appBar("ToDo List", context),
       body: pageBody(),
       floatingActionButton: AppStyles.floatingActionButton(Icons.add, () {
-        _showModalBottomSheet();
-      }),
+         }),
     );
   }
 }

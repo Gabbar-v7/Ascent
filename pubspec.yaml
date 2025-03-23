@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # Visuals
+  gap: ^3.0.1
 
   # Native Support
   url_launcher: ^6.3.1

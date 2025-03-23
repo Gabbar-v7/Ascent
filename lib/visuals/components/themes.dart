@@ -12,6 +12,9 @@ final ThemeData lightTheme = ThemeData(
     ),
     backgroundColor: Colors.white,
   ),
+  inputDecorationTheme: InputDecorationTheme(
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+  ),
   navigationBarTheme: NavigationBarThemeData(backgroundColor: Colors.white),
   bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
 );
@@ -29,6 +32,9 @@ final ThemeData darkTheme = ThemeData(
       statusBarIconBrightness: Brightness.light,
     ),
     backgroundColor: Colors.black,
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
   ),
   navigationBarTheme: NavigationBarThemeData(backgroundColor: Colors.black),
   bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.black),
