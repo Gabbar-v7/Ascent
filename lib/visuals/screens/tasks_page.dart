@@ -48,6 +48,29 @@ class _TasksPageState extends State<TasksPage> {
     fetchTasks();
   }
 
+  /// Delete a task from the database
+  Future<void> deleteTask(Task task) async {
+    await (database.delete(database.tasks)
+      ..where((tbl) => tbl.id.equals(task.id))).go();
+    fetchTasks();
+  }
+
+  /// Update an existing task
+  Future<void> updateTask(
+    Task task,
+    String newTaskName,
+    DateTime newDueDate,
+  ) async {
+    await (database.update(database.tasks)
+      ..where((tbl) => tbl.id.equals(task.id))).write(
+      TasksCompanion(
+        task: drift.Value(newTaskName),
+        dueDate: drift.Value(newDueDate),
+      ),
+    );
+    fetchTasks();
+  }
+
   /// Categorize tasks
   Map<String, List<Task>> categorizeTasks() {
     DateTime today = DateTime.now();
@@ -164,7 +187,22 @@ class _TasksPageState extends State<TasksPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  AppStyles.appBar(label, context),
+                  AppStyles.appBar(
+                    label,
+                    context,
+                    actions:
+                        task != null
+                            ? [
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline),
+                                onPressed: () {
+                                  deleteTask(task);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ]
+                            : [],
+                  ),
                   TextField(
                     controller: controller,
                     textCapitalization: TextCapitalization.sentences,
@@ -196,7 +234,11 @@ class _TasksPageState extends State<TasksPage> {
                       ElevatedButton(
                         onPressed: () {
                           if (controller.text.isNotEmpty) {
-                            addTask(controller.text, selectedDate);
+                            if (task != null) {
+                              updateTask(task, controller.text, selectedDate);
+                            } else {
+                              addTask(controller.text, selectedDate);
+                            }
                             Navigator.pop(context);
                           }
                         },
