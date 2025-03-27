@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ascent/database/app_database.dart';
 import 'package:drift/drift.dart' as drift;
+import 'dart:async';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({super.key});
@@ -12,51 +13,48 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> {
+  // Database instance
   final database = AppDatabase();
-  TextEditingController controller = TextEditingController();
-  List<Task> allTasks = [];
+
+  // Controllers and state
+  final TextEditingController _taskController = TextEditingController();
+  List<Task> _tasks = [];
+  Map<String, List<Task>>? _categorizedTasksCache;
+  Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
-    fetchTasks();
+    _fetchTasks();
   }
 
-  /// Fetch tasks from the database and update the UI
-  Future<void> fetchTasks() async {
+  @override
+  void dispose() {
+    _taskController.dispose();
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  // Database Operations
+  Future<void> _fetchTasks() async {
     final tasks = await database.select(database.tasks).get();
-    tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate)); // Sort by date
-
-    setState(() {
-      allTasks = tasks;
-    });
+    tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+    if (mounted) {
+      setState(() {
+        _tasks = tasks;
+        _categorizedTasksCache = null; // Invalidate cache
+      });
+    }
   }
 
-  /// Insert a new task into the database
-  Future<void> addTask(String taskName, DateTime dueDate) async {
+  Future<void> _addTask(String taskName, DateTime dueDate) async {
     await database
         .into(database.tasks)
         .insert(TasksCompanion.insert(task: taskName, dueDate: dueDate));
-    fetchTasks(); // Refresh the UI
+    await _fetchTasks();
   }
 
-  /// Update task completion status
-  Future<void> toggleTaskCompletion(Task task, bool isDone) async {
-    await (database.update(database.tasks)..where(
-      (tbl) => tbl.id.equals(task.id),
-    )).write(TasksCompanion(isDone: drift.Value(isDone)));
-    fetchTasks();
-  }
-
-  /// Delete a task from the database
-  Future<void> deleteTask(Task task) async {
-    await (database.delete(database.tasks)
-      ..where((tbl) => tbl.id.equals(task.id))).go();
-    fetchTasks();
-  }
-
-  /// Update an existing task
-  Future<void> updateTask(
+  Future<void> _updateTask(
     Task task,
     String newTaskName,
     DateTime newDueDate,
@@ -68,104 +66,151 @@ class _TasksPageState extends State<TasksPage> {
         dueDate: drift.Value(newDueDate),
       ),
     );
-    fetchTasks();
+    await _fetchTasks();
   }
 
-  /// Categorize tasks
-  Map<String, List<Task>> categorizeTasks() {
-    DateTime today = DateTime.now();
-    today = DateTime(today.year, today.month, today.day); // Remove time part
-    DateTime tomorrow = today.add(Duration(days: 1));
+  Future<void> _deleteTask(Task task) async {
+    await (database.delete(database.tasks)
+      ..where((tbl) => tbl.id.equals(task.id))).go();
+    await _fetchTasks();
+  }
 
-    List<Task> todayTasks = [];
-    List<Task> previousTasks = [];
-    List<Task> futureTasks = [];
-    List<Task> completedTasks = [];
+  Future<void> _toggleTaskCompletion(Task task, bool isDone) async {
+    // Cancel any pending debounce timer
+    _debounceTimer?.cancel();
 
-    for (var task in allTasks) {
+    // Update UI immediately for better responsiveness
+    setState(() {
+      final index = _tasks.indexWhere((t) => t.id == task.id);
+      if (index != -1) {
+        _tasks[index] = Task(
+          id: task.id,
+          task: task.task,
+          dueDate: task.dueDate,
+          isDone: isDone,
+          notification: task.notification,
+        );
+      }
+      _categorizedTasksCache = null; // Invalidate cache
+    });
+
+    // Debounce the database update
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      await (database.update(database.tasks)..where(
+        (tbl) => tbl.id.equals(task.id),
+      )).write(TasksCompanion(isDone: drift.Value(isDone)));
+    });
+  }
+
+  // Task Organization
+  Map<String, List<Task>> _categorizeTasks() {
+    // Return cached categories if available
+    if (_categorizedTasksCache != null) {
+      return _categorizedTasksCache!;
+    }
+
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    final tomorrow = todayDate.add(const Duration(days: 1));
+
+    final categorizedTasks = {
+      "Today": <Task>[],
+      "Previous": <Task>[],
+      "Future": <Task>[],
+      "Completed": <Task>[],
+    };
+
+    for (final task in _tasks) {
       if (task.isDone) {
-        completedTasks.add(task);
-      } else if (task.dueDate.isBefore(today)) {
-        previousTasks.add(task);
+        categorizedTasks["Completed"]!.add(task);
+      } else if (task.dueDate.isBefore(todayDate)) {
+        categorizedTasks["Previous"]!.add(task);
       } else if (task.dueDate.isBefore(tomorrow)) {
-        todayTasks.add(task);
+        categorizedTasks["Today"]!.add(task);
       } else {
-        futureTasks.add(task);
+        categorizedTasks["Future"]!.add(task);
       }
     }
 
-    return {
-      "Today": todayTasks,
-      "Previous": previousTasks,
-      "Future": futureTasks,
-      "Completed": completedTasks,
-    };
+    // Cache the results
+    _categorizedTasksCache = categorizedTasks;
+    return categorizedTasks;
   }
 
-  Widget _taskTile(Task task) {
-    return GestureDetector(
-      onLongPress: () {
-        _showModalBottomSheet(task, "Edit Task");
-      },
-      onHorizontalDragEnd: (details) {
-        if (details.primaryVelocity! > 0) {
-          // Right swipe: Toggle isDone
-          toggleTaskCompletion(task, !task.isDone);
-        }
-      },
-      child: ListTile(
-        leading: Checkbox(
-          value: task.isDone,
-          onChanged: (value) {
-            toggleTaskCompletion(task, value!);
-          },
+  // UI Components
+  Widget _buildTaskTile(Task task) {
+    return RepaintBoundary(
+      child: GestureDetector(
+        onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity! > 0) {
+            _toggleTaskCompletion(task, !task.isDone);
+          }
+        },
+        child: ListTile(
+          leading: Checkbox(
+            value: task.isDone,
+            onChanged: (value) => _toggleTaskCompletion(task, value!),
+          ),
+          title: Text(
+            task.task,
+            style:
+                task.isDone
+                    ? const TextStyle(decoration: TextDecoration.lineThrough)
+                    : null,
+          ),
+          trailing: Text(
+            "${task.dueDate.day}/${task.dueDate.month}",
+            style: TextStyle(
+              color:
+                  task.dueDate.isBefore(DateTime.now()) && !task.isDone
+                      ? Colors.red
+                      : Colors.grey,
+            ),
+          ),
         ),
-        title: Text(
-          task.task,
-          style:
-              task.isDone
-                  ? TextStyle(decoration: TextDecoration.lineThrough)
-                  : null,
-        ),
-        trailing: Text("${task.dueDate.day}/${task.dueDate.month}"),
       ),
     );
   }
 
-  Widget pageBody() {
-    final categorizedTasks = categorizeTasks();
-
-    return ListView(
-      children:
-          categorizedTasks.entries
-              .where((entry) => entry.value.isNotEmpty) // Hide empty categories
-              .map(
-                (entry) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: Text(
-                        entry.key,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    ...entry.value.map((task) => _taskTile(task)),
-                  ],
-                ),
-              )
-              .toList(),
+  Widget _buildCategoryHeader(String title) {
+    return RepaintBoundary(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Text(
+          title,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 
-  void _showModalBottomSheet(Task? task, String label) {
-    controller.text = task?.task ?? "";
+  Widget _buildTaskList() {
+    final categorizedTasks = _categorizeTasks();
+
+    return ListView.builder(
+      itemCount:
+          categorizedTasks.entries
+              .where((entry) => entry.value.isNotEmpty)
+              .length,
+      itemBuilder: (context, index) {
+        final entry = categorizedTasks.entries
+            .where((entry) => entry.value.isNotEmpty)
+            .elementAt(index);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildCategoryHeader(entry.key),
+            ...entry.value.map(_buildTaskTile),
+          ],
+        );
+      },
+    );
+  }
+
+  // Bottom Sheet
+  void _showTaskBottomSheet(Task? task, String label) {
+    _taskController.text = task?.task ?? "";
     DateTime selectedDate = task?.dueDate ?? DateTime.now();
 
     showModalBottomSheet(
@@ -174,85 +219,87 @@ class _TasksPageState extends State<TasksPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       isScrollControlled: true,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            return Padding(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 10,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 10,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  AppStyles.appBar(
-                    label,
-                    context,
-                    actions:
-                        task != null
-                            ? [
-                              IconButton(
-                                icon: const Icon(Icons.delete_outline),
-                                onPressed: () {
-                                  deleteTask(task);
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ]
-                            : [],
+      builder:
+          (context) => StatefulBuilder(
+            builder:
+                (context, setModalState) => Padding(
+                  padding: EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    top: 10,
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 10,
                   ),
-                  TextField(
-                    controller: controller,
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: InputDecoration(hintText: "Enter Task:"),
-                  ),
-                  const Gap(20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          DateTime? picked = await showDatePicker(
-                            context: context,
-                            initialDate: selectedDate,
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2200),
-                          );
-                          if (picked != null) {
-                            setModalState(() {
-                              selectedDate = picked;
-                            });
-                          }
-                        },
-                        child: Text(
-                          "${selectedDate.day}/${selectedDate.month}",
+                      AppStyles.appBar(
+                        label,
+                        context,
+                        actions:
+                            task != null
+                                ? [
+                                  IconButton(
+                                    icon: const Icon(Icons.delete_outline),
+                                    onPressed: () {
+                                      _deleteTask(task);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ]
+                                : [],
+                      ),
+                      TextField(
+                        controller: _taskController,
+                        textCapitalization: TextCapitalization.sentences,
+                        decoration: const InputDecoration(
+                          hintText: "Enter Task:",
                         ),
                       ),
-                      const Gap(10),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (controller.text.isNotEmpty) {
-                            if (task != null) {
-                              updateTask(task, controller.text, selectedDate);
-                            } else {
-                              addTask(controller.text, selectedDate);
-                            }
-                            Navigator.pop(context);
-                          }
-                        },
-                        child: Text("Save"),
+                      const Gap(20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              final picked = await showDatePicker(
+                                context: context,
+                                initialDate: selectedDate,
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2200),
+                              );
+                              if (picked != null) {
+                                setModalState(() => selectedDate = picked);
+                              }
+                            },
+                            child: Text(
+                              "${selectedDate.day}/${selectedDate.month}",
+                            ),
+                          ),
+                          const Gap(10),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_taskController.text.isNotEmpty) {
+                                if (task != null) {
+                                  _updateTask(
+                                    task,
+                                    _taskController.text,
+                                    selectedDate,
+                                  );
+                                } else {
+                                  _addTask(_taskController.text, selectedDate);
+                                }
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: const Text("Save"),
+                          ),
+                        ],
                       ),
+                      const Gap(30),
                     ],
                   ),
-                  const Gap(30),
-                ],
-              ),
-            );
-          },
-        );
-      },
+                ),
+          ),
     );
   }
 
@@ -260,10 +307,11 @@ class _TasksPageState extends State<TasksPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppStyles.appBar("ToDo List", context),
-      body: pageBody(),
-      floatingActionButton: AppStyles.floatingActionButton(Icons.add, () {
-        _showModalBottomSheet(null, "Add Task");
-      }),
+      body: _buildTaskList(),
+      floatingActionButton: AppStyles.floatingActionButton(
+        Icons.add,
+        () => _showTaskBottomSheet(null, "Add Task"),
+      ),
     );
   }
 }
