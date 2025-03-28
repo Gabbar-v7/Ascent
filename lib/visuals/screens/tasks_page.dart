@@ -222,90 +222,92 @@ class _TasksPageState extends State<TasksPage> {
       builder:
           (context) => StatefulBuilder(
             builder:
-                (context, setModalState) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppStyles.appBar(
-                      label,
-                      context,
-                      actions:
-                          task != null
-                              ? [
-                                IconButton(
-                                  icon: const Icon(Icons.delete_outline),
-                                  onPressed: () {
-                                    _deleteTask(task);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ]
-                              : [],
-                      backgroundColor: Colors.transparent,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 10,
-                        bottom: 25,
-                        right: 20,
-                        left: 20,
+                (context, setModalState) => SafeArea(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppStyles.appBar(
+                        label,
+                        context,
+                        actions:
+                            task != null
+                                ? [
+                                  IconButton(
+                                    icon: const Icon(Icons.delete_outline),
+                                    onPressed: () {
+                                      _deleteTask(task);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ]
+                                : [],
+                        backgroundColor: Colors.transparent,
                       ),
-                      child: Column(
-                        children: <Widget>[
-                          TextField(
-                            controller: _taskController,
-                            textCapitalization: TextCapitalization.sentences,
-                            decoration: const InputDecoration(
-                              hintText: "Enter Task:",
-                            ),
-                          ),
-                          const Gap(20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () async {
-                                  final picked = await showDatePicker(
-                                    context: context,
-                                    initialDate: selectedDate,
-                                    firstDate: DateTime(2000),
-                                    lastDate: DateTime(2200),
-                                  );
-                                  if (picked != null) {
-                                    setModalState(() => selectedDate = picked);
-                                  }
-                                },
-                                child: Text(
-                                  "${selectedDate.day}/${selectedDate.month}",
-                                ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 20,
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            TextField(
+                              controller: _taskController,
+                              textCapitalization: TextCapitalization.sentences,
+                              decoration: const InputDecoration(
+                                hintText: "Enter Task:",
                               ),
-                              const Gap(10),
-                              ElevatedButton(
-                                onPressed: () {
-                                  if (_taskController.text.isNotEmpty) {
-                                    if (task != null) {
-                                      _updateTask(
-                                        task,
-                                        _taskController.text,
-                                        selectedDate,
-                                      );
-                                    } else {
-                                      _addTask(
-                                        _taskController.text,
-                                        selectedDate,
+                            ),
+                            const Gap(20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              spacing: 10,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    final picked = await showDatePicker(
+                                      context: context,
+                                      initialDate: selectedDate,
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2200),
+                                    );
+                                    if (picked != null) {
+                                      setModalState(
+                                        () => selectedDate = picked,
                                       );
                                     }
-                                    Navigator.pop(context);
-                                  }
-                                },
-                                child: const Text("Save"),
-                              ),
-                            ],
-                          ),
-                          Gap(MediaQuery.of(context).viewInsets.bottom),
-                        ],
+                                  },
+                                  child: Text(
+                                    "${selectedDate.day}/${selectedDate.month}",
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    if (_taskController.text.isNotEmpty) {
+                                      if (task != null) {
+                                        _updateTask(
+                                          task,
+                                          _taskController.text,
+                                          selectedDate,
+                                        );
+                                      } else {
+                                        _addTask(
+                                          _taskController.text,
+                                          selectedDate,
+                                        );
+                                      }
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: const Text("Save"),
+                                ),
+                              ],
+                            ),
+                            Gap(MediaQuery.of(context).viewInsets.bottom),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
           ),
     );
