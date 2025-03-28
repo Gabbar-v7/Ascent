@@ -8,7 +8,6 @@ plugins {
 android {
     namespace = "com.example.ascent"
     compileSdk = flutter.compileSdkVersion              // 35
-    ndkVersion = flutter.ndkVersion                     // 26.3.11579264
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -43,6 +42,9 @@ android {
 
     buildTypes {
         release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("release")
         }
