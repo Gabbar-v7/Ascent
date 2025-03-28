@@ -7,6 +7,7 @@ class AppStyles {
     BuildContext context, {
     IconData icon = Icons.arrow_back_ios_rounded,
     List<Widget> actions = const [],
+    Color? backgroundColor,
   }) {
     return AppBar(
       leading: IconButton(
@@ -15,6 +16,7 @@ class AppStyles {
       ),
       title: Text(title, style: TextStyle(fontWeight: FontWeight.w500)),
       actions: actions,
+      backgroundColor: backgroundColor,
     );
   }
 
