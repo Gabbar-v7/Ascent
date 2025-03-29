@@ -59,7 +59,7 @@ class _TasksPageState extends State<TasksPage> {
   Future<void> _addTask(String taskName, DateTime dueDate) async {
     await database
         .into(database.tasks)
-        .insert(TasksCompanion.insert(task: taskName, dueDate: dueDate));
+        .insert(TasksCompanion.insert(taskTitle: taskName, dueDate: dueDate));
     await _fetchTasks();
   }
 
@@ -71,7 +71,7 @@ class _TasksPageState extends State<TasksPage> {
     await (database.update(database.tasks)
       ..where((tbl) => tbl.id.equals(task.id))).write(
       TasksCompanion(
-        task: drift.Value(newTaskName),
+        taskTitle: drift.Value(newTaskName),
         dueDate: drift.Value(newDueDate),
       ),
     );
@@ -91,7 +91,7 @@ class _TasksPageState extends State<TasksPage> {
       if (index != -1) {
         _tasks[index] = Task(
           id: task.id,
-          task: task.task,
+          taskTitle: task.taskTitle,
           dueDate: task.dueDate,
           doneOn: isDone ? DateTime.now() : null,
         );
@@ -157,7 +157,7 @@ class _TasksPageState extends State<TasksPage> {
             onChanged: (value) => _toggleTaskCompletion(task, value!),
           ),
           title: Text(
-            task.task,
+            task.taskTitle,
             style:
                 isCompleted
                     ? const TextStyle(decoration: TextDecoration.lineThrough)
@@ -214,7 +214,7 @@ class _TasksPageState extends State<TasksPage> {
 
   // Bottom Sheet
   void _showTaskBottomSheet(Task? task, String label) {
-    _taskController.text = task?.task ?? "";
+    _taskController.text = task?.taskTitle ?? "";
     DateTime selectedDate = task?.dueDate ?? DateTime.now();
 
     showModalBottomSheet(
