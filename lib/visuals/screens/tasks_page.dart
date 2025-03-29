@@ -37,7 +37,19 @@ class _TasksPageState extends State<TasksPage> {
 
   // Database Operations
   Future<void> _fetchTasks() async {
-    final tasks = await database.select(database.tasks).get();
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    final tomorrow = todayDate.add(const Duration(days: 1));
+
+    final tasks =
+        await (database.select(database.tasks)..where(
+          (tbl) =>
+              tbl.doneOn.isNull() |
+              (tbl.doneOn.isNotNull() &
+                  (tbl.doneOn.isSmallerThan(drift.Constant(todayDate)) |
+                      tbl.doneOn.isBiggerThan(drift.Constant(tomorrow)))),
+        )).get();
+
     tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
     if (mounted) {
       setState(() {
@@ -88,7 +100,7 @@ class _TasksPageState extends State<TasksPage> {
           task: task.task,
           dueDate: task.dueDate,
           isDone: isDone,
-          notification: task.notification,
+          doneOn: isDone ? DateTime.now() : null,
         );
       }
       _categorizedTasksCache = null; // Invalidate cache
@@ -96,9 +108,13 @@ class _TasksPageState extends State<TasksPage> {
 
     // Debounce the database update
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      await (database.update(database.tasks)..where(
-        (tbl) => tbl.id.equals(task.id),
-      )).write(TasksCompanion(isDone: drift.Value(isDone)));
+      await (database.update(database.tasks)
+        ..where((tbl) => tbl.id.equals(task.id))).write(
+        TasksCompanion(
+          isDone: drift.Value(isDone),
+          doneOn: drift.Value(isDone ? DateTime.now() : null),
+        ),
+      );
     });
   }
 
@@ -121,7 +137,7 @@ class _TasksPageState extends State<TasksPage> {
     };
 
     for (final task in _tasks) {
-      if (task.isDone) {
+      if (task.doneOn != null) {
         categorizedTasks["Completed"]!.add(task);
       } else if (task.dueDate.isBefore(todayDate)) {
         categorizedTasks["Previous"]!.add(task);
@@ -139,23 +155,24 @@ class _TasksPageState extends State<TasksPage> {
 
   // UI Components
   Widget _buildTaskTile(Task task) {
+    final isCompleted = task.doneOn != null;
     return RepaintBoundary(
       child: GestureDetector(
         onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity! > 0) {
-            _toggleTaskCompletion(task, !task.isDone);
+            _toggleTaskCompletion(task, !isCompleted);
           }
         },
         child: ListTile(
           leading: Checkbox(
-            value: task.isDone,
+            value: isCompleted,
             onChanged: (value) => _toggleTaskCompletion(task, value!),
           ),
           title: Text(
             task.task,
             style:
-                task.isDone
+                isCompleted
                     ? const TextStyle(decoration: TextDecoration.lineThrough)
                     : null,
           ),
@@ -163,7 +180,7 @@ class _TasksPageState extends State<TasksPage> {
             "${task.dueDate.day}/${task.dueDate.month}",
             style: TextStyle(
               color:
-                  task.dueDate.isBefore(DateTime.now()) && !task.isDone
+                  task.dueDate.isBefore(DateTime.now()) && !isCompleted
                       ? Colors.red
                       : Colors.grey,
             ),

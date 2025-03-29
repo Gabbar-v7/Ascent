@@ -5,5 +5,5 @@ class Tasks extends Table {
   TextColumn get task => text()();
   DateTimeColumn get dueDate => dateTime()();
   BoolColumn get isDone => boolean().withDefault(Constant(false))();
-  BoolColumn get notification => boolean().withDefault(Constant(false))();
+  DateTimeColumn get doneOn => dateTime().nullable()();
 }

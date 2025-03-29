@@ -54,29 +54,17 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     ),
     defaultValue: Constant(false),
   );
-  static const VerificationMeta _notificationMeta = const VerificationMeta(
-    'notification',
-  );
+  static const VerificationMeta _doneOnMeta = const VerificationMeta('doneOn');
   @override
-  late final GeneratedColumn<bool> notification = GeneratedColumn<bool>(
-    'notification',
+  late final GeneratedColumn<DateTime> doneOn = GeneratedColumn<DateTime>(
+    'done_on',
     aliasedName,
-    false,
-    type: DriftSqlType.bool,
+    true,
+    type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("notification" IN (0, 1))',
-    ),
-    defaultValue: Constant(false),
   );
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    task,
-    dueDate,
-    isDone,
-    notification,
-  ];
+  List<GeneratedColumn> get $columns => [id, task, dueDate, isDone, doneOn];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -114,13 +102,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         isDone.isAcceptableOrUnknown(data['is_done']!, _isDoneMeta),
       );
     }
-    if (data.containsKey('notification')) {
+    if (data.containsKey('done_on')) {
       context.handle(
-        _notificationMeta,
-        notification.isAcceptableOrUnknown(
-          data['notification']!,
-          _notificationMeta,
-        ),
+        _doneOnMeta,
+        doneOn.isAcceptableOrUnknown(data['done_on']!, _doneOnMeta),
       );
     }
     return context;
@@ -152,11 +137,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
             DriftSqlType.bool,
             data['${effectivePrefix}is_done'],
           )!,
-      notification:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.bool,
-            data['${effectivePrefix}notification'],
-          )!,
+      doneOn: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}done_on'],
+      ),
     );
   }
 
@@ -171,13 +155,13 @@ class Task extends DataClass implements Insertable<Task> {
   final String task;
   final DateTime dueDate;
   final bool isDone;
-  final bool notification;
+  final DateTime? doneOn;
   const Task({
     required this.id,
     required this.task,
     required this.dueDate,
     required this.isDone,
-    required this.notification,
+    this.doneOn,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -186,7 +170,9 @@ class Task extends DataClass implements Insertable<Task> {
     map['task'] = Variable<String>(task);
     map['due_date'] = Variable<DateTime>(dueDate);
     map['is_done'] = Variable<bool>(isDone);
-    map['notification'] = Variable<bool>(notification);
+    if (!nullToAbsent || doneOn != null) {
+      map['done_on'] = Variable<DateTime>(doneOn);
+    }
     return map;
   }
 
@@ -196,7 +182,8 @@ class Task extends DataClass implements Insertable<Task> {
       task: Value(task),
       dueDate: Value(dueDate),
       isDone: Value(isDone),
-      notification: Value(notification),
+      doneOn:
+          doneOn == null && nullToAbsent ? const Value.absent() : Value(doneOn),
     );
   }
 
@@ -210,7 +197,7 @@ class Task extends DataClass implements Insertable<Task> {
       task: serializer.fromJson<String>(json['task']),
       dueDate: serializer.fromJson<DateTime>(json['dueDate']),
       isDone: serializer.fromJson<bool>(json['isDone']),
-      notification: serializer.fromJson<bool>(json['notification']),
+      doneOn: serializer.fromJson<DateTime?>(json['doneOn']),
     );
   }
   @override
@@ -221,7 +208,7 @@ class Task extends DataClass implements Insertable<Task> {
       'task': serializer.toJson<String>(task),
       'dueDate': serializer.toJson<DateTime>(dueDate),
       'isDone': serializer.toJson<bool>(isDone),
-      'notification': serializer.toJson<bool>(notification),
+      'doneOn': serializer.toJson<DateTime?>(doneOn),
     };
   }
 
@@ -230,13 +217,13 @@ class Task extends DataClass implements Insertable<Task> {
     String? task,
     DateTime? dueDate,
     bool? isDone,
-    bool? notification,
+    Value<DateTime?> doneOn = const Value.absent(),
   }) => Task(
     id: id ?? this.id,
     task: task ?? this.task,
     dueDate: dueDate ?? this.dueDate,
     isDone: isDone ?? this.isDone,
-    notification: notification ?? this.notification,
+    doneOn: doneOn.present ? doneOn.value : this.doneOn,
   );
   Task copyWithCompanion(TasksCompanion data) {
     return Task(
@@ -244,10 +231,7 @@ class Task extends DataClass implements Insertable<Task> {
       task: data.task.present ? data.task.value : this.task,
       dueDate: data.dueDate.present ? data.dueDate.value : this.dueDate,
       isDone: data.isDone.present ? data.isDone.value : this.isDone,
-      notification:
-          data.notification.present
-              ? data.notification.value
-              : this.notification,
+      doneOn: data.doneOn.present ? data.doneOn.value : this.doneOn,
     );
   }
 
@@ -258,13 +242,13 @@ class Task extends DataClass implements Insertable<Task> {
           ..write('task: $task, ')
           ..write('dueDate: $dueDate, ')
           ..write('isDone: $isDone, ')
-          ..write('notification: $notification')
+          ..write('doneOn: $doneOn')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, task, dueDate, isDone, notification);
+  int get hashCode => Object.hash(id, task, dueDate, isDone, doneOn);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -273,7 +257,7 @@ class Task extends DataClass implements Insertable<Task> {
           other.task == this.task &&
           other.dueDate == this.dueDate &&
           other.isDone == this.isDone &&
-          other.notification == this.notification);
+          other.doneOn == this.doneOn);
 }
 
 class TasksCompanion extends UpdateCompanion<Task> {
@@ -281,20 +265,20 @@ class TasksCompanion extends UpdateCompanion<Task> {
   final Value<String> task;
   final Value<DateTime> dueDate;
   final Value<bool> isDone;
-  final Value<bool> notification;
+  final Value<DateTime?> doneOn;
   const TasksCompanion({
     this.id = const Value.absent(),
     this.task = const Value.absent(),
     this.dueDate = const Value.absent(),
     this.isDone = const Value.absent(),
-    this.notification = const Value.absent(),
+    this.doneOn = const Value.absent(),
   });
   TasksCompanion.insert({
     this.id = const Value.absent(),
     required String task,
     required DateTime dueDate,
     this.isDone = const Value.absent(),
-    this.notification = const Value.absent(),
+    this.doneOn = const Value.absent(),
   }) : task = Value(task),
        dueDate = Value(dueDate);
   static Insertable<Task> custom({
@@ -302,14 +286,14 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Expression<String>? task,
     Expression<DateTime>? dueDate,
     Expression<bool>? isDone,
-    Expression<bool>? notification,
+    Expression<DateTime>? doneOn,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (task != null) 'task': task,
       if (dueDate != null) 'due_date': dueDate,
       if (isDone != null) 'is_done': isDone,
-      if (notification != null) 'notification': notification,
+      if (doneOn != null) 'done_on': doneOn,
     });
   }
 
@@ -318,14 +302,14 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Value<String>? task,
     Value<DateTime>? dueDate,
     Value<bool>? isDone,
-    Value<bool>? notification,
+    Value<DateTime?>? doneOn,
   }) {
     return TasksCompanion(
       id: id ?? this.id,
       task: task ?? this.task,
       dueDate: dueDate ?? this.dueDate,
       isDone: isDone ?? this.isDone,
-      notification: notification ?? this.notification,
+      doneOn: doneOn ?? this.doneOn,
     );
   }
 
@@ -344,8 +328,8 @@ class TasksCompanion extends UpdateCompanion<Task> {
     if (isDone.present) {
       map['is_done'] = Variable<bool>(isDone.value);
     }
-    if (notification.present) {
-      map['notification'] = Variable<bool>(notification.value);
+    if (doneOn.present) {
+      map['done_on'] = Variable<DateTime>(doneOn.value);
     }
     return map;
   }
@@ -357,7 +341,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
           ..write('task: $task, ')
           ..write('dueDate: $dueDate, ')
           ..write('isDone: $isDone, ')
-          ..write('notification: $notification')
+          ..write('doneOn: $doneOn')
           ..write(')'))
         .toString();
   }
@@ -380,7 +364,7 @@ typedef $$TasksTableCreateCompanionBuilder =
       required String task,
       required DateTime dueDate,
       Value<bool> isDone,
-      Value<bool> notification,
+      Value<DateTime?> doneOn,
     });
 typedef $$TasksTableUpdateCompanionBuilder =
     TasksCompanion Function({
@@ -388,7 +372,7 @@ typedef $$TasksTableUpdateCompanionBuilder =
       Value<String> task,
       Value<DateTime> dueDate,
       Value<bool> isDone,
-      Value<bool> notification,
+      Value<DateTime?> doneOn,
     });
 
 class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
@@ -419,8 +403,8 @@ class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<bool> get notification => $composableBuilder(
-    column: $table.notification,
+  ColumnFilters<DateTime> get doneOn => $composableBuilder(
+    column: $table.doneOn,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -454,8 +438,8 @@ class $$TasksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get notification => $composableBuilder(
-    column: $table.notification,
+  ColumnOrderings<DateTime> get doneOn => $composableBuilder(
+    column: $table.doneOn,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -481,10 +465,8 @@ class $$TasksTableAnnotationComposer
   GeneratedColumn<bool> get isDone =>
       $composableBuilder(column: $table.isDone, builder: (column) => column);
 
-  GeneratedColumn<bool> get notification => $composableBuilder(
-    column: $table.notification,
-    builder: (column) => column,
-  );
+  GeneratedColumn<DateTime> get doneOn =>
+      $composableBuilder(column: $table.doneOn, builder: (column) => column);
 }
 
 class $$TasksTableTableManager
@@ -519,13 +501,13 @@ class $$TasksTableTableManager
                 Value<String> task = const Value.absent(),
                 Value<DateTime> dueDate = const Value.absent(),
                 Value<bool> isDone = const Value.absent(),
-                Value<bool> notification = const Value.absent(),
+                Value<DateTime?> doneOn = const Value.absent(),
               }) => TasksCompanion(
                 id: id,
                 task: task,
                 dueDate: dueDate,
                 isDone: isDone,
-                notification: notification,
+                doneOn: doneOn,
               ),
           createCompanionCallback:
               ({
@@ -533,13 +515,13 @@ class $$TasksTableTableManager
                 required String task,
                 required DateTime dueDate,
                 Value<bool> isDone = const Value.absent(),
-                Value<bool> notification = const Value.absent(),
+                Value<DateTime?> doneOn = const Value.absent(),
               }) => TasksCompanion.insert(
                 id: id,
                 task: task,
                 dueDate: dueDate,
                 isDone: isDone,
-                notification: notification,
+                doneOn: doneOn,
               ),
           withReferenceMapper:
               (p0) =>
