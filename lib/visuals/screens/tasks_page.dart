@@ -20,7 +20,6 @@ class _TasksPageState extends State<TasksPage> {
   final TextEditingController _taskController = TextEditingController();
   List<Task> _tasks = [];
   Map<String, List<Task>>? _categorizedTasksCache;
-  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -31,7 +30,6 @@ class _TasksPageState extends State<TasksPage> {
   @override
   void dispose() {
     _taskController.dispose();
-    _debounceTimer?.cancel();
     super.dispose();
   }
 
@@ -45,9 +43,8 @@ class _TasksPageState extends State<TasksPage> {
         await (database.select(database.tasks)..where(
           (tbl) =>
               tbl.doneOn.isNull() |
-              (tbl.doneOn.isNotNull() &
-                  (tbl.doneOn.isBiggerThan(drift.Constant(todayDate)) |
-                      tbl.doneOn.isSmallerThan(drift.Constant(tomorrow)))),
+              (tbl.doneOn.isBiggerThan(drift.Constant(todayDate)) |
+                  tbl.doneOn.isSmallerThan(drift.Constant(tomorrow))),
         )).get();
 
     tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
@@ -88,9 +85,6 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   Future<void> _toggleTaskCompletion(Task task, bool isDone) async {
-    // Cancel any pending debounce timer
-    _debounceTimer?.cancel();
-
     // Update UI immediately for better responsiveness
     setState(() {
       final index = _tasks.indexWhere((t) => t.id == task.id);
@@ -105,13 +99,10 @@ class _TasksPageState extends State<TasksPage> {
       _categorizedTasksCache = null; // Invalidate cache
     });
 
-    // Debounce the database update
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      await (database.update(database.tasks)
-        ..where((tbl) => tbl.id.equals(task.id))).write(
-        TasksCompanion(doneOn: drift.Value(isDone ? DateTime.now() : null)),
-      );
-    });
+    await (database.update(database.tasks)
+      ..where((tbl) => tbl.id.equals(task.id))).write(
+      TasksCompanion(doneOn: drift.Value(isDone ? DateTime.now() : null)),
+    );
   }
 
   // Task Organization
