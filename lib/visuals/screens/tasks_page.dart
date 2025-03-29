@@ -46,8 +46,8 @@ class _TasksPageState extends State<TasksPage> {
           (tbl) =>
               tbl.doneOn.isNull() |
               (tbl.doneOn.isNotNull() &
-                  (tbl.doneOn.isSmallerThan(drift.Constant(todayDate)) |
-                      tbl.doneOn.isBiggerThan(drift.Constant(tomorrow)))),
+                  (tbl.doneOn.isBiggerThan(drift.Constant(todayDate)) |
+                      tbl.doneOn.isSmallerThan(drift.Constant(tomorrow)))),
         )).get();
 
     tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
