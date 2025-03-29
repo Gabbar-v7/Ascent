@@ -4,7 +4,7 @@ A blazing-fast Flutter mobile app for managing tasks, notes, and focus sessions 
 
 Built for **speed** and **efficiency**. Perfect for productivity on the go!  
 
-### 📌 *Why Ascent?*  
+### 📌 Why Ascent?
 - **Gesture-driven** (swipe, hold, tap shortcuts)  
 - **Lightweight & optimized** (no lag, fast startup)  
 - **Clean UI** with dark/light mode  
@@ -15,8 +15,8 @@ Try it now and boost your workflow! Contributions welcome.
 <div align="center">
     <a href="#"><img src="https://img.shields.io/github/stars/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Stars"></a>&nbsp;
     <a href="#"><img src="https://img.shields.io/github/forks/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Forks"></a>&nbsp;
-    <a href="#"><img src="https://img.shields.io/github/issues/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Active Issue"></a>&nbsp;
-    <a href="#"><img src="https://img.shields.io/github/issues-pr/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Active PR(s)"></a>
+    <a href="#"><img src="https://img.shields.io/github/issues/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Active Issues"></a>&nbsp;
+    <a href="#"><img src="https://img.shields.io/github/issues-pr/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Active PRs"></a>
     <br>
     <a href="#"><img src="https://img.shields.io/github/release/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Release"></a>&nbsp;
     <a href="#"><img src="https://img.shields.io/github/repo-size/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Repo Size"></a>
@@ -79,11 +79,11 @@ flutter run
 ```
 lib/
 ├── database/          # Database related code
-├── visuals/          # UI components
-│   ├── components/   # Reusable UI components
-│   ├── screens/      # App screens
-│   └── utils/        # Utility functions
-└── main.dart         # App entry point
+├── visuals/           # UI components
+│   ├── components/    # Reusable UI components
+│   ├── screens/       # App screens
+│   └── utils/         # Utility functions
+└── main.dart          # App entry point
 ```
 
 ## Development
