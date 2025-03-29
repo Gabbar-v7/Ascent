@@ -43,7 +43,7 @@ class _TasksPageState extends State<TasksPage> {
         await (database.select(database.tasks)..where(
           (tbl) =>
               tbl.doneOn.isNull() |
-              (tbl.doneOn.isBiggerThan(drift.Constant(todayDate)) |
+              (tbl.doneOn.isBiggerThan(drift.Constant(todayDate)) &
                   tbl.doneOn.isSmallerThan(drift.Constant(tomorrow))),
         )).get();
 
