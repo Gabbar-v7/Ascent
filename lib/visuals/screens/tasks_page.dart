@@ -99,7 +99,6 @@ class _TasksPageState extends State<TasksPage> {
           id: task.id,
           task: task.task,
           dueDate: task.dueDate,
-          isDone: isDone,
           doneOn: isDone ? DateTime.now() : null,
         );
       }
@@ -110,10 +109,7 @@ class _TasksPageState extends State<TasksPage> {
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       await (database.update(database.tasks)
         ..where((tbl) => tbl.id.equals(task.id))).write(
-        TasksCompanion(
-          isDone: drift.Value(isDone),
-          doneOn: drift.Value(isDone ? DateTime.now() : null),
-        ),
+        TasksCompanion(doneOn: drift.Value(isDone ? DateTime.now() : null)),
       );
     });
   }

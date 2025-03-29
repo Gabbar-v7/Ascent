@@ -41,19 +41,6 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _isDoneMeta = const VerificationMeta('isDone');
-  @override
-  late final GeneratedColumn<bool> isDone = GeneratedColumn<bool>(
-    'is_done',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("is_done" IN (0, 1))',
-    ),
-    defaultValue: Constant(false),
-  );
   static const VerificationMeta _doneOnMeta = const VerificationMeta('doneOn');
   @override
   late final GeneratedColumn<DateTime> doneOn = GeneratedColumn<DateTime>(
@@ -73,14 +60,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     requiredDuringInsert: false,
   );
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    task,
-    dueDate,
-    isDone,
-    doneOn,
-    notify,
-  ];
+  List<GeneratedColumn> get $columns => [id, task, dueDate, doneOn, notify];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -111,12 +91,6 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
       );
     } else if (isInserting) {
       context.missing(_dueDateMeta);
-    }
-    if (data.containsKey('is_done')) {
-      context.handle(
-        _isDoneMeta,
-        isDone.isAcceptableOrUnknown(data['is_done']!, _isDoneMeta),
-      );
     }
     if (data.containsKey('done_on')) {
       context.handle(
@@ -154,11 +128,6 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
             DriftSqlType.dateTime,
             data['${effectivePrefix}due_date'],
           )!,
-      isDone:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.bool,
-            data['${effectivePrefix}is_done'],
-          )!,
       doneOn: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}done_on'],
@@ -180,14 +149,12 @@ class Task extends DataClass implements Insertable<Task> {
   final int id;
   final String task;
   final DateTime dueDate;
-  final bool isDone;
   final DateTime? doneOn;
   final DateTime? notify;
   const Task({
     required this.id,
     required this.task,
     required this.dueDate,
-    required this.isDone,
     this.doneOn,
     this.notify,
   });
@@ -197,7 +164,6 @@ class Task extends DataClass implements Insertable<Task> {
     map['id'] = Variable<int>(id);
     map['task'] = Variable<String>(task);
     map['due_date'] = Variable<DateTime>(dueDate);
-    map['is_done'] = Variable<bool>(isDone);
     if (!nullToAbsent || doneOn != null) {
       map['done_on'] = Variable<DateTime>(doneOn);
     }
@@ -212,7 +178,6 @@ class Task extends DataClass implements Insertable<Task> {
       id: Value(id),
       task: Value(task),
       dueDate: Value(dueDate),
-      isDone: Value(isDone),
       doneOn:
           doneOn == null && nullToAbsent ? const Value.absent() : Value(doneOn),
       notify:
@@ -229,7 +194,6 @@ class Task extends DataClass implements Insertable<Task> {
       id: serializer.fromJson<int>(json['id']),
       task: serializer.fromJson<String>(json['task']),
       dueDate: serializer.fromJson<DateTime>(json['dueDate']),
-      isDone: serializer.fromJson<bool>(json['isDone']),
       doneOn: serializer.fromJson<DateTime?>(json['doneOn']),
       notify: serializer.fromJson<DateTime?>(json['notify']),
     );
@@ -241,7 +205,6 @@ class Task extends DataClass implements Insertable<Task> {
       'id': serializer.toJson<int>(id),
       'task': serializer.toJson<String>(task),
       'dueDate': serializer.toJson<DateTime>(dueDate),
-      'isDone': serializer.toJson<bool>(isDone),
       'doneOn': serializer.toJson<DateTime?>(doneOn),
       'notify': serializer.toJson<DateTime?>(notify),
     };
@@ -251,14 +214,12 @@ class Task extends DataClass implements Insertable<Task> {
     int? id,
     String? task,
     DateTime? dueDate,
-    bool? isDone,
     Value<DateTime?> doneOn = const Value.absent(),
     Value<DateTime?> notify = const Value.absent(),
   }) => Task(
     id: id ?? this.id,
     task: task ?? this.task,
     dueDate: dueDate ?? this.dueDate,
-    isDone: isDone ?? this.isDone,
     doneOn: doneOn.present ? doneOn.value : this.doneOn,
     notify: notify.present ? notify.value : this.notify,
   );
@@ -267,7 +228,6 @@ class Task extends DataClass implements Insertable<Task> {
       id: data.id.present ? data.id.value : this.id,
       task: data.task.present ? data.task.value : this.task,
       dueDate: data.dueDate.present ? data.dueDate.value : this.dueDate,
-      isDone: data.isDone.present ? data.isDone.value : this.isDone,
       doneOn: data.doneOn.present ? data.doneOn.value : this.doneOn,
       notify: data.notify.present ? data.notify.value : this.notify,
     );
@@ -279,7 +239,6 @@ class Task extends DataClass implements Insertable<Task> {
           ..write('id: $id, ')
           ..write('task: $task, ')
           ..write('dueDate: $dueDate, ')
-          ..write('isDone: $isDone, ')
           ..write('doneOn: $doneOn, ')
           ..write('notify: $notify')
           ..write(')'))
@@ -287,7 +246,7 @@ class Task extends DataClass implements Insertable<Task> {
   }
 
   @override
-  int get hashCode => Object.hash(id, task, dueDate, isDone, doneOn, notify);
+  int get hashCode => Object.hash(id, task, dueDate, doneOn, notify);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -295,7 +254,6 @@ class Task extends DataClass implements Insertable<Task> {
           other.id == this.id &&
           other.task == this.task &&
           other.dueDate == this.dueDate &&
-          other.isDone == this.isDone &&
           other.doneOn == this.doneOn &&
           other.notify == this.notify);
 }
@@ -304,14 +262,12 @@ class TasksCompanion extends UpdateCompanion<Task> {
   final Value<int> id;
   final Value<String> task;
   final Value<DateTime> dueDate;
-  final Value<bool> isDone;
   final Value<DateTime?> doneOn;
   final Value<DateTime?> notify;
   const TasksCompanion({
     this.id = const Value.absent(),
     this.task = const Value.absent(),
     this.dueDate = const Value.absent(),
-    this.isDone = const Value.absent(),
     this.doneOn = const Value.absent(),
     this.notify = const Value.absent(),
   });
@@ -319,7 +275,6 @@ class TasksCompanion extends UpdateCompanion<Task> {
     this.id = const Value.absent(),
     required String task,
     required DateTime dueDate,
-    this.isDone = const Value.absent(),
     this.doneOn = const Value.absent(),
     this.notify = const Value.absent(),
   }) : task = Value(task),
@@ -328,7 +283,6 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Expression<int>? id,
     Expression<String>? task,
     Expression<DateTime>? dueDate,
-    Expression<bool>? isDone,
     Expression<DateTime>? doneOn,
     Expression<DateTime>? notify,
   }) {
@@ -336,7 +290,6 @@ class TasksCompanion extends UpdateCompanion<Task> {
       if (id != null) 'id': id,
       if (task != null) 'task': task,
       if (dueDate != null) 'due_date': dueDate,
-      if (isDone != null) 'is_done': isDone,
       if (doneOn != null) 'done_on': doneOn,
       if (notify != null) 'notify': notify,
     });
@@ -346,7 +299,6 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Value<int>? id,
     Value<String>? task,
     Value<DateTime>? dueDate,
-    Value<bool>? isDone,
     Value<DateTime?>? doneOn,
     Value<DateTime?>? notify,
   }) {
@@ -354,7 +306,6 @@ class TasksCompanion extends UpdateCompanion<Task> {
       id: id ?? this.id,
       task: task ?? this.task,
       dueDate: dueDate ?? this.dueDate,
-      isDone: isDone ?? this.isDone,
       doneOn: doneOn ?? this.doneOn,
       notify: notify ?? this.notify,
     );
@@ -372,9 +323,6 @@ class TasksCompanion extends UpdateCompanion<Task> {
     if (dueDate.present) {
       map['due_date'] = Variable<DateTime>(dueDate.value);
     }
-    if (isDone.present) {
-      map['is_done'] = Variable<bool>(isDone.value);
-    }
     if (doneOn.present) {
       map['done_on'] = Variable<DateTime>(doneOn.value);
     }
@@ -390,7 +338,6 @@ class TasksCompanion extends UpdateCompanion<Task> {
           ..write('id: $id, ')
           ..write('task: $task, ')
           ..write('dueDate: $dueDate, ')
-          ..write('isDone: $isDone, ')
           ..write('doneOn: $doneOn, ')
           ..write('notify: $notify')
           ..write(')'))
@@ -414,7 +361,6 @@ typedef $$TasksTableCreateCompanionBuilder =
       Value<int> id,
       required String task,
       required DateTime dueDate,
-      Value<bool> isDone,
       Value<DateTime?> doneOn,
       Value<DateTime?> notify,
     });
@@ -423,7 +369,6 @@ typedef $$TasksTableUpdateCompanionBuilder =
       Value<int> id,
       Value<String> task,
       Value<DateTime> dueDate,
-      Value<bool> isDone,
       Value<DateTime?> doneOn,
       Value<DateTime?> notify,
     });
@@ -448,11 +393,6 @@ class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
 
   ColumnFilters<DateTime> get dueDate => $composableBuilder(
     column: $table.dueDate,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<bool> get isDone => $composableBuilder(
-    column: $table.isDone,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -491,11 +431,6 @@ class $$TasksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get isDone => $composableBuilder(
-    column: $table.isDone,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<DateTime> get doneOn => $composableBuilder(
     column: $table.doneOn,
     builder: (column) => ColumnOrderings(column),
@@ -524,9 +459,6 @@ class $$TasksTableAnnotationComposer
 
   GeneratedColumn<DateTime> get dueDate =>
       $composableBuilder(column: $table.dueDate, builder: (column) => column);
-
-  GeneratedColumn<bool> get isDone =>
-      $composableBuilder(column: $table.isDone, builder: (column) => column);
 
   GeneratedColumn<DateTime> get doneOn =>
       $composableBuilder(column: $table.doneOn, builder: (column) => column);
@@ -566,14 +498,12 @@ class $$TasksTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<String> task = const Value.absent(),
                 Value<DateTime> dueDate = const Value.absent(),
-                Value<bool> isDone = const Value.absent(),
                 Value<DateTime?> doneOn = const Value.absent(),
                 Value<DateTime?> notify = const Value.absent(),
               }) => TasksCompanion(
                 id: id,
                 task: task,
                 dueDate: dueDate,
-                isDone: isDone,
                 doneOn: doneOn,
                 notify: notify,
               ),
@@ -582,14 +512,12 @@ class $$TasksTableTableManager
                 Value<int> id = const Value.absent(),
                 required String task,
                 required DateTime dueDate,
-                Value<bool> isDone = const Value.absent(),
                 Value<DateTime?> doneOn = const Value.absent(),
                 Value<DateTime?> notify = const Value.absent(),
               }) => TasksCompanion.insert(
                 id: id,
                 task: task,
                 dueDate: dueDate,
-                isDone: isDone,
                 doneOn: doneOn,
                 notify: notify,
               ),
