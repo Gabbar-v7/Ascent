@@ -31,15 +31,6 @@ Try it now and boost your workflow! Contributions welcome.
 ✔ **Notes** – Lightweight & markdown-ready  
 ✔ **Optimized UX** – Instant actions, minimal taps, silky animations  
 
-## Performance Optimizations
-
-- Task categorization caching
-- Efficient list rendering with ListView.builder
-- Debounced task completion updates
-- Optimized state management
-- RepaintBoundary for UI components
-- Memory leak prevention
-
 ## Screenshots
 
 [Add screenshots of your app here]
@@ -95,6 +86,8 @@ The app uses Drift (SQLite) for local storage. To generate database code:
 ```bash
 dart run build_runner build
 ```
+
+For more information refer [Drift Documentation](https://drift.simonbinder.eu/setup/).
 
 ### Code Style
 
