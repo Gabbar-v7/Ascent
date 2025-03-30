@@ -20,7 +20,6 @@ class _TasksPageState extends State<TasksPage> {
   final TextEditingController _taskController = TextEditingController();
   List<Task> _tasks = [];
   Map<String, List<Task>>? _categorizedTasksCache;
-  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -31,13 +30,23 @@ class _TasksPageState extends State<TasksPage> {
   @override
   void dispose() {
     _taskController.dispose();
-    _debounceTimer?.cancel();
     super.dispose();
   }
 
   // Database Operations
   Future<void> _fetchTasks() async {
-    final tasks = await database.select(database.tasks).get();
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    final tomorrow = todayDate.add(const Duration(days: 1));
+
+    final tasks =
+        await (database.select(database.tasks)..where(
+          (tbl) =>
+              tbl.doneOn.isNull() |
+              (tbl.doneOn.isBiggerThan(drift.Constant(todayDate)) &
+                  tbl.doneOn.isSmallerThan(drift.Constant(tomorrow))),
+        )).get();
+
     tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
     if (mounted) {
       setState(() {
@@ -50,7 +59,7 @@ class _TasksPageState extends State<TasksPage> {
   Future<void> _addTask(String taskName, DateTime dueDate) async {
     await database
         .into(database.tasks)
-        .insert(TasksCompanion.insert(task: taskName, dueDate: dueDate));
+        .insert(TasksCompanion.insert(taskTitle: taskName, dueDate: dueDate));
     await _fetchTasks();
   }
 
@@ -62,7 +71,7 @@ class _TasksPageState extends State<TasksPage> {
     await (database.update(database.tasks)
       ..where((tbl) => tbl.id.equals(task.id))).write(
       TasksCompanion(
-        task: drift.Value(newTaskName),
+        taskTitle: drift.Value(newTaskName),
         dueDate: drift.Value(newDueDate),
       ),
     );
@@ -76,30 +85,24 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   Future<void> _toggleTaskCompletion(Task task, bool isDone) async {
-    // Cancel any pending debounce timer
-    _debounceTimer?.cancel();
-
     // Update UI immediately for better responsiveness
     setState(() {
       final index = _tasks.indexWhere((t) => t.id == task.id);
       if (index != -1) {
         _tasks[index] = Task(
           id: task.id,
-          task: task.task,
+          taskTitle: task.taskTitle,
           dueDate: task.dueDate,
-          isDone: isDone,
-          notification: task.notification,
+          doneOn: isDone ? DateTime.now() : null,
         );
       }
       _categorizedTasksCache = null; // Invalidate cache
     });
 
-    // Debounce the database update
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      await (database.update(database.tasks)..where(
-        (tbl) => tbl.id.equals(task.id),
-      )).write(TasksCompanion(isDone: drift.Value(isDone)));
-    });
+    await (database.update(database.tasks)
+      ..where((tbl) => tbl.id.equals(task.id))).write(
+      TasksCompanion(doneOn: drift.Value(isDone ? DateTime.now() : null)),
+    );
   }
 
   // Task Organization
@@ -121,7 +124,7 @@ class _TasksPageState extends State<TasksPage> {
     };
 
     for (final task in _tasks) {
-      if (task.isDone) {
+      if (task.doneOn != null) {
         categorizedTasks["Completed"]!.add(task);
       } else if (task.dueDate.isBefore(todayDate)) {
         categorizedTasks["Previous"]!.add(task);
@@ -139,23 +142,24 @@ class _TasksPageState extends State<TasksPage> {
 
   // UI Components
   Widget _buildTaskTile(Task task) {
+    final isCompleted = task.doneOn != null;
     return RepaintBoundary(
       child: GestureDetector(
         onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity! > 0) {
-            _toggleTaskCompletion(task, !task.isDone);
+            _toggleTaskCompletion(task, !isCompleted);
           }
         },
         child: ListTile(
           leading: Checkbox(
-            value: task.isDone,
+            value: isCompleted,
             onChanged: (value) => _toggleTaskCompletion(task, value!),
           ),
           title: Text(
-            task.task,
+            task.taskTitle,
             style:
-                task.isDone
+                isCompleted
                     ? const TextStyle(decoration: TextDecoration.lineThrough)
                     : null,
           ),
@@ -163,7 +167,7 @@ class _TasksPageState extends State<TasksPage> {
             "${task.dueDate.day}/${task.dueDate.month}",
             style: TextStyle(
               color:
-                  task.dueDate.isBefore(DateTime.now()) && !task.isDone
+                  task.dueDate.isBefore(DateTime.now()) && !isCompleted
                       ? Colors.red
                       : Colors.grey,
             ),
@@ -210,7 +214,7 @@ class _TasksPageState extends State<TasksPage> {
 
   // Bottom Sheet
   void _showTaskBottomSheet(Task? task, String label) {
-    _taskController.text = task?.task ?? "";
+    _taskController.text = task?.taskTitle ?? "";
     DateTime selectedDate = task?.dueDate ?? DateTime.now();
 
     showModalBottomSheet(
@@ -316,7 +320,7 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppStyles.appBar("ToDo List", context),
+      appBar: AppStyles.appBar("Tasks", context),
       body: _buildTaskList(),
       floatingActionButton: AppStyles.floatingActionButton(
         Icons.add,

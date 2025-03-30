@@ -1,6 +1,6 @@
 import 'package:ascent/visuals/screens/in_progress.dart';
 import 'package:flutter/material.dart';
-import 'package:ascent/visuals/screens/tasks_page.dart';
+import 'package:ascent/visuals/screens/tasks.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
