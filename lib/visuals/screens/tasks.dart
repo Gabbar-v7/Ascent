@@ -320,7 +320,7 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppStyles.appBar("ToDo List", context),
+      appBar: AppStyles.appBar("Tasks", context),
       body: _buildTaskList(),
       floatingActionButton: AppStyles.floatingActionButton(
         Icons.add,
