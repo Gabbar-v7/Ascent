@@ -1,18 +1,35 @@
 # Ascent
 
-A modern, efficient, and user-friendly task management application built with Flutter.
+A blazing-fast Flutter mobile app for managing tasks, notes, and focus sessions with intuitive gestures and smooth performance. 
+
+Built for **speed** and **efficiency**. Perfect for productivity on the go!  
+
+### 📌 Why Ascent?
+- **Gesture-driven** (swipe, hold, tap shortcuts)  
+- **Lightweight & optimized** (no lag, fast startup)  
+- **Clean UI** with dark/light mode  
+
+Try it now and boost your workflow! Contributions welcome.  
+
+## Stats
+<div align="center">
+    <a href="#"><img src="https://img.shields.io/github/stars/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Stars"></a>&nbsp;
+    <a href="#"><img src="https://img.shields.io/github/forks/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Forks"></a>&nbsp;
+    <a href="#"><img src="https://img.shields.io/github/issues/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Active Issues"></a>&nbsp;
+    <a href="#"><img src="https://img.shields.io/github/issues-pr/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Active PRs"></a>
+    <br>
+    <a href="#"><img src="https://img.shields.io/github/release/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Release"></a>&nbsp;
+    <a href="#"><img src="https://img.shields.io/github/repo-size/gabbar-v7/ascent?style=for-the-badge&labelColor=grey&color=grey" alt="Repo Size"></a>
+    <br>
+    <a href="#"><img src="https://img.shields.io/github/license/gabbar-v7/ascent?style=for-the-badge&label=license&labelColor=grey&color=grey" alt="License"></a>&nbsp;
+</div>
 
 ## Features
 
-- 📝 Create, edit, and delete tasks
-- 📅 Set due dates for tasks
-- ✅ Mark tasks as complete/incomplete
-- 📱 Beautiful and responsive UI
-- 🌓 Light and dark theme support
-- 🔄 Real-time task updates
-- 📊 Task categorization (Today, Previous, Future, Completed)
-- ⚡ Optimized performance with caching and debouncing
-- 🔔 Task notifications (coming soon)
+✔ **To-Do List** – Quick-add, swipe gestures, smart sorting  
+✔ **Pomodoro Timer** – Focus sessions with stats tracking  
+✔ **Notes** – Lightweight & markdown-ready  
+✔ **Optimized UX** – Instant actions, minimal taps, silky animations  
 
 ## Screenshots
 
@@ -25,7 +42,6 @@ A modern, efficient, and user-friendly task management application built with Fl
 - Flutter SDK (latest stable version)
 - Dart SDK (latest stable version)
 - Android Studio / VS Code with Flutter extensions
-- Git
 
 ### Installation
 
@@ -54,19 +70,12 @@ flutter run
 ```
 lib/
 ├── database/          # Database related code
-├── visuals/          # UI components
-│   ├── components/   # Reusable UI components
-│   ├── screens/      # App screens
-│   └── utils/        # Utility functions
-└── main.dart         # App entry point
+├── visuals/           # UI components
+│   ├── components/    # Reusable UI components
+│   ├── screens/       # App screens
+│   └── utils/         # Utility functions
+└── main.dart          # App entry point
 ```
-
-## Dependencies
-
-- `drift`: SQLite database
-- `gap`: Spacing utility
-- `url_launcher`: URL handling
-- [Add other dependencies]
 
 ## Development
 
@@ -78,37 +87,44 @@ The app uses Drift (SQLite) for local storage. To generate database code:
 dart run build_runner build
 ```
 
+For more information refer [Drift Documentation](https://drift.simonbinder.eu/setup/).
+
 ### Code Style
 
-This project follows the official [Dart style guide](https://dart.dev/guides/language/effective-dart/style).
-
-## Performance Optimizations
-
-- Task categorization caching
-- Efficient list rendering with ListView.builder
-- Debounced task completion updates
-- Optimized state management
-- RepaintBoundary for UI components
-- Memory leak prevention
+This project follows the official [Dart Style Guide](https://dart.dev/guides/language/effective-dart/style).
 
 ## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. **Fork the Repository:**
 
-## License
+   ```bash
+   git fork https://github.com/Gabbar-v7/Ascent.git
+   ```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+2. **Create a Feature Branch:**
 
-## Acknowledgments
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
 
-- Flutter team for the amazing framework
-- Drift team for the database solution
-- [Add other acknowledgments]
+3. **Commit Your Changes:**
 
-## Contact
+   ```bash
+   git commit -m "Your concise commit message"
+   ```
 
-Project Link: [https://github.com/Gabbar-v7/Ascent](https://github.com/Gabbar-v7/Ascent)
+4. **Push the Branch:**
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+5. **Submit a Pull Request on GitHub.**
+
+## Support
+
+<div align="center">
+    <a href="https://github.com/sponsors/Gabbar-v7"><img src="https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#white" alt="GitHub Sponsors" height=30></a>&nbsp;
+    <a href="https://buymeacoffee.com/gabbar_v7"><img src="https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee" height=30></a>&nbsp;
+    <a href="https://www.paypal.me/GabbarShall"><img src="https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal" height=30></a>
+</div>
