@@ -311,22 +311,29 @@ class _TasksPageState extends State<TasksPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      AppStyles.appBar(
-                        label,
-                        context,
-                        actions:
-                            task != null
-                                ? [
-                                  IconButton(
-                                    icon: const Icon(Icons.delete_outline),
-                                    onPressed: () {
-                                      _deleteTask(task);
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ]
-                                : [],
-                        backgroundColor: Colors.transparent,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 3.0,
+                          right: 3,
+                          left: 3,
+                        ),
+                        child: AppStyles.appBar(
+                          label,
+                          context,
+                          actions:
+                              task != null
+                                  ? [
+                                    IconButton(
+                                      icon: const Icon(Icons.delete_outline),
+                                      onPressed: () {
+                                        _deleteTask(task);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ]
+                                  : [],
+                          backgroundColor: Colors.transparent,
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
