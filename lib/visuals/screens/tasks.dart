@@ -170,8 +170,7 @@ class _TasksPageState extends State<TasksPage> {
             onDoubleTap: () => _toggleTaskCompletion(task, !isCompleted),
             onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
             borderRadius: BorderRadius.circular(12),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+            child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
