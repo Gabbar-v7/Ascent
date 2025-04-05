@@ -191,10 +191,12 @@ class _TasksPageState extends State<TasksPage> {
                         onChanged:
                             (value) => _toggleTaskCompletion(task, value!),
                       ),
-                      const Gap(8),
+                      const Gap(6),
                       Expanded(
                         child: Text(
                           task.taskTitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
@@ -205,6 +207,7 @@ class _TasksPageState extends State<TasksPage> {
                           ),
                         ),
                       ),
+                      const Gap(8),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
