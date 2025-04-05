@@ -156,7 +156,7 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   // UI Components
-  Widget taskTile({required Task task}) {
+  Widget _taskTile(Task task) {
     final isCompleted = task.doneOn != null;
     final isOverdue = task.dueDate.isBefore(DateTime.now()) && !isCompleted;
     final hasBody = task.taskBody?.isNotEmpty ?? false;
@@ -252,10 +252,6 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-  Widget _buildTaskTile(Task task) {
-    return taskTile(task: task);
-  }
-
   Widget _buildCategoryHeader(String title) {
     return RepaintBoundary(
       child: Padding(
@@ -284,7 +280,7 @@ class _TasksPageState extends State<TasksPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildCategoryHeader(entry.key),
-            ...entry.value.map(_buildTaskTile),
+            ...entry.value.map(_taskTile),
           ],
         );
       },
