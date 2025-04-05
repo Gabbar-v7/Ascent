@@ -156,35 +156,94 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   // UI Components
-  Widget _buildTaskTile(Task task) {
+  Widget taskTile({required Task task}) {
     final isCompleted = task.doneOn != null;
+
     return RepaintBoundary(
-      child: GestureDetector(
-        onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
-        onDoubleTap: () {
-          _toggleTaskCompletion(task, !isCompleted);
-        },
-        child: AppStyles.listTile(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
           onDoubleTap: () => _toggleTaskCompletion(task, !isCompleted),
           onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
-          leading: Checkbox(
-            value: isCompleted,
-            onChanged: (value) => _toggleTaskCompletion(task, value!),
-          ),
-          title: task.taskTitle,
-          trailing: Text(
-            "${task.dueDate.day}/${task.dueDate.month}",
-            style: TextStyle(
-              color:
-                  task.dueDate.isBefore(DateTime.now()) && !isCompleted
-                      ? Colors.red
-                      : Colors.grey,
+          borderRadius: BorderRadius.circular(12),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.grey.withValues(alpha: 0.2),
+                width: 1,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Top row (leading + title + trailing)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Checkbox(
+                      value: isCompleted,
+                      onChanged: (value) => _toggleTaskCompletion(task, value!),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        task.taskTitle,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "${task.dueDate.day}/${task.dueDate.month}",
+                        style: TextStyle(
+                          color:
+                              task.dueDate.isBefore(DateTime.now()) &&
+                                      !isCompleted
+                                  ? Colors.red
+                                  : Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Conditional divider and body
+                if (task.taskBody != null && task.taskBody!.isNotEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40.0),
+                    child: Text(
+                      task.taskBody!,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
-          body: task.taskBody,
         ),
       ),
     );
+  }
+
+  Widget _buildTaskTile(Task task) {
+    return taskTile(task: task);
   }
 
   Widget _buildCategoryHeader(String title) {
