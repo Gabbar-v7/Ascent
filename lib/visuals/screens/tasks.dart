@@ -17,7 +17,8 @@ class _TasksPageState extends State<TasksPage> {
   final database = AppDatabase();
 
   // Controllers and state
-  final TextEditingController _taskController = TextEditingController();
+  final TextEditingController _taskTitleController = TextEditingController();
+  final TextEditingController _taskBodyController = TextEditingController();
   List<Task> _tasks = [];
   Map<String, List<Task>>? _categorizedTasksCache;
 
@@ -29,7 +30,8 @@ class _TasksPageState extends State<TasksPage> {
 
   @override
   void dispose() {
-    _taskController.dispose();
+    _taskTitleController.dispose();
+    _taskBodyController.dispose();
     super.dispose();
   }
 
@@ -56,22 +58,34 @@ class _TasksPageState extends State<TasksPage> {
     }
   }
 
-  Future<void> _addTask(String taskName, DateTime dueDate) async {
+  Future<void> _addTask(
+    String taskTitle,
+    String taskBody,
+    DateTime dueDate,
+  ) async {
     await database
         .into(database.tasks)
-        .insert(TasksCompanion.insert(taskTitle: taskName, dueDate: dueDate));
+        .insert(
+          TasksCompanion.insert(
+            taskTitle: taskTitle,
+            taskBody: drift.Value(taskBody),
+            dueDate: dueDate,
+          ),
+        );
     await _fetchTasks();
   }
 
   Future<void> _updateTask(
     Task task,
-    String newTaskName,
+    String newTaskTitle,
+    String newTaskBody,
     DateTime newDueDate,
   ) async {
     await (database.update(database.tasks)
       ..where((tbl) => tbl.id.equals(task.id))).write(
       TasksCompanion(
-        taskTitle: drift.Value(newTaskName),
+        taskTitle: drift.Value(newTaskTitle),
+        taskBody: drift.Value(newTaskBody),
         dueDate: drift.Value(newDueDate),
       ),
     );
@@ -92,6 +106,7 @@ class _TasksPageState extends State<TasksPage> {
         _tasks[index] = Task(
           id: task.id,
           taskTitle: task.taskTitle,
+          taskBody: task.taskBody,
           dueDate: task.dueDate,
           doneOn: isDone ? DateTime.now() : null,
         );
@@ -146,23 +161,17 @@ class _TasksPageState extends State<TasksPage> {
     return RepaintBoundary(
       child: GestureDetector(
         onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
-        onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity! > 0) {
-            _toggleTaskCompletion(task, !isCompleted);
-          }
+        onDoubleTap: () {
+          _toggleTaskCompletion(task, !isCompleted);
         },
-        child: ListTile(
+        child: AppStyles.listTile(
+          onDoubleTap: () => _toggleTaskCompletion(task, !isCompleted),
+          onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
           leading: Checkbox(
             value: isCompleted,
             onChanged: (value) => _toggleTaskCompletion(task, value!),
           ),
-          title: Text(
-            task.taskTitle,
-            style:
-                isCompleted
-                    ? const TextStyle(decoration: TextDecoration.lineThrough)
-                    : null,
-          ),
+          title: task.taskTitle,
           trailing: Text(
             "${task.dueDate.day}/${task.dueDate.month}",
             style: TextStyle(
@@ -172,6 +181,7 @@ class _TasksPageState extends State<TasksPage> {
                       : Colors.grey,
             ),
           ),
+          body: task.taskBody,
         ),
       ),
     );
@@ -214,7 +224,8 @@ class _TasksPageState extends State<TasksPage> {
 
   // Bottom Sheet
   void _showTaskBottomSheet(Task? task, String label) {
-    _taskController.text = task?.taskTitle ?? "";
+    _taskTitleController.text = task?.taskTitle ?? "";
+    _taskBodyController.text = task?.taskBody ?? "";
     DateTime selectedDate = task?.dueDate ?? DateTime.now();
 
     showModalBottomSheet(
@@ -255,11 +266,20 @@ class _TasksPageState extends State<TasksPage> {
                         child: Column(
                           children: <Widget>[
                             TextField(
-                              controller: _taskController,
+                              controller: _taskTitleController,
                               textCapitalization: TextCapitalization.sentences,
                               decoration: const InputDecoration(
-                                hintText: "Enter Task:",
+                                hintText: "Enter title task:",
                               ),
+                            ),
+                            const Gap(20),
+                            TextFormField(
+                              controller: _taskBodyController,
+                              maxLines: 5,
+                              decoration: InputDecoration(
+                                hintText: "Enter task body:",
+                              ),
+                              keyboardType: TextInputType.multiline,
                             ),
                             const Gap(20),
                             Row(
@@ -286,16 +306,18 @@ class _TasksPageState extends State<TasksPage> {
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    if (_taskController.text.isNotEmpty) {
+                                    if (_taskTitleController.text.isNotEmpty) {
                                       if (task != null) {
                                         _updateTask(
                                           task,
-                                          _taskController.text,
+                                          _taskTitleController.text,
+                                          _taskBodyController.text,
                                           selectedDate,
                                         );
                                       } else {
                                         _addTask(
-                                          _taskController.text,
+                                          _taskTitleController.text,
+                                          _taskBodyController.text,
                                           selectedDate,
                                         );
                                       }
