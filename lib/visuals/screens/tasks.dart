@@ -164,87 +164,87 @@ class _TasksPageState extends State<TasksPage> {
     return RepaintBoundary(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onDoubleTap: () => _toggleTaskCompletion(task, !isCompleted),
-            onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.grey.withValues(alpha: .3),
-                  width: 1,
-                ),
+        child: InkWell(
+          onDoubleTap: () => _toggleTaskCompletion(task, !isCompleted),
+          onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.grey.withValues(alpha: .3),
+                width: 1,
               ),
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Top row with checkbox, title, and date
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: isCompleted,
-                        onChanged:
-                            (value) => _toggleTaskCompletion(task, value!),
-                      ),
-                      const Gap(6),
-                      Expanded(
-                        child: Text(
-                          task.taskTitle,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            letterSpacing: 0.3,
-                            decoration:
-                                isCompleted ? TextDecoration.lineThrough : null,
-                            decorationThickness: 4,
-                          ),
-                        ),
-                      ),
-                      const Gap(8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withValues(alpha: .1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          "${task.dueDate.day}/${task.dueDate.month}",
-                          style: TextStyle(
-                            color: isOverdue ? Colors.red : Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // Body text with conditional divider
-                  if (hasBody)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0, right: 20),
+            ),
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Top row with checkbox, title, and date
+                Row(
+                  children: [
+                    Checkbox(
+                      value: isCompleted,
+                      onChanged: (value) => _toggleTaskCompletion(task, value!),
+                    ),
+                    const Gap(6),
+                    Expanded(
                       child: Text(
-                        task.taskBody!,
+                        task.taskTitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[400],
-                          height: 1.4,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          letterSpacing: 0.3,
                           decoration:
                               isCompleted ? TextDecoration.lineThrough : null,
                           decorationThickness: 4,
-                          decorationColor: Colors.grey[600],
                         ),
                       ),
                     ),
-                ],
-              ),
+                    const Gap(8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withValues(alpha: .1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "${task.dueDate.day}/${task.dueDate.month}",
+                        style: TextStyle(
+                          color: isOverdue ? Colors.red : Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Body text with conditional divider
+                if (hasBody)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20,
+                      bottom: 6,
+                    ),
+                    child: Text(
+                      task.taskBody!,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[400],
+                        height: 1.4,
+                        decoration:
+                            isCompleted ? TextDecoration.lineThrough : null,
+                        decorationThickness: 4,
+                        decorationColor: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
