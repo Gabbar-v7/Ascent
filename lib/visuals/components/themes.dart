@@ -6,6 +6,7 @@ final ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: Colors.white,
   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
   appBarTheme: AppBarTheme(
+    scrolledUnderElevation: 0,
     systemOverlayStyle: SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
       statusBarIconBrightness: Brightness.dark,
@@ -27,6 +28,7 @@ final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
   ),
   appBarTheme: AppBarTheme(
+    scrolledUnderElevation: 0,
     systemOverlayStyle: SystemUiOverlayStyle(
       statusBarBrightness: Brightness.dark,
       statusBarIconBrightness: Brightness.light,
