@@ -1,4 +1,5 @@
 import 'package:ascent/visuals/components/app_styles.dart';
+import 'package:ascent/visuals/components/theme_extensions/general_decoration.dart';
 import 'package:ascent/visuals/components/theme_extensions/task_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -229,8 +230,6 @@ class _TasksPageState extends State<TasksPage> {
                     ),
                     child: Text(
                       task.taskBody!,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(
                         context,
                       ).extension<TaskDecoration>()?.taskBodyStyle.copyWith(
@@ -339,16 +338,6 @@ class _TasksPageState extends State<TasksPage> {
                               style: const TextStyle(fontSize: 16),
                               decoration: InputDecoration(
                                 hintText: "Task Title",
-                                filled: true,
-                                fillColor: Colors.grey.withValues(alpha: 0.1),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 14,
-                                ),
                               ),
                             ),
                             const Gap(16),
@@ -359,16 +348,6 @@ class _TasksPageState extends State<TasksPage> {
                               style: const TextStyle(fontSize: 16),
                               decoration: InputDecoration(
                                 hintText: "Add Description (Optional)",
-                                filled: true,
-                                fillColor: Colors.grey.withValues(alpha: 0.1),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 14,
-                                ),
                               ),
                               keyboardType: TextInputType.multiline,
                             ),
@@ -397,18 +376,10 @@ class _TasksPageState extends State<TasksPage> {
                                     label: Text(
                                       "Due: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
                                     ),
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                        vertical: 14,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      elevation:
-                                          0, // Remove shadow to match your container
-                                      foregroundColor: Colors.white,
-                                    ),
+                                    style:
+                                        Theme.of(context)
+                                            .extension<GeneralDecoration>()
+                                            ?.secondaryButton,
                                   ),
                                 ),
                                 const Gap(16),
@@ -417,18 +388,10 @@ class _TasksPageState extends State<TasksPage> {
                                     onPressed: () {},
                                     icon: Icon(Icons.abc),
                                     label: Text("Coming Soon"),
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                        vertical: 14,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      elevation:
-                                          0, // Remove shadow to match your container
-                                      foregroundColor: Colors.white,
-                                    ),
+                                    style:
+                                        Theme.of(context)
+                                            .extension<GeneralDecoration>()
+                                            ?.secondaryButton,
                                   ),
                                 ),
                               ],
@@ -439,14 +402,6 @@ class _TasksPageState extends State<TasksPage> {
                                 Expanded(
                                   child: ElevatedButton(
                                     onPressed: () => Navigator.pop(context),
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 16,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
                                     child: const Text("Cancel"),
                                   ),
                                 ),
@@ -478,14 +433,6 @@ class _TasksPageState extends State<TasksPage> {
                                         Navigator.pop(context);
                                       }
                                     },
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 16,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
                                     child: const Text("Save"),
                                   ),
                                 ),

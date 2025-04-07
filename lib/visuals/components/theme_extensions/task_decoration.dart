@@ -33,9 +33,8 @@ class TaskDecoration extends ThemeExtension<TaskDecoration> {
     ThemeExtension<TaskDecoration>? other,
     double t,
   ) {
-    if (other is! TaskDecoration) {
-      return this;
-    }
+    if (other is! TaskDecoration) return this;
+
     return TaskDecoration(
       dateTagContainer:
           BoxDecoration.lerp(dateTagContainer, other.dateTagContainer, t)!,
