@@ -199,7 +199,7 @@ class _TasksPageState extends State<TasksPage> {
                         ),
                       ),
                     ),
-                    const Gap(8),
+                    const Gap(10),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -229,6 +229,8 @@ class _TasksPageState extends State<TasksPage> {
                     ),
                     child: Text(
                       task.taskBody!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(
                         context,
                       ).extension<TaskDecoration>()?.taskBodyStyle.copyWith(
