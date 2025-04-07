@@ -1,4 +1,5 @@
 import 'package:ascent/visuals/components/app_styles.dart';
+import 'package:ascent/visuals/components/theme_extensions/task_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ascent/database/app_database.dart';
@@ -169,13 +170,10 @@ class _TasksPageState extends State<TasksPage> {
           onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
           borderRadius: BorderRadius.circular(12),
           child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.grey.withValues(alpha: .3),
-                width: 1,
-              ),
-            ),
+            decoration:
+                Theme.of(
+                  context,
+                ).extension<TaskDecoration>()?.borderedContainer,
             padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,10 +207,10 @@ class _TasksPageState extends State<TasksPage> {
                         horizontal: 12,
                         vertical: 6,
                       ),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withValues(alpha: .1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      decoration:
+                          Theme.of(
+                            context,
+                          ).extension<TaskDecoration>()?.dateTagContainer,
                       child: Text(
                         "${task.dueDate.day}/${task.dueDate.month}",
                         style: TextStyle(
@@ -233,14 +231,11 @@ class _TasksPageState extends State<TasksPage> {
                     ),
                     child: Text(
                       task.taskBody!,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[400],
-                        height: 1.4,
+                      style: Theme.of(
+                        context,
+                      ).extension<TaskDecoration>()?.taskBodyStyle.copyWith(
                         decoration:
                             isCompleted ? TextDecoration.lineThrough : null,
-                        decorationThickness: 4,
-                        decorationColor: Colors.grey[600],
                       ),
                     ),
                   ),
