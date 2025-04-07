@@ -213,7 +213,14 @@ class _TasksPageState extends State<TasksPage> {
                       child: Text(
                         "${task.dueDate.day}/${task.dueDate.month}",
                         style: TextStyle(
-                          color: isOverdue ? Colors.red : Colors.grey,
+                          color:
+                              isOverdue
+                                  ? Theme.of(
+                                    context,
+                                  ).extension<TaskDecoration>()?.overdueColor
+                                  : Theme.of(
+                                    context,
+                                  ).extension<TaskDecoration>()?.dueColor,
                         ),
                       ),
                     ),

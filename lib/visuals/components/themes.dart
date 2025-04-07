@@ -67,6 +67,8 @@ final ThemeData lightTheme = ThemeData(
         decorationThickness: 4,
         decorationColor: Colors.black54,
       ),
+      overdueColor: Colors.red,
+      dueColor: Colors.green,
     ),
   ],
 );
@@ -137,6 +139,8 @@ final ThemeData darkTheme = ThemeData(
         decorationThickness: 4,
         decorationColor: Colors.grey[600],
       ),
+      overdueColor: Colors.red,
+      dueColor: Colors.grey,
     ),
   ],
 );
