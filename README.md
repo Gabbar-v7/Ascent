@@ -9,7 +9,13 @@ Built for **speed** and **efficiency**. Perfect for productivity on the go!
 - **Lightweight & optimized** (no lag, fast startup)  
 - **Clean UI** with dark/light mode  
 
-Try it now and boost your workflow! Contributions welcome.  
+Try it now and boost your workflow! Contributions welcome. 
+
+<div align="center">
+   <img src=".github/assets/get-it-on-google-play.png" alt="Get it on Google Play" height=100>
+   <img src=".github/assets/get-it-on-f-droid.png" alt="Get it on F-Droid" height=100>
+   <img src=".github/assets/download-on-the-app-store.png" alt="Download on the App Store" height=100>
+</div>
 
 ## Stats
 <div align="center">
