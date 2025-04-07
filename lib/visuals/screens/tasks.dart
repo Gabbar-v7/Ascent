@@ -61,7 +61,7 @@ class _TasksPageState extends State<TasksPage> {
 
   Future<void> _addTask(
     String taskTitle,
-    String taskBody,
+    String? taskBody,
     DateTime dueDate,
   ) async {
     await database
@@ -79,7 +79,7 @@ class _TasksPageState extends State<TasksPage> {
   Future<void> _updateTask(
     Task task,
     String newTaskTitle,
-    String newTaskBody,
+    String? newTaskBody,
     DateTime newDueDate,
   ) async {
     await (database.update(database.tasks)
@@ -461,13 +461,17 @@ class _TasksPageState extends State<TasksPage> {
                                           _updateTask(
                                             task,
                                             _taskTitleController.text,
-                                            _taskBodyController.text,
+                                            _taskBodyController.text.isNotEmpty
+                                                ? _taskBodyController.text
+                                                : null,
                                             selectedDate,
                                           );
                                         } else {
                                           _addTask(
                                             _taskTitleController.text,
-                                            _taskBodyController.text,
+                                            _taskBodyController.text.isNotEmpty
+                                                ? _taskBodyController.text
+                                                : null,
                                             selectedDate,
                                           );
                                         }
