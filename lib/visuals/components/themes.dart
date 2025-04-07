@@ -31,6 +31,12 @@ final ThemeData lightTheme = ThemeData(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.withValues(alpha: .5), width: 1),
       ),
+      taskTitleStyle: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 16,
+        letterSpacing: 0.3,
+        decorationThickness: 4,
+      ),
       taskBodyStyle: TextStyle(
         fontSize: 14,
         color: Colors.black,
@@ -73,6 +79,12 @@ final ThemeData darkTheme = ThemeData(
       borderedContainer: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.withValues(alpha: 0.3), width: 1),
+      ),
+      taskTitleStyle: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 16,
+        letterSpacing: 0.3,
+        decorationThickness: 4,
       ),
       taskBodyStyle: TextStyle(
         fontSize: 14,

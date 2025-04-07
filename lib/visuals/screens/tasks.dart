@@ -191,13 +191,11 @@ class _TasksPageState extends State<TasksPage> {
                         task.taskTitle,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          letterSpacing: 0.3,
+                        style: Theme.of(
+                          context,
+                        ).extension<TaskDecoration>()?.taskTitleStyle.copyWith(
                           decoration:
                               isCompleted ? TextDecoration.lineThrough : null,
-                          decorationThickness: 4,
                         ),
                       ),
                     ),
