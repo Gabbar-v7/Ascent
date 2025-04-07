@@ -303,7 +303,7 @@ class _TasksPageState extends State<TasksPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(
-                          top: 3.0,
+                          top: 3,
                           right: 3,
                           left: 3,
                         ),
@@ -332,66 +332,158 @@ class _TasksPageState extends State<TasksPage> {
                         ),
                         child: Column(
                           children: <Widget>[
+                            // Title field
                             TextField(
                               controller: _taskTitleController,
                               textCapitalization: TextCapitalization.sentences,
-                              decoration: const InputDecoration(
-                                hintText: "Enter title task:",
+                              style: const TextStyle(fontSize: 16),
+                              decoration: InputDecoration(
+                                hintText: "Task Title",
+                                filled: true,
+                                fillColor: Colors.grey.withValues(alpha: 0.1),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide.none,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 14,
+                                ),
                               ),
                             ),
-                            const Gap(20),
+                            const Gap(16),
+                            // Body field
                             TextFormField(
                               controller: _taskBodyController,
-                              maxLines: 5,
+                              maxLines: 4,
+                              style: const TextStyle(fontSize: 16),
                               decoration: InputDecoration(
-                                hintText: "Enter task body:",
+                                hintText: "Add Description (Optional)",
+                                filled: true,
+                                fillColor: Colors.grey.withValues(alpha: 0.1),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide.none,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 14,
+                                ),
                               ),
                               keyboardType: TextInputType.multiline,
                             ),
-                            const Gap(20),
+                            const Gap(16),
+
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              spacing: 10,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    final picked = await showDatePicker(
-                                      context: context,
-                                      initialDate: selectedDate,
-                                      firstDate: DateTime(2000),
-                                      lastDate: DateTime(2200),
-                                    );
-                                    if (picked != null) {
-                                      setModalState(
-                                        () => selectedDate = picked,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                // Due date selector
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      final picked = await showDatePicker(
+                                        context: context,
+                                        initialDate: selectedDate,
+                                        firstDate: DateTime(2000),
+                                        lastDate: DateTime(2200),
                                       );
-                                    }
-                                  },
-                                  child: Text(
-                                    "${selectedDate.day}/${selectedDate.month}",
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    if (_taskTitleController.text.isNotEmpty) {
-                                      if (task != null) {
-                                        _updateTask(
-                                          task,
-                                          _taskTitleController.text,
-                                          _taskBodyController.text,
-                                          selectedDate,
-                                        );
-                                      } else {
-                                        _addTask(
-                                          _taskTitleController.text,
-                                          _taskBodyController.text,
-                                          selectedDate,
+                                      if (picked != null) {
+                                        setModalState(
+                                          () => selectedDate = picked,
                                         );
                                       }
-                                      Navigator.pop(context);
-                                    }
-                                  },
-                                  child: const Text("Save"),
+                                    },
+                                    icon: Icon(Icons.calendar_today),
+                                    label: Text(
+                                      "Due: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 14,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      elevation:
+                                          0, // Remove shadow to match your container
+                                      foregroundColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                const Gap(16),
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.abc),
+                                    label: Text("Coming Soon"),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 14,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      elevation:
+                                          0, // Remove shadow to match your container
+                                      foregroundColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(16),
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: const Text("Cancel"),
+                                  ),
+                                ),
+                                const Gap(12),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      if (_taskTitleController
+                                          .text
+                                          .isNotEmpty) {
+                                        if (task != null) {
+                                          _updateTask(
+                                            task,
+                                            _taskTitleController.text,
+                                            _taskBodyController.text,
+                                            selectedDate,
+                                          );
+                                        } else {
+                                          _addTask(
+                                            _taskTitleController.text,
+                                            _taskBodyController.text,
+                                            selectedDate,
+                                          );
+                                        }
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: const Text("Save"),
+                                  ),
                                 ),
                               ],
                             ),
