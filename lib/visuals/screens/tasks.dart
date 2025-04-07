@@ -177,10 +177,10 @@ class _TasksPageState extends State<TasksPage> {
             padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 // Top row with checkbox, title, and date
                 Row(
-                  children: [
+                  children: <Widget>[
                     Checkbox(
                       value: isCompleted,
                       onChanged: (value) => _toggleTaskCompletion(task, value!),
@@ -223,7 +223,7 @@ class _TasksPageState extends State<TasksPage> {
                 if (hasBody)
                   Padding(
                     padding: const EdgeInsets.only(
-                      left: 20.0,
+                      left: 20,
                       right: 20,
                       bottom: 6,
                     ),
