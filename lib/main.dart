@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ascent/visuals/home_page.dart';
+import 'package:ascent/visuals/index.dart';
 import 'package:ascent/visuals/components/themes.dart';
 
 void main() {

@@ -461,9 +461,9 @@ class _TasksPageState extends State<TasksPage> {
     return Scaffold(
       appBar: AppStyles.appBar("Tasks", context),
       body: _buildTaskList(),
-      floatingActionButton: AppStyles.floatingActionButton(
-        Icons.add,
-        () => _showTaskBottomSheet(null, "Add Task"),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => _showTaskBottomSheet(null, "Add Task"),
       ),
     );
   }

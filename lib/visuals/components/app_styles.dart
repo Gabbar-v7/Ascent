@@ -19,14 +19,4 @@ class AppStyles {
       backgroundColor: backgroundColor,
     );
   }
-
-  static FloatingActionButton floatingActionButton(
-    IconData icon,
-    VoidCallback onPress,
-  ) {
-    return FloatingActionButton(
-      onPressed: onPress,
-      child: Icon(icon, size: 27),
-    );
-  }
 }
