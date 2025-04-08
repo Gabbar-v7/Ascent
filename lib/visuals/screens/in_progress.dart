@@ -1,5 +1,6 @@
 import 'package:ascent/visuals/components/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InProgressPage extends StatelessWidget {
@@ -30,7 +31,7 @@ class InProgressPage extends StatelessWidget {
               'In Progress',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20), // Spacing
+            const Gap(20), // Spacing
             // Informative text
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -40,7 +41,7 @@ class InProgressPage extends StatelessWidget {
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
             ),
-            SizedBox(height: 20), // Spacing
+            const Gap(20), // Spacing
             // Button to open GitHub URL
             ElevatedButton(
               onPressed: _launchGithubUrl,

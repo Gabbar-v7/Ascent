@@ -11,10 +11,10 @@ class AppStyles {
   }) {
     return AppBar(
       leading: IconButton(
-        icon: Icon(icon, size: 27),
+        icon: Icon(icon),
         onPressed: () => NavManager.popPage(context),
       ),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.w500)),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
       actions: actions,
       backgroundColor: backgroundColor,
     );
