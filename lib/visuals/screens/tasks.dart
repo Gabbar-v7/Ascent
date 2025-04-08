@@ -1,4 +1,6 @@
 import 'package:ascent/visuals/components/app_styles.dart';
+import 'package:ascent/visuals/components/theme_extensions/general_decoration.dart';
+import 'package:ascent/visuals/components/theme_extensions/task_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ascent/database/app_database.dart';
@@ -17,7 +19,8 @@ class _TasksPageState extends State<TasksPage> {
   final database = AppDatabase();
 
   // Controllers and state
-  final TextEditingController _taskController = TextEditingController();
+  final TextEditingController _taskTitleController = TextEditingController();
+  final TextEditingController _taskBodyController = TextEditingController();
   List<Task> _tasks = [];
   Map<String, List<Task>>? _categorizedTasksCache;
 
@@ -29,7 +32,8 @@ class _TasksPageState extends State<TasksPage> {
 
   @override
   void dispose() {
-    _taskController.dispose();
+    _taskTitleController.dispose();
+    _taskBodyController.dispose();
     super.dispose();
   }
 
@@ -56,22 +60,34 @@ class _TasksPageState extends State<TasksPage> {
     }
   }
 
-  Future<void> _addTask(String taskName, DateTime dueDate) async {
+  Future<void> _addTask(
+    String taskTitle,
+    String? taskBody,
+    DateTime dueDate,
+  ) async {
     await database
         .into(database.tasks)
-        .insert(TasksCompanion.insert(taskTitle: taskName, dueDate: dueDate));
+        .insert(
+          TasksCompanion.insert(
+            taskTitle: taskTitle,
+            taskBody: drift.Value(taskBody),
+            dueDate: dueDate,
+          ),
+        );
     await _fetchTasks();
   }
 
   Future<void> _updateTask(
     Task task,
-    String newTaskName,
+    String newTaskTitle,
+    String? newTaskBody,
     DateTime newDueDate,
   ) async {
     await (database.update(database.tasks)
       ..where((tbl) => tbl.id.equals(task.id))).write(
       TasksCompanion(
-        taskTitle: drift.Value(newTaskName),
+        taskTitle: drift.Value(newTaskTitle),
+        taskBody: drift.Value(newTaskBody),
         dueDate: drift.Value(newDueDate),
       ),
     );
@@ -92,6 +108,7 @@ class _TasksPageState extends State<TasksPage> {
         _tasks[index] = Task(
           id: task.id,
           taskTitle: task.taskTitle,
+          taskBody: task.taskBody,
           dueDate: task.dueDate,
           doneOn: isDone ? DateTime.now() : null,
         );
@@ -141,35 +158,94 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   // UI Components
-  Widget _buildTaskTile(Task task) {
+  Widget _taskTile(Task task) {
     final isCompleted = task.doneOn != null;
+    final isOverdue = task.dueDate.isBefore(DateTime.now()) && !isCompleted;
+    final hasBody = task.taskBody?.isNotEmpty ?? false;
+
     return RepaintBoundary(
-      child: GestureDetector(
-        onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
-        onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity! > 0) {
-            _toggleTaskCompletion(task, !isCompleted);
-          }
-        },
-        child: ListTile(
-          leading: Checkbox(
-            value: isCompleted,
-            onChanged: (value) => _toggleTaskCompletion(task, value!),
-          ),
-          title: Text(
-            task.taskTitle,
-            style:
-                isCompleted
-                    ? const TextStyle(decoration: TextDecoration.lineThrough)
-                    : null,
-          ),
-          trailing: Text(
-            "${task.dueDate.day}/${task.dueDate.month}",
-            style: TextStyle(
-              color:
-                  task.dueDate.isBefore(DateTime.now()) && !isCompleted
-                      ? Colors.red
-                      : Colors.grey,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: InkWell(
+          onDoubleTap: () => _toggleTaskCompletion(task, !isCompleted),
+          onLongPress: () => _showTaskBottomSheet(task, "Edit Task"),
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            decoration:
+                Theme.of(
+                  context,
+                ).extension<TaskDecoration>()?.borderedContainer,
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // Top row with checkbox, title, and date
+                Row(
+                  children: <Widget>[
+                    Checkbox(
+                      value: isCompleted,
+                      onChanged: (value) => _toggleTaskCompletion(task, value!),
+                    ),
+                    const Gap(6),
+                    Expanded(
+                      child: Text(
+                        task.taskTitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(
+                          context,
+                        ).extension<TaskDecoration>()?.taskTitleStyle.copyWith(
+                          decoration:
+                              isCompleted ? TextDecoration.lineThrough : null,
+                        ),
+                      ),
+                    ),
+                    const Gap(10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration:
+                          Theme.of(
+                            context,
+                          ).extension<TaskDecoration>()?.dateTagContainer,
+                      child: Text(
+                        "${task.dueDate.day}/${task.dueDate.month}",
+                        style: TextStyle(
+                          color:
+                              isOverdue
+                                  ? Theme.of(
+                                    context,
+                                  ).extension<TaskDecoration>()?.overdueColor
+                                  : Theme.of(
+                                    context,
+                                  ).extension<TaskDecoration>()?.dueColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Body text with conditional divider
+                if (hasBody)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      bottom: 6,
+                    ),
+                    child: Text(
+                      task.taskBody!,
+                      style: Theme.of(
+                        context,
+                      ).extension<TaskDecoration>()?.taskBodyStyle.copyWith(
+                        decoration:
+                            isCompleted ? TextDecoration.lineThrough : null,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
@@ -205,7 +281,7 @@ class _TasksPageState extends State<TasksPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildCategoryHeader(entry.key),
-            ...entry.value.map(_buildTaskTile),
+            ...entry.value.map(_taskTile),
           ],
         );
       },
@@ -214,7 +290,8 @@ class _TasksPageState extends State<TasksPage> {
 
   // Bottom Sheet
   void _showTaskBottomSheet(Task? task, String label) {
-    _taskController.text = task?.taskTitle ?? "";
+    _taskTitleController.text = task?.taskTitle ?? "";
+    _taskBodyController.text = task?.taskBody ?? "";
     DateTime selectedDate = task?.dueDate ?? DateTime.now();
 
     showModalBottomSheet(
@@ -230,22 +307,29 @@ class _TasksPageState extends State<TasksPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      AppStyles.appBar(
-                        label,
-                        context,
-                        actions:
-                            task != null
-                                ? [
-                                  IconButton(
-                                    icon: const Icon(Icons.delete_outline),
-                                    onPressed: () {
-                                      _deleteTask(task);
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ]
-                                : [],
-                        backgroundColor: Colors.transparent,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 3,
+                          right: 3,
+                          left: 3,
+                        ),
+                        child: AppStyles.appBar(
+                          label,
+                          context,
+                          actions:
+                              task != null
+                                  ? [
+                                    IconButton(
+                                      icon: const Icon(Icons.delete_outline),
+                                      onPressed: () {
+                                        _deleteTask(task);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ]
+                                  : [],
+                          backgroundColor: Colors.transparent,
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -254,55 +338,110 @@ class _TasksPageState extends State<TasksPage> {
                         ),
                         child: Column(
                           children: <Widget>[
+                            // Title field
                             TextField(
-                              controller: _taskController,
+                              controller: _taskTitleController,
                               textCapitalization: TextCapitalization.sentences,
-                              decoration: const InputDecoration(
-                                hintText: "Enter Task:",
+                              style: const TextStyle(fontSize: 16),
+                              decoration: InputDecoration(
+                                hintText: "Task Title",
                               ),
                             ),
-                            const Gap(20),
+                            const Gap(16),
+                            // Body field
+                            TextFormField(
+                              controller: _taskBodyController,
+                              maxLines: 4,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: InputDecoration(
+                                hintText: "Add Description (Optional)",
+                              ),
+                              keyboardType: TextInputType.multiline,
+                            ),
+                            const Gap(16),
+
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              spacing: 10,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    final picked = await showDatePicker(
-                                      context: context,
-                                      initialDate: selectedDate,
-                                      firstDate: DateTime(2000),
-                                      lastDate: DateTime(2200),
-                                    );
-                                    if (picked != null) {
-                                      setModalState(
-                                        () => selectedDate = picked,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                // Due date selector
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      final picked = await showDatePicker(
+                                        context: context,
+                                        initialDate: selectedDate,
+                                        firstDate: DateTime(2000),
+                                        lastDate: DateTime(2200),
                                       );
-                                    }
-                                  },
-                                  child: Text(
-                                    "${selectedDate.day}/${selectedDate.month}",
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    if (_taskController.text.isNotEmpty) {
-                                      if (task != null) {
-                                        _updateTask(
-                                          task,
-                                          _taskController.text,
-                                          selectedDate,
-                                        );
-                                      } else {
-                                        _addTask(
-                                          _taskController.text,
-                                          selectedDate,
+                                      if (picked != null) {
+                                        setModalState(
+                                          () => selectedDate = picked,
                                         );
                                       }
-                                      Navigator.pop(context);
-                                    }
-                                  },
-                                  child: const Text("Save"),
+                                    },
+                                    icon: Icon(Icons.calendar_today),
+                                    label: Text(
+                                      "Due: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+                                    ),
+                                    style:
+                                        Theme.of(context)
+                                            .extension<GeneralDecoration>()
+                                            ?.secondaryButton,
+                                  ),
+                                ),
+                                const Gap(16),
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.abc),
+                                    label: Text("Coming Soon"),
+                                    style:
+                                        Theme.of(context)
+                                            .extension<GeneralDecoration>()
+                                            ?.secondaryButton,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(16),
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("Cancel"),
+                                  ),
+                                ),
+                                const Gap(12),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      if (_taskTitleController
+                                          .text
+                                          .isNotEmpty) {
+                                        if (task != null) {
+                                          _updateTask(
+                                            task,
+                                            _taskTitleController.text,
+                                            _taskBodyController.text.isNotEmpty
+                                                ? _taskBodyController.text
+                                                : null,
+                                            selectedDate,
+                                          );
+                                        } else {
+                                          _addTask(
+                                            _taskTitleController.text,
+                                            _taskBodyController.text.isNotEmpty
+                                                ? _taskBodyController.text
+                                                : null,
+                                            selectedDate,
+                                          );
+                                        }
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                                    child: const Text("Save"),
+                                  ),
                                 ),
                               ],
                             ),
