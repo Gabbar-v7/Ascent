@@ -1,4 +1,5 @@
 import 'package:ascent/visuals/screens/in_progress.dart';
+import 'package:ascent/visuals/screens/notes/index.dart';
 import 'package:flutter/material.dart';
 import 'package:ascent/visuals/screens/tasks/index.dart';
 
@@ -14,7 +15,7 @@ class HomePageState extends State<HomePage> {
   late List<Widget> pageList = [
     const TasksPage(),
     InProgressPage(),
-    InProgressPage(),
+    const NotesPage(),
   ];
 
   @override
