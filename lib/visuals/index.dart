@@ -1,4 +1,5 @@
 import 'package:ascent/visuals/screens/in_progress.dart';
+import 'package:ascent/visuals/screens/settings/index.dart';
 import 'package:flutter/material.dart';
 import 'package:ascent/visuals/screens/tasks/index.dart';
 
@@ -31,7 +32,7 @@ class HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       builder: (context) {
-        return Padding(padding: EdgeInsets.all(10), child: InProgressPage());
+        return Padding(padding: EdgeInsets.all(10), child: SettingsPage());
       },
     );
   }
