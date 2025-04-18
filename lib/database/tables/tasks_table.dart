@@ -6,5 +6,5 @@ class Tasks extends Table {
   TextColumn get taskBody => text().nullable()();
   DateTimeColumn get dueDate => dateTime()();
   DateTimeColumn get doneOn => dateTime().nullable()();
-  DateTimeColumn get notify => dateTime().nullable()();
+  BoolColumn get notify => boolean().nullable()();
 }
