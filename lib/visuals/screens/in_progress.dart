@@ -1,6 +1,5 @@
 import 'package:ascent/visuals/components/app_styles.dart';
 import 'package:ascent/visuals/screens/settings/index.dart';
-import 'package:ascent/visuals/utils/nav_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,13 +27,11 @@ class InProgressPage extends StatelessWidget {
         context,
         actions: <Widget>[
           IconButton(
-            onPressed: () {
-              NavManager.popPage(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
-              );
-            },
+            onPressed:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
+                ),
             icon: Icon(Icons.settings),
           ),
         ],
