@@ -28,90 +28,94 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _pageBody() {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Gap(40),
-          Text(
-            'Database Management',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const Gap(40),
-          Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  const Icon(Icons.storage, size: 48, color: Colors.blue),
-                  const Gap(16),
-                  Text(
-                    'Backup & Restore',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const Gap(24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: _isExporting ? null : _exportDatabase,
-                      icon:
-                          _isExporting
-                              ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                              : const Icon(Icons.upload),
-                      label: const Text("Export Database"),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Gap(16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: _isImporting ? null : _importDatabase,
-                      icon:
-                          _isImporting
-                              ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                              : const Icon(Icons.download),
-                      label: const Text("Import Database"),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Gap(40),
+              Text(
+                'Database Management',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
+              const Gap(40),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      const Icon(Icons.storage, size: 48, color: Colors.blue),
+                      const Gap(16),
+                      Text(
+                        'Backup & Restore',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const Gap(24),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: _isExporting ? null : _exportDatabase,
+                          icon:
+                              _isExporting
+                                  ? const SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                  : const Icon(Icons.upload),
+                          label: const Text("Export Database"),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Gap(16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: _isImporting ? null : _importDatabase,
+                          icon:
+                              _isImporting
+                                  ? const SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                  : const Icon(Icons.download),
+                          label: const Text("Import Database"),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -242,6 +246,8 @@ class SettingsPageState extends State<SettingsPage> {
         throw Exception('Database file not found at ${dbFile.path}');
       }
 
+      final dbFileBytes = await dbFile.readAsBytes();
+
       // Create export filename with timestamp
       final now = DateTime.now();
       final timestamp =
@@ -255,14 +261,12 @@ class SettingsPageState extends State<SettingsPage> {
       final resultPath = await FilePicker.platform.saveFile(
         dialogTitle: 'Save Database Backup',
         fileName: 'Ascent-Backup-$timestamp.sqlite',
+        bytes: Uint8List.fromList(dbFileBytes),
       );
 
       if (resultPath == null) {
         throw Exception('Export cancelled by user');
       }
-
-      // Copy database to selected location
-      await dbFile.copy(resultPath);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
