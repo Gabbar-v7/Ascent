@@ -19,14 +19,6 @@ class SettingsPage extends StatefulWidget {
 class SettingsPageState extends State<SettingsPage> {
   bool _isExporting = false;
   bool _isImporting = false;
-  int _countdown = 0;
-  Timer? _countdownTimer;
-
-  @override
-  void dispose() {
-    _countdownTimer?.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +26,7 @@ class SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppStyles.appBar('Settings', context),
-      body: Stack(
-        children: [
-          _pageBody(colorScheme),
-          if (_countdown > 0) _countdownOverlay(),
-        ],
-      ),
+      body: _pageBody(colorScheme),
     );
   }
 
@@ -53,19 +40,8 @@ class SettingsPageState extends State<SettingsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Gap(24),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    'Database Management',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.primary,
-                    ),
-                  ),
-                ),
-                const Gap(12),
                 _buildBackupRestoreSection(colorScheme),
-                const Gap(24),
+                const Gap(12),
               ],
             ),
           ),
@@ -186,49 +162,6 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _countdownOverlay() {
-    return Positioned.fill(
-      child: Material(
-        color: Colors.black.withValues(alpha: 0.7),
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(32),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
-                  blurRadius: 20,
-                  spreadRadius: 5,
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircularProgressIndicator(),
-                const Gap(24),
-                Text(
-                  'Restarting in $_countdown',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const Gap(8),
-                Text(
-                  'Please wait while the app restarts',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Future<String> getSqliteDbPath() async {
     final dir = await getApplicationDocumentsDirectory();
     return p.join(dir.path, 'database.sqlite');
@@ -238,7 +171,6 @@ class SettingsPageState extends State<SettingsPage> {
     try {
       setState(() {
         _isImporting = true;
-        _countdown = 0;
       });
 
       // Get original DB file
@@ -275,17 +207,11 @@ class SettingsPageState extends State<SettingsPage> {
       await originalDbFile.delete();
       await selectedFile.copy(originalDbFile.path);
 
-      // Start countdown
-      setState(() => _countdown = 5);
-      _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        if (_countdown > 1) {
-          setState(() => _countdown--);
-        } else {
-          timer.cancel();
-          // Restart app or reload database here
-          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-        }
-      });
+      // Navigate to countdown page
+      if (mounted) {
+        debugPrint("");
+      }
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -306,7 +232,7 @@ class SettingsPageState extends State<SettingsPage> {
       }
       debugPrint("Error occurred while importing database: $e");
     } finally {
-      if (mounted && _countdown == 0) {
+      if (mounted) {
         setState(() => _isImporting = false);
       }
     }
