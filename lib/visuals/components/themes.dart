@@ -35,6 +35,23 @@ final ThemeData lightTheme = ThemeData(
   ),
   navigationBarTheme: NavigationBarThemeData(backgroundColor: Colors.white),
   bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
+  textTheme: TextTheme(
+    titleLarge: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+    ),
+    titleMedium: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+    ),
+    titleSmall: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+    ),
+  ),
 
   extensions: <ThemeExtension>[
     GeneralDecoration(
@@ -107,6 +124,23 @@ final ThemeData darkTheme = ThemeData(
   ),
   navigationBarTheme: NavigationBarThemeData(backgroundColor: Colors.black),
   bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.black),
+  textTheme: TextTheme(
+    titleLarge: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+    ),
+    titleMedium: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+    ),
+    titleSmall: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+    ),
+  ),
 
   extensions: <ThemeExtension>[
     GeneralDecoration(

@@ -111,15 +111,12 @@ class SettingsPageState extends State<SettingsPage> {
                     children: [
                       Text(
                         'Backup & Restore',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w600),
+                        style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       const Gap(4),
                       Text(
                         'Export or import your database file',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
+                        style: TextStyle(color: colorScheme.onSurfaceVariant),
                       ),
                     ],
                   ),
@@ -219,7 +216,7 @@ class SettingsPageState extends State<SettingsPage> {
                 const Gap(8),
                 Text(
                   'Please wait while the app restarts',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                   textAlign: TextAlign.center,
