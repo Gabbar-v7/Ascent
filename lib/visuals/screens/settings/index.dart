@@ -189,7 +189,7 @@ class SettingsPageState extends State<SettingsPage> {
       final selectedFile = File(result.files.single.path!);
       final extension = p.extension(selectedFile.path).toLowerCase();
 
-      if (extension != '.sqlite') {
+      if (extension != '.x-sqlite3' && extension != '.sqlite') {
         throw Exception('Please select a .sqlite file');
       }
 
@@ -207,9 +207,19 @@ class SettingsPageState extends State<SettingsPage> {
       await originalDbFile.delete();
       await selectedFile.copy(originalDbFile.path);
 
-      // Navigate to countdown page
+      // Show success message
       if (mounted) {
-        debugPrint("");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Database imported successfully'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
+          ),
+        );
       }
       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     } catch (e) {
@@ -222,15 +232,10 @@ class SettingsPageState extends State<SettingsPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            margin: EdgeInsets.only(
-              bottom: MediaQuery.of(context).size.height - 100,
-              left: 16,
-              right: 16,
-            ),
+            margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
           ),
         );
       }
-      debugPrint("Error occurred while importing database: $e");
     } finally {
       if (mounted) {
         setState(() => _isImporting = false);
@@ -253,7 +258,9 @@ class SettingsPageState extends State<SettingsPage> {
       // Let user choose save location
       final resultPath = await FilePicker.platform.saveFile(
         dialogTitle: 'Save Database Backup',
-        fileName: 'Ascent-Backup.sqlite',
+        fileName: 'Ascent-Backup.x-sqlite3',
+        type: FileType.custom,
+        allowedExtensions: ['x-sqlite3', 'sqlite'],
         bytes: Uint8List.fromList(dbFileBytes),
       );
 
@@ -264,23 +271,13 @@ class SettingsPageState extends State<SettingsPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.check_circle_outline, color: Colors.white),
-                const Gap(12),
-                const Text('Database exported successfully'),
-              ],
-            ),
+            content: Text('Database exported successfully to $resultPath'),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            margin: EdgeInsets.only(
-              bottom: MediaQuery.of(context).size.height - 100,
-              left: 16,
-              right: 16,
-            ),
+            margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
           ),
         );
       }
@@ -294,15 +291,10 @@ class SettingsPageState extends State<SettingsPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            margin: EdgeInsets.only(
-              bottom: MediaQuery.of(context).size.height - 100,
-              left: 16,
-              right: 16,
-            ),
+            margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
           ),
         );
       }
-      debugPrint("Error occurred while exporting database: $e");
     } finally {
       if (mounted) {
         setState(() => _isExporting = false);
