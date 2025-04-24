@@ -22,25 +22,22 @@ class SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       appBar: AppStyles.appBar('Settings', context),
-      body: _pageBody(colorScheme),
+      body: _buildBody(),
     );
   }
 
-  Widget _pageBody(ColorScheme colorScheme) {
+  Widget _buildBody() {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Gap(24),
-                _buildBackupRestoreSection(colorScheme),
+                _buildBackupRestoreCard(),
                 const Gap(12),
               ],
             ),
@@ -50,54 +47,30 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildBackupRestoreSection(ColorScheme colorScheme) {
+  Widget _buildBackupRestoreCard() {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
     return Card(
       elevation: 0,
-      color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+      color: colors.surfaceContainerHighest.withAlpha(76), // ~0.3 opacity
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+          color: colors.outlineVariant.withAlpha(127), // ~0.5 opacity
           width: 0.5,
         ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: ShapeDecoration(
-                    color: colorScheme.primaryContainer,
-                    shape: const CircleBorder(),
-                  ),
-                  child: Icon(
-                    Icons.storage_rounded,
-                    color: colorScheme.onPrimaryContainer,
-                    size: 28,
-                  ),
-                ),
-                const Gap(16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Backup & Restore',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      const Gap(4),
-                      Text(
-                        'Export or import your database file',
-                        style: TextStyle(color: colorScheme.onSurfaceVariant),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            _buildSectionHeader(
+              icon: Icons.storage_rounded,
+              title: 'Backup & Restore',
+              subtitle: 'Export or import your database file',
+              iconColor: colors.onPrimaryContainer,
+              iconBackground: colors.primaryContainer,
             ),
             const Gap(24),
             _buildActionButton(
@@ -105,7 +78,6 @@ class SettingsPageState extends State<SettingsPage> {
               icon: Icons.upload_rounded,
               isLoading: _isExporting,
               onPressed: _isExporting ? null : _exportDatabase,
-              colorScheme: colorScheme,
               isPrimary: true,
             ),
             const Gap(12),
@@ -114,7 +86,6 @@ class SettingsPageState extends State<SettingsPage> {
               icon: Icons.download_rounded,
               isLoading: _isImporting,
               onPressed: _isImporting ? null : _importDatabase,
-              colorScheme: colorScheme,
               isPrimary: false,
             ),
           ],
@@ -123,14 +94,56 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Widget _buildSectionHeader({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color iconColor,
+    required Color iconBackground,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: iconBackground,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: iconColor, size: 28),
+        ),
+        const Gap(16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+              const Gap(4),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildActionButton({
     required String label,
     required IconData icon,
     required bool isLoading,
     required VoidCallback? onPressed,
-    required ColorScheme colorScheme,
     required bool isPrimary,
   }) {
+    final colors = Theme.of(context).colorScheme;
+    final backgroundColor =
+        isPrimary ? colors.primary : colors.secondaryContainer;
+    final foregroundColor =
+        isPrimary ? colors.onPrimary : colors.onSecondaryContainer;
+
     return FilledButton.tonalIcon(
       onPressed: onPressed,
       icon:
@@ -140,21 +153,14 @@ class SettingsPageState extends State<SettingsPage> {
                 height: 18,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color:
-                      isPrimary
-                          ? colorScheme.onPrimary
-                          : colorScheme.onSecondaryContainer,
+                  color: foregroundColor,
                 ),
               )
               : Icon(icon),
       label: Text(label),
       style: FilledButton.styleFrom(
-        backgroundColor:
-            isPrimary ? colorScheme.primary : colorScheme.secondaryContainer,
-        foregroundColor:
-            isPrimary
-                ? colorScheme.onPrimary
-                : colorScheme.onSecondaryContainer,
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
         minimumSize: const Size(double.infinity, 52),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -162,21 +168,30 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Future<String> getSqliteDbPath() async {
+  Future<String> _getDatabasePath() async {
     final dir = await getApplicationDocumentsDirectory();
     return p.join(dir.path, 'database.sqlite');
   }
 
-  void _importDatabase() async {
+  Future<void> _showSnackBar(String message, {bool isError = false}) async {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+      ),
+    );
+  }
+
+  Future<void> _importDatabase() async {
     try {
-      setState(() {
-        _isImporting = true;
-      });
+      setState(() => _isImporting = true);
 
-      // Get original DB file
-      final originalDbFile = File(await getSqliteDbPath());
-
-      // Use FilePicker to select any file (we'll check extension manually)
+      final originalDbFile = File(await _getDatabasePath());
       final result = await FilePicker.platform.pickFiles(
         type: FileType.any,
         allowMultiple: false,
@@ -197,7 +212,7 @@ class SettingsPageState extends State<SettingsPage> {
         throw Exception('Selected file does not exist');
       }
 
-      // Create backup of current database
+      // Create backup
       final backupPath = '${originalDbFile.path}.backup';
       if (await originalDbFile.exists()) {
         await originalDbFile.copy(backupPath);
@@ -207,98 +222,38 @@ class SettingsPageState extends State<SettingsPage> {
       await originalDbFile.delete();
       await selectedFile.copy(originalDbFile.path);
 
-      // Show success message
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Database imported successfully'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
-          ),
-        );
-      }
+      await _showSnackBar('Database imported successfully');
       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Import failed: ${e.toString()}'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
-          ),
-        );
-      }
+      await _showSnackBar('Import failed: ${e.toString()}', isError: true);
     } finally {
-      if (mounted) {
-        setState(() => _isImporting = false);
-      }
+      if (mounted) setState(() => _isImporting = false);
     }
   }
 
-  void _exportDatabase() async {
+  Future<void> _exportDatabase() async {
     try {
       setState(() => _isExporting = true);
 
-      // Get the database path
-      final dbFile = File(await getSqliteDbPath());
+      final dbFile = File(await _getDatabasePath());
       if (!await dbFile.exists()) {
         throw Exception('Database file not found at ${dbFile.path}');
       }
 
-      final dbFileBytes = await dbFile.readAsBytes();
-
-      // Let user choose save location
       final resultPath = await FilePicker.platform.saveFile(
         dialogTitle: 'Save Database Backup',
         fileName: 'Ascent-Backup.x-sqlite3',
         type: FileType.custom,
         allowedExtensions: ['x-sqlite3', 'sqlite'],
-        bytes: Uint8List.fromList(dbFileBytes),
+        bytes: await dbFile.readAsBytes(),
       );
 
-      if (resultPath == null) {
-        throw Exception('Export cancelled by user');
-      }
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Database exported successfully to $resultPath'),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
-          ),
-        );
-      }
+      if (resultPath == null) throw Exception('Export cancelled by user');
+      await _showSnackBar('Database exported successfully to $resultPath');
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Export failed: ${e.toString()}'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
-          ),
-        );
-      }
+      await _showSnackBar('Export failed: ${e.toString()}', isError: true);
     } finally {
-      if (mounted) {
-        setState(() => _isExporting = false);
-      }
+      if (mounted) setState(() => _isExporting = false);
     }
   }
 }
