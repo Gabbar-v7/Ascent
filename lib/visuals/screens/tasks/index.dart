@@ -1,11 +1,18 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:ascent/visuals/components/app_styles.dart';
 import 'package:ascent/visuals/components/theme_extensions/general_decoration.dart';
 import 'package:ascent/visuals/components/theme_extensions/task_decoration.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:ascent/database/app_database.dart';
 import 'package:drift/drift.dart' as drift;
+import 'package:path_provider/path_provider.dart';
 import 'dart:async';
+
+import 'package:share_plus/share_plus.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({super.key});
@@ -120,6 +127,42 @@ class _TasksPageState extends State<TasksPage> {
       ..where((tbl) => tbl.id.equals(task.id))).write(
       TasksCompanion(doneOn: drift.Value(isDone ? DateTime.now() : null)),
     );
+  }
+
+  Future<void> _shareTaskAsFile(Task task) async {
+    final taskData = {
+      "taskTitle": task.taskTitle,
+      "taskBody": task.taskBody,
+      "dueDate": task.dueDate.toIso8601String(),
+    };
+
+    final jsonString = jsonEncode(taskData);
+    final directory = await getTemporaryDirectory();
+    final filePath = '${directory.path}/${task.taskTitle}.aso';
+    final file = File(filePath);
+
+    await file.writeAsString(jsonString);
+
+    final params = ShareParams(
+      files: [XFile(filePath)],
+      subject: "Task: ${task.taskTitle}",
+      title: "Task Details",
+      text:
+          "${task.taskTitle}\n"
+          "${task.dueDate.day}/${task.dueDate.month}/${task.dueDate.year}\n\n"
+          "${task.taskBody ?? "No description"}",
+    );
+
+    await SharePlus.instance.share(params);
+  }
+
+  void _copyTaskToClipboard(Task task) {
+    final taskText =
+        "${task.taskTitle}\n"
+        "${task.dueDate.day}/${task.dueDate.month}/${task.dueDate.year}\n\n"
+        "${task.taskBody ?? "No description"}";
+
+    Clipboard.setData(ClipboardData(text: taskText));
   }
 
   // Task Organization
@@ -320,7 +363,19 @@ class _TasksPageState extends State<TasksPage> {
                               task != null
                                   ? [
                                     IconButton(
-                                      icon: const Icon(Icons.delete_outline),
+                                      icon: Icon(Icons.copy_outlined, size: 20),
+                                      onPressed:
+                                          () => _copyTaskToClipboard(task),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.share, size: 22),
+                                      onPressed: () => _shareTaskAsFile(task),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete_outline,
+                                        size: 26,
+                                      ),
                                       onPressed: () {
                                         _deleteTask(task);
                                         Navigator.pop(context);
