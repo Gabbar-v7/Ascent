@@ -42,6 +42,7 @@ dependencies:
   url_launcher: ^6.3.1
   file_picker: ^10.1.2
   share_plus: ^11.0.0
+  flutter_sharing_intent: ^1.1.1
 
   # Database and Storage
   drift: ^2.26.0

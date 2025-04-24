@@ -1,6 +1,14 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:ascent/database/app_database.dart';
 import 'package:ascent/visuals/screens/in_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:ascent/visuals/screens/tasks/index.dart';
+import 'package:drift/drift.dart' as drift;
+import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
+import 'package:flutter_sharing_intent/model/sharing_file.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,11 +24,52 @@ class HomePageState extends State<HomePage> {
     InProgressPage(),
     InProgressPage(),
   ];
+  AppDatabase database = AppDatabase();
+
+  StreamSubscription? _intentDataStreamSubscription;
 
   @override
   void initState() {
     super.initState();
     pageList;
+
+    // For app in memory
+    _intentDataStreamSubscription = FlutterSharingIntent.instance
+        .getMediaStream()
+        .listen((List<SharedFile> value) {
+          _handleSharedFiles(value);
+        });
+
+    // For app cold start
+    FlutterSharingIntent.instance.getInitialSharing().then((
+      List<SharedFile> value,
+    ) {
+      _handleSharedFiles(value);
+    });
+  }
+
+  @override
+  void dispose() {
+    _intentDataStreamSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _handleSharedFiles(List<SharedFile> files) {
+    for (var file in files) {
+      if (file.value.toString().endsWith(".aso")) {
+        dynamic fileContent = File(file.value.toString()).readAsStringSync();
+        fileContent = jsonDecode(fileContent);
+        database
+            .into(database.tasks)
+            .insert(
+              TasksCompanion.insert(
+                taskTitle: fileContent['taskTitle'],
+                taskBody: drift.Value(fileContent['taskBody']),
+                dueDate: DateTime.parse(fileContent['dueDate']),
+              ),
+            );
+      }
+    }
   }
 
   void _showModalBottomSheet() {
