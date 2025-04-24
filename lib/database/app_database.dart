@@ -14,11 +14,11 @@ class AppDatabase extends _$AppDatabase {
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
-      name: 'ascent_database',
+      name: 'database',
       native: const DriftNativeOptions(
         // By default, `driftDatabase` from `package:drift_flutter` stores the
         // database files in `getApplicationDocumentsDirectory()`.
-        databaseDirectory: getApplicationSupportDirectory,
+        databaseDirectory: getApplicationDocumentsDirectory,
       ),
       // If you need web support, see https://drift.simonbinder.eu/platforms/web/
     );

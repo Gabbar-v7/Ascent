@@ -65,12 +65,15 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
   );
   static const VerificationMeta _notifyMeta = const VerificationMeta('notify');
   @override
-  late final GeneratedColumn<DateTime> notify = GeneratedColumn<DateTime>(
+  late final GeneratedColumn<bool> notify = GeneratedColumn<bool>(
     'notify',
     aliasedName,
     true,
-    type: DriftSqlType.dateTime,
+    type: DriftSqlType.bool,
     requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("notify" IN (0, 1))',
+    ),
   );
   @override
   List<GeneratedColumn> get $columns => [
@@ -163,7 +166,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         data['${effectivePrefix}done_on'],
       ),
       notify: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
+        DriftSqlType.bool,
         data['${effectivePrefix}notify'],
       ),
     );
@@ -181,7 +184,7 @@ class Task extends DataClass implements Insertable<Task> {
   final String? taskBody;
   final DateTime dueDate;
   final DateTime? doneOn;
-  final DateTime? notify;
+  final bool? notify;
   const Task({
     required this.id,
     required this.taskTitle,
@@ -203,7 +206,7 @@ class Task extends DataClass implements Insertable<Task> {
       map['done_on'] = Variable<DateTime>(doneOn);
     }
     if (!nullToAbsent || notify != null) {
-      map['notify'] = Variable<DateTime>(notify);
+      map['notify'] = Variable<bool>(notify);
     }
     return map;
   }
@@ -235,7 +238,7 @@ class Task extends DataClass implements Insertable<Task> {
       taskBody: serializer.fromJson<String?>(json['taskBody']),
       dueDate: serializer.fromJson<DateTime>(json['dueDate']),
       doneOn: serializer.fromJson<DateTime?>(json['doneOn']),
-      notify: serializer.fromJson<DateTime?>(json['notify']),
+      notify: serializer.fromJson<bool?>(json['notify']),
     );
   }
   @override
@@ -247,7 +250,7 @@ class Task extends DataClass implements Insertable<Task> {
       'taskBody': serializer.toJson<String?>(taskBody),
       'dueDate': serializer.toJson<DateTime>(dueDate),
       'doneOn': serializer.toJson<DateTime?>(doneOn),
-      'notify': serializer.toJson<DateTime?>(notify),
+      'notify': serializer.toJson<bool?>(notify),
     };
   }
 
@@ -257,7 +260,7 @@ class Task extends DataClass implements Insertable<Task> {
     Value<String?> taskBody = const Value.absent(),
     DateTime? dueDate,
     Value<DateTime?> doneOn = const Value.absent(),
-    Value<DateTime?> notify = const Value.absent(),
+    Value<bool?> notify = const Value.absent(),
   }) => Task(
     id: id ?? this.id,
     taskTitle: taskTitle ?? this.taskTitle,
@@ -311,7 +314,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
   final Value<String?> taskBody;
   final Value<DateTime> dueDate;
   final Value<DateTime?> doneOn;
-  final Value<DateTime?> notify;
+  final Value<bool?> notify;
   const TasksCompanion({
     this.id = const Value.absent(),
     this.taskTitle = const Value.absent(),
@@ -335,7 +338,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Expression<String>? taskBody,
     Expression<DateTime>? dueDate,
     Expression<DateTime>? doneOn,
-    Expression<DateTime>? notify,
+    Expression<bool>? notify,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -353,7 +356,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Value<String?>? taskBody,
     Value<DateTime>? dueDate,
     Value<DateTime?>? doneOn,
-    Value<DateTime?>? notify,
+    Value<bool?>? notify,
   }) {
     return TasksCompanion(
       id: id ?? this.id,
@@ -384,7 +387,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
       map['done_on'] = Variable<DateTime>(doneOn.value);
     }
     if (notify.present) {
-      map['notify'] = Variable<DateTime>(notify.value);
+      map['notify'] = Variable<bool>(notify.value);
     }
     return map;
   }
@@ -421,7 +424,7 @@ typedef $$TasksTableCreateCompanionBuilder =
       Value<String?> taskBody,
       required DateTime dueDate,
       Value<DateTime?> doneOn,
-      Value<DateTime?> notify,
+      Value<bool?> notify,
     });
 typedef $$TasksTableUpdateCompanionBuilder =
     TasksCompanion Function({
@@ -430,7 +433,7 @@ typedef $$TasksTableUpdateCompanionBuilder =
       Value<String?> taskBody,
       Value<DateTime> dueDate,
       Value<DateTime?> doneOn,
-      Value<DateTime?> notify,
+      Value<bool?> notify,
     });
 
 class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
@@ -466,7 +469,7 @@ class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get notify => $composableBuilder(
+  ColumnFilters<bool> get notify => $composableBuilder(
     column: $table.notify,
     builder: (column) => ColumnFilters(column),
   );
@@ -506,7 +509,7 @@ class $$TasksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get notify => $composableBuilder(
+  ColumnOrderings<bool> get notify => $composableBuilder(
     column: $table.notify,
     builder: (column) => ColumnOrderings(column),
   );
@@ -536,7 +539,7 @@ class $$TasksTableAnnotationComposer
   GeneratedColumn<DateTime> get doneOn =>
       $composableBuilder(column: $table.doneOn, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get notify =>
+  GeneratedColumn<bool> get notify =>
       $composableBuilder(column: $table.notify, builder: (column) => column);
 }
 
@@ -573,7 +576,7 @@ class $$TasksTableTableManager
                 Value<String?> taskBody = const Value.absent(),
                 Value<DateTime> dueDate = const Value.absent(),
                 Value<DateTime?> doneOn = const Value.absent(),
-                Value<DateTime?> notify = const Value.absent(),
+                Value<bool?> notify = const Value.absent(),
               }) => TasksCompanion(
                 id: id,
                 taskTitle: taskTitle,
@@ -589,7 +592,7 @@ class $$TasksTableTableManager
                 Value<String?> taskBody = const Value.absent(),
                 required DateTime dueDate,
                 Value<DateTime?> doneOn = const Value.absent(),
-                Value<DateTime?> notify = const Value.absent(),
+                Value<bool?> notify = const Value.absent(),
               }) => TasksCompanion.insert(
                 id: id,
                 taskTitle: taskTitle,
