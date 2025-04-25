@@ -126,6 +126,7 @@ class _TasksPageState extends State<TasksPage> {
     final file = File('${directory.path}/${task.taskTitle}.aso');
     await file.writeAsString(
       jsonEncode({
+        "secret": "eMR3C2e",
         "taskTitle": task.taskTitle,
         "taskBody": task.taskBody,
         "dueDate": task.dueDate.toIso8601String(),
@@ -376,6 +377,7 @@ class _TasksPageState extends State<TasksPage> {
                       const Gap(16),
                       TextFormField(
                         controller: _taskBodyController,
+                        textCapitalization: TextCapitalization.sentences,
                         maxLines: 4,
                         style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
@@ -447,6 +449,7 @@ class _TasksPageState extends State<TasksPage> {
                                           : null,
                                       selectedDate,
                                     );
+                                    Navigator.pop(context);
                                   } else {
                                     _addTask(
                                       _taskTitleController.text,
@@ -455,8 +458,9 @@ class _TasksPageState extends State<TasksPage> {
                                           : null,
                                       selectedDate,
                                     );
+                                    _taskTitleController.clear();
+                                    _taskBodyController.clear();
                                   }
-                                  Navigator.pop(context);
                                 }
                               },
                               child: const Text("Save"),
