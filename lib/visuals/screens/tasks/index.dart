@@ -460,6 +460,7 @@ class _TasksPageState extends State<TasksPage> {
                                     );
                                     _taskTitleController.clear();
                                     _taskBodyController.clear();
+                                    Focus.of(context).unfocus();
                                   }
                                 }
                               },
