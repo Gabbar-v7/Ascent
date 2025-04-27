@@ -449,7 +449,6 @@ class _TasksPageState extends State<TasksPage> {
                                           : null,
                                       selectedDate,
                                     );
-                                    Navigator.pop(context);
                                   } else {
                                     _addTask(
                                       _taskTitleController.text,
@@ -458,10 +457,8 @@ class _TasksPageState extends State<TasksPage> {
                                           : null,
                                       selectedDate,
                                     );
-                                    _taskTitleController.clear();
-                                    _taskBodyController.clear();
-                                    Focus.of(context).unfocus();
                                   }
+                                  Navigator.pop(context);
                                 }
                               },
                               child: const Text("Save"),
