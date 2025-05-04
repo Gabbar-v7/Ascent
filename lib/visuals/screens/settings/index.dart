@@ -206,7 +206,7 @@ class SettingsPageState extends State<SettingsPage> {
         child: Column(
           children: [
             _buildSectionHeader(
-              icon: Icons.storage_rounded,
+              icon: Icons.sd_storage,
               title: 'Backup & Restore',
               subtitle: 'Export or import your database file',
               iconColor: colors.onPrimaryContainer,
