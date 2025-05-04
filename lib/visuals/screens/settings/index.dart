@@ -17,157 +17,11 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
+  // State variables
   bool _isExporting = false;
   bool _isImporting = false;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppStyles.appBar('Settings', context),
-      body: _buildBody(),
-    );
-  }
-
-  Widget _buildBody() {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              children: [
-                const Gap(24),
-                _buildBackupRestoreCard(),
-                const Gap(12),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBackupRestoreCard() {
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-
-    return Card(
-      elevation: 0,
-      color: colors.surfaceContainerHighest.withAlpha(76), // ~0.3 opacity
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: colors.outlineVariant.withAlpha(127), // ~0.5 opacity
-          width: 0.5,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          children: [
-            _buildSectionHeader(
-              icon: Icons.storage_rounded,
-              title: 'Backup & Restore',
-              subtitle: 'Export or import your database file',
-              iconColor: colors.onPrimaryContainer,
-              iconBackground: colors.primaryContainer,
-            ),
-            const Gap(24),
-            _buildActionButton(
-              label: 'Export Database',
-              icon: Icons.upload_rounded,
-              isLoading: _isExporting,
-              onPressed: _isExporting ? null : _exportDatabase,
-              isPrimary: true,
-            ),
-            const Gap(12),
-            _buildActionButton(
-              label: 'Import Database',
-              icon: Icons.download_rounded,
-              isLoading: _isImporting,
-              onPressed: _isImporting ? null : _importDatabase,
-              isPrimary: false,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Color iconColor,
-    required Color iconBackground,
-  }) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: iconBackground,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: iconColor, size: 28),
-        ),
-        const Gap(16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-              const Gap(4),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActionButton({
-    required String label,
-    required IconData icon,
-    required bool isLoading,
-    required VoidCallback? onPressed,
-    required bool isPrimary,
-  }) {
-    final colors = Theme.of(context).colorScheme;
-    final backgroundColor =
-        isPrimary ? colors.primary : colors.secondaryContainer;
-    final foregroundColor =
-        isPrimary ? colors.onPrimary : colors.onSecondaryContainer;
-
-    return FilledButton.tonalIcon(
-      onPressed: onPressed,
-      icon:
-          isLoading
-              ? SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: foregroundColor,
-                ),
-              )
-              : Icon(icon),
-      label: Text(label),
-      style: FilledButton.styleFrom(
-        backgroundColor: backgroundColor,
-        foregroundColor: foregroundColor,
-        minimumSize: const Size(double.infinity, 52),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-      ),
-    );
-  }
-
+  // Helper methods
   Future<String> _getDatabasePath() async {
     final dir = await getApplicationDocumentsDirectory();
     return p.join(dir.path, 'database.sqlite');
@@ -187,6 +41,7 @@ class SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  // Business logic methods
   Future<void> _importDatabase() async {
     try {
       setState(() => _isImporting = true);
@@ -255,5 +110,154 @@ class SettingsPageState extends State<SettingsPage> {
     } finally {
       if (mounted) setState(() => _isExporting = false);
     }
+  }
+
+  // UI Component methods
+  Widget _buildActionButton({
+    required String label,
+    required IconData icon,
+    required bool isLoading,
+    required VoidCallback? onPressed,
+    required bool isPrimary,
+  }) {
+    final colors = Theme.of(context).colorScheme;
+    final backgroundColor =
+        isPrimary ? colors.primary : colors.secondaryContainer;
+    final foregroundColor =
+        isPrimary ? colors.onPrimary : colors.onSecondaryContainer;
+
+    return FilledButton.tonalIcon(
+      onPressed: onPressed,
+      icon:
+          isLoading
+              ? SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: foregroundColor,
+                ),
+              )
+              : Icon(icon),
+      label: Text(label),
+      style: FilledButton.styleFrom(
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
+        minimumSize: const Size(double.infinity, 52),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color iconColor,
+    required Color iconBackground,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: iconBackground,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: iconColor, size: 28),
+        ),
+        const Gap(16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+              const Gap(4),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBackupRestoreCard() {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
+    return Card(
+      elevation: 0,
+      color: colors.surfaceContainerHighest.withAlpha(76), // ~0.3 opacity
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: colors.outlineVariant.withAlpha(127), // ~0.5 opacity
+          width: 0.5,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          children: [
+            _buildSectionHeader(
+              icon: Icons.storage_rounded,
+              title: 'Backup & Restore',
+              subtitle: 'Export or import your database file',
+              iconColor: colors.onPrimaryContainer,
+              iconBackground: colors.primaryContainer,
+            ),
+            const Gap(24),
+            _buildActionButton(
+              label: 'Export Database',
+              icon: Icons.upload_rounded,
+              isLoading: _isExporting,
+              onPressed: _isExporting ? null : _exportDatabase,
+              isPrimary: true,
+            ),
+            const Gap(12),
+            _buildActionButton(
+              label: 'Import Database',
+              icon: Icons.download_rounded,
+              isLoading: _isImporting,
+              onPressed: _isImporting ? null : _importDatabase,
+              isPrimary: false,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                const Gap(24),
+                _buildBackupRestoreCard(),
+                const Gap(12),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppStyles.appBar('Settings', context),
+      body: _buildBody(),
+    );
   }
 }
