@@ -37,6 +37,7 @@ dependencies:
 
   # Visuals
   gap: ^3.0.1
+  flutter_markdown: ^0.7.7
 
   # Native Support
   url_launcher: ^6.3.1
