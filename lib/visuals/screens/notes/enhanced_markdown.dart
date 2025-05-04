@@ -13,10 +13,12 @@ class EnhancedMarkdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Markdown(
       data: data,
       onTapLink: _handleLinkTap,
-      builders: {'code': CodeBlockBuilder()},
+      builders: {'code': CodeBlockBuilder(isDarkMode: isDarkMode)},
       styleSheet: MarkdownStyleSheet(
         code: const TextStyle(backgroundColor: Colors.transparent),
       ),
@@ -31,14 +33,16 @@ class EnhancedMarkdown extends StatelessWidget {
 }
 
 class CodeBlockBuilder extends MarkdownElementBuilder {
-  CodeBlockBuilder();
+  final bool isDarkMode;
+
+  CodeBlockBuilder({this.isDarkMode = false});
 
   @override
   Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {
     final code = element.textContent;
     final language = _extractLanguage(element);
 
-    return CodeBlock(code: code, language: language);
+    return CodeBlock(code: code, language: language, isDarkMode: isDarkMode);
   }
 
   String _extractLanguage(md.Element element) {
@@ -49,34 +53,52 @@ class CodeBlockBuilder extends MarkdownElementBuilder {
 class CodeBlock extends StatelessWidget {
   final String code;
   final String language;
+  final bool isDarkMode;
 
-  const CodeBlock({super.key, required this.code, required this.language});
+  const CodeBlock({
+    super.key,
+    required this.code,
+    required this.language,
+    this.isDarkMode = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final borderColor =
+        isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300;
+    final headerBgColor = isDarkMode ? Color(0xFF1E1E1E) : Colors.grey.shade100;
+    final contentBgColor = isDarkMode ? Color(0xFF121212) : Colors.grey.shade50;
+    final textColor = isDarkMode ? Colors.grey.shade300 : Colors.grey.shade800;
+
     return Card(
+      color: Colors.red,
+      elevation: 0,
+      surfaceTintColor: Colors.green,
+      shadowColor: Colors.white,
+      margin: const EdgeInsets.all(0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(width: 1),
+        side: BorderSide(width: 1, color: borderColor),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          children: [_buildHeader(), _buildCodeContent()],
+          children: [
+            _buildHeader(headerBgColor, borderColor, textColor),
+            _buildCodeContent(contentBgColor, textColor),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(Color bgColor, Color borderColor, Color textColor) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        border: Border(
-          bottom: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        color: bgColor,
+        border: Border(bottom: BorderSide(color: borderColor, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -91,34 +113,35 @@ class CodeBlock extends StatelessWidget {
                 Text(
                   _getLanguageDisplayName(),
                   style: TextStyle(
-                    color: Colors.grey.shade800,
+                    color: textColor,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
-            CopyButton(code: code),
+            CopyButton(code: code, isDarkMode: isDarkMode),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCodeContent() {
+  Widget _buildCodeContent(Color bgColor, Color textColor) {
     return Container(
-      color: Colors.grey.shade50,
+      color: bgColor,
       width: double.infinity,
       constraints: const BoxConstraints(maxHeight: 400),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Container(
-          padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
-          child: Text(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: SelectableText(
             code,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'RobotoMono',
               fontSize: 14,
               height: 1.5,
+              color: isDarkMode ? Colors.grey.shade200 : Colors.grey.shade900,
             ),
             textAlign: TextAlign.left,
           ),
@@ -156,7 +179,7 @@ class CodeBlock extends StatelessWidget {
         break;
       default:
         iconData = Icons.code;
-        color = Colors.grey.shade700;
+        color = isDarkMode ? Colors.grey.shade400 : Colors.grey.shade700;
     }
 
     return Icon(iconData, size: 16, color: color);
@@ -181,8 +204,9 @@ class CodeBlock extends StatelessWidget {
 
 class CopyButton extends StatefulWidget {
   final String code;
+  final bool isDarkMode;
 
-  const CopyButton({super.key, required this.code});
+  const CopyButton({super.key, required this.code, this.isDarkMode = false});
 
   @override
   State<CopyButton> createState() => _CopyButtonState();
@@ -200,6 +224,10 @@ class _CopyButtonState extends State<CopyButton> {
 
   @override
   Widget build(BuildContext context) {
+    final textColor =
+        widget.isDarkMode ? Colors.grey.shade400 : Colors.grey.shade600;
+    final successColor = widget.isDarkMode ? Colors.greenAccent : Colors.green;
+
     return TextButton.icon(
       style: TextButton.styleFrom(
         splashFactory: NoSplash.splashFactory,
@@ -212,12 +240,15 @@ class _CopyButtonState extends State<CopyButton> {
       onPressed: _copyToClipboard,
       label: Text(
         _copied ? 'Copied!' : 'Copy',
-        style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+        style: TextStyle(
+          fontSize: 13,
+          color: _copied ? successColor : textColor,
+        ),
       ),
       icon: Icon(
         _copied ? Icons.check : Icons.copy,
         size: 12,
-        color: _copied ? Colors.green : Colors.grey.shade600,
+        color: _copied ? successColor : textColor,
       ),
     );
   }
