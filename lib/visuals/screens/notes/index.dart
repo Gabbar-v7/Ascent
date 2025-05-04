@@ -14,8 +14,12 @@ class _NotesPageState extends State<NotesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppStyles.appBar("Notes", context),
-      body: EnhancedMarkdown(
-        data: """
+      body: EnhancedMarkdown(data: data),
+    );
+  }
+}
+
+final data = """
 # Ascent
 
 A blazing-fast Flutter mobile app for managing tasks, notes, and focus sessions with intuitive gestures and smooth performance. 
@@ -85,7 +89,7 @@ flutter run
 
 ## Project Structure
 
-```
+```plaintext
 lib/
 ├── database/          # Database related code
 ├── visuals/           # UI components
@@ -140,14 +144,10 @@ This project follows the official [Dart Style Guide](https://dart.dev/guides/lan
 5. **Submit a Pull Request on GitHub.**
 
 ## Support
-
 <div align="center">
     <a href="https://github.com/sponsors/Gabbar-v7"><img src="https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#white" alt="GitHub Sponsors" height=30></a>&nbsp;
     <a href="https://buymeacoffee.com/gabbar_v7"><img src="https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee" height=30></a>&nbsp;
     <a href="https://www.paypal.me/GabbarShall"><img src="https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal" height=30></a>
+
 </div>
-""",
-      ),
-    );
-  }
-}
+""";
