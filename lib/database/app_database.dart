@@ -1,11 +1,12 @@
 import 'package:drift/drift.dart';
 import 'package:ascent/database/tables/tasks_table.dart';
+import 'package:ascent/database/tables/notes_table.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [Tasks])
+@DriftDatabase(tables: [Tasks, Notes])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
