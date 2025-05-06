@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:ascent/visuals/components/app_styles.dart';
 import 'package:ascent/visuals/components/theme_extensions/general_decoration.dart';
 import 'package:ascent/visuals/components/theme_extensions/task_decoration.dart';
+import 'package:ascent/visuals/utils/general.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -122,8 +123,10 @@ class _TasksPageState extends State<TasksPage> {
 
   // Task sharing utilities
   Future<void> _shareTaskAsFile(Task task) async {
+    final fileName = generateRandomString(7);
+
     final directory = await getTemporaryDirectory();
-    final file = File('${directory.path}/${task.taskTitle}.aso');
+    final file = File('${directory.path}/$fileName.aso');
     await file.writeAsString(
       jsonEncode({
         "secret": "eMR3C2e",
@@ -134,8 +137,14 @@ class _TasksPageState extends State<TasksPage> {
     );
 
     final params = ShareParams(
-      files: [XFile(file.path)],
-      subject: "Task: ${task.taskTitle}",
+      files: [
+        XFile(
+          file.path,
+          mimeType: 'application/octet-stream',
+          name: '$fileName.aso',
+        ),
+      ],
+      title: fileName,
       text:
           "${task.taskTitle}\n"
           "${task.dueDate.day}/${task.dueDate.month}/${task.dueDate.year}\n\n"

@@ -135,7 +135,7 @@ class CodeBlock extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: SelectableText(
+          child: Text(
             code,
             style: TextStyle(
               fontFamily: 'RobotoMono',
