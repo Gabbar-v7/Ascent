@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:ascent/services/drift_service.dart';
 import 'package:ascent/visuals/components/app_styles.dart';
 import 'package:ascent/visuals/components/theme_extensions/general_decoration.dart';
 import 'package:ascent/visuals/components/theme_extensions/task_decoration.dart';
@@ -21,7 +22,7 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> {
-  final database = AppDatabase();
+  final database = DriftService.instance.driftDb;
   final TextEditingController _taskTitleController = TextEditingController();
   final TextEditingController _taskBodyController = TextEditingController();
   List<Task> _tasks = [];

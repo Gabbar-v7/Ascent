@@ -38,7 +38,7 @@ dependencies:
   # Visuals
   gap: ^3.0.1
   markdown: ^7.3.0
-  flutter_markdown: ^0.7.7
+  gpt_markdown: ^1.0.18
 
   # Native Support
   url_launcher: ^6.3.1
@@ -48,6 +48,7 @@ dependencies:
   # Database and Storage
   drift: ^2.26.0
   drift_flutter: ^0.2.4
+  sqlite3: ^2.7.5
   path_provider: ^2.1.5
   path: ^1.9.1
 
