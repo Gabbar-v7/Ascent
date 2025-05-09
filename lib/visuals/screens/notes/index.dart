@@ -2,7 +2,7 @@ import "package:ascent/database/app_database.dart";
 import "package:ascent/services/drift_service.dart";
 import "package:ascent/visuals/components/app_styles.dart";
 import "package:ascent/visuals/components/theme_extensions/task_decoration.dart";
-import "package:ascent/visuals/screens/notes/view_note.dart";
+import "package:ascent/visuals/screens/notes/edit_note.dart";
 import "package:flutter/material.dart";
 import "package:gap/gap.dart";
 
@@ -14,7 +14,7 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
-  final database = DriftService.instance.driftDb;
+  final database = DriftService.instance.driftDB;
   List<Note> _notes = <Note>[];
 
   @override
@@ -59,11 +59,12 @@ class _NotesPageState extends State<NotesPage> {
       appBar: AppStyles.appBar("Notes", context),
       body: _buildNotesList(),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'NotesHero',
         child: const Icon(Icons.add),
         onPressed:
             () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ViewNote()),
+              MaterialPageRoute(builder: (context) => EditNote()),
             ),
       ),
     );

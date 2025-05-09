@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ascent/utils/general_utils.dart';
 import 'package:ascent/visuals/components/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 class SettingsPage extends StatefulWidget {
@@ -20,12 +20,6 @@ class SettingsPageState extends State<SettingsPage> {
   // State variables
   bool _isExporting = false;
   bool _isImporting = false;
-
-  // Helper methods
-  Future<String> _getDatabasePath() async {
-    final dir = await getApplicationDocumentsDirectory();
-    return p.join(dir.path, 'database.sqlite');
-  }
 
   Future<void> _showSnackBar(String message, {bool isError = false}) async {
     if (!mounted) return;
@@ -46,7 +40,7 @@ class SettingsPageState extends State<SettingsPage> {
     try {
       setState(() => _isImporting = true);
 
-      final originalDbFile = File(await _getDatabasePath());
+      final originalDbFile = File(await getDatabasePath());
       final result = await FilePicker.platform.pickFiles(
         type: FileType.any,
         allowMultiple: false,
@@ -90,7 +84,7 @@ class SettingsPageState extends State<SettingsPage> {
     try {
       setState(() => _isExporting = true);
 
-      final dbFile = File(await _getDatabasePath());
+      final dbFile = File(await getDatabasePath());
       if (!await dbFile.exists()) {
         throw Exception('Database file not found at ${dbFile.path}');
       }

@@ -5,7 +5,7 @@ import 'package:ascent/services/drift_service.dart';
 import 'package:ascent/visuals/components/app_styles.dart';
 import 'package:ascent/visuals/components/theme_extensions/general_decoration.dart';
 import 'package:ascent/visuals/components/theme_extensions/task_decoration.dart';
-import 'package:ascent/visuals/utils/general.dart';
+import 'package:ascent/utils/general_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -22,7 +22,7 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> {
-  final database = DriftService.instance.driftDb;
+  final database = DriftService.instance.driftDB;
   final TextEditingController _taskTitleController = TextEditingController();
   final TextEditingController _taskBodyController = TextEditingController();
   List<Task> _tasks = [];
@@ -493,6 +493,7 @@ class _TasksPageState extends State<TasksPage> {
       appBar: AppStyles.appBar("Tasks", context),
       body: _buildTaskList(),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'TasksHero',
         child: const Icon(Icons.add),
         onPressed: () => _showTaskBottomSheet(null, "Add Task"),
       ),

@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:ascent/database/app_database.dart';
+import 'package:ascent/utils/general_utils.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart';
-import 'package:path/path.dart' as path;
 
 /// A service class responsible for interacting with the Drift database.
 ///
@@ -18,19 +18,18 @@ class DriftService {
   static final DriftService instance = DriftService._();
 
   /// Instance used for database operations.
-  late AppDatabase driftDb;
+  late AppDatabase driftDB;
 
   /// Initializes the Drift database service.
   ///
   /// This method should be called once in the application's main method
   /// to set up the database.
-  Future<void> init() async => driftDb = await _createIsolatedDb();
+  Future<void> init() async => driftDB = await _createIsolatedDb();
 
   /// Creates two separate executors for read and write operations
   Future<AppDatabase> _createIsolatedDb() async {
     final db = LazyDatabase(() async {
-      final databasePath = await getApplicationDocumentsDirectory();
-      final dbFile = File(path.join(databasePath.path, 'database.sqlite'));
+      final dbFile = File(await getDatabasePath());
 
       /// Set cache directory
       final cacheBase = (await getTemporaryDirectory()).path;
