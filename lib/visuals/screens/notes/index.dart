@@ -44,7 +44,16 @@ class _NotesPageState extends State<NotesPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(_notes[index].noteTitle),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.arrow_right)),
+                  IconButton(
+                    onPressed:
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditNote(_notes[index]),
+                          ),
+                        ),
+                    icon: Icon(Icons.arrow_right),
+                  ),
                 ],
               ),
             ),
@@ -64,7 +73,7 @@ class _NotesPageState extends State<NotesPage> {
         onPressed:
             () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => EditNote()),
+              MaterialPageRoute(builder: (context) => EditNote(null)),
             ),
       ),
     );
