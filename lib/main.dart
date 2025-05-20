@@ -1,10 +1,13 @@
+import 'package:ascent/services/drift_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ascent/visuals/index.dart';
 import 'package:ascent/visuals/components/themes.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await DriftService.instance.init();
 
   // Lock the app to portrait mode
   SystemChrome.setPreferredOrientations([
