@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:ascent/services/drift_service.dart';
 import 'package:ascent/visuals/components/app_styles.dart';
 import 'package:ascent/visuals/components/theme_extensions/general_decoration.dart';
 import 'package:ascent/visuals/components/theme_extensions/task_decoration.dart';
+import 'package:ascent/utils/general_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -20,7 +22,7 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> {
-  final database = AppDatabase();
+  final database = DriftService.instance.driftDB;
   final TextEditingController _taskTitleController = TextEditingController();
   final TextEditingController _taskBodyController = TextEditingController();
   List<Task> _tasks = [];
@@ -122,8 +124,10 @@ class _TasksPageState extends State<TasksPage> {
 
   // Task sharing utilities
   Future<void> _shareTaskAsFile(Task task) async {
+    final fileName = generateRandomString(7);
+
     final directory = await getTemporaryDirectory();
-    final file = File('${directory.path}/${task.taskTitle}.aso');
+    final file = File('${directory.path}/$fileName.aso');
     await file.writeAsString(
       jsonEncode({
         "secret": "eMR3C2e",
@@ -134,8 +138,14 @@ class _TasksPageState extends State<TasksPage> {
     );
 
     final params = ShareParams(
-      files: [XFile(file.path)],
-      subject: "Task: ${task.taskTitle}",
+      files: [
+        XFile(
+          file.path,
+          mimeType: 'application/octet-stream',
+          name: '$fileName.aso',
+        ),
+      ],
+      title: fileName,
       text:
           "${task.taskTitle}\n"
           "${task.dueDate.day}/${task.dueDate.month}/${task.dueDate.year}\n\n"
@@ -302,11 +312,7 @@ class _TasksPageState extends State<TasksPage> {
   void _showTaskBottomSheet(Task? task, String label) {
     _taskTitleController.text = task?.taskTitle ?? "";
     _taskBodyController.text = task?.taskBody ?? "";
-
-    // Create a ValueNotifier to track the date changes
-    final dateNotifier = ValueNotifier<DateTime>(
-      task?.dueDate ?? DateTime.now(),
-    );
+    DateTime selectedDate = task?.dueDate ?? DateTime.now();
 
     showModalBottomSheet(
       context: context,
@@ -315,165 +321,169 @@ class _TasksPageState extends State<TasksPage> {
       ),
       isScrollControlled: true,
       builder:
-          (context) =>
-              _buildBottomSheetContent(context, task, label, dateNotifier),
-    );
-  }
-
-  Widget _buildBottomSheetContent(
-    BuildContext context,
-    Task? task,
-    String label,
-    ValueNotifier<DateTime> dateNotifier,
-  ) {
-    return ValueListenableBuilder<DateTime>(
-      valueListenable: dateNotifier,
-      builder: (context, selectedDate, _) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 3, right: 3, left: 3),
-                child: AppStyles.appBar(
-                  label,
-                  context,
-                  actions:
-                      task != null
-                          ? <Widget>[
-                            IconButton(
-                              icon: const Icon(Icons.copy_outlined, size: 20),
-                              onPressed: () => _copyTaskToClipboard(task),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.share, size: 22),
-                              onPressed: () => _shareTaskAsFile(task),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete_outline, size: 26),
-                              onPressed: () {
-                                _deleteTask(task);
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ]
-                          : <Widget>[],
-                  backgroundColor: Colors.transparent,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 20,
-                ),
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: _taskTitleController,
-                      textCapitalization: TextCapitalization.sentences,
-                      style: const TextStyle(fontSize: 16),
-                      decoration: const InputDecoration(hintText: "Task Title"),
-                    ),
-                    const Gap(16),
-                    TextFormField(
-                      controller: _taskBodyController,
-                      textCapitalization: TextCapitalization.sentences,
-                      maxLines: 4,
-                      style: const TextStyle(fontSize: 16),
-                      decoration: const InputDecoration(
-                        hintText: "Add Description (Optional)",
+          (context) => StatefulBuilder(
+            builder:
+                (context, setModalState) => SafeArea(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 3,
+                          right: 3,
+                          left: 3,
+                        ),
+                        child: AppStyles.appBar(
+                          label,
+                          context,
+                          actions:
+                              task != null
+                                  ? <Widget>[
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.copy_outlined,
+                                        size: 20,
+                                      ),
+                                      onPressed:
+                                          () => _copyTaskToClipboard(task),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.share, size: 22),
+                                      onPressed: () => _shareTaskAsFile(task),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete_outline,
+                                        size: 26,
+                                      ),
+                                      onPressed: () {
+                                        _deleteTask(task);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ]
+                                  : <Widget>[],
+                          backgroundColor: Colors.transparent,
+                        ),
                       ),
-                      keyboardType: TextInputType.multiline,
-                    ),
-                    const Gap(16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () async {
-                              final picked = await showDatePicker(
-                                context: context,
-                                initialDate: selectedDate,
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2200),
-                              );
-                              if (picked != null) {
-                                dateNotifier.value = picked;
-                              }
-                            },
-                            icon: const Icon(Icons.calendar_today),
-                            label: Text(
-                              "Due: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 20,
+                        ),
+                        child: Column(
+                          children: [
+                            TextField(
+                              controller: _taskTitleController,
+                              textCapitalization: TextCapitalization.sentences,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: const InputDecoration(
+                                hintText: "Task Title",
+                              ),
                             ),
-                            style:
-                                Theme.of(context)
-                                    .extension<GeneralDecoration>()
-                                    ?.secondaryButton,
-                          ),
+                            const Gap(16),
+                            TextFormField(
+                              controller: _taskBodyController,
+                              textCapitalization: TextCapitalization.sentences,
+                              maxLines: 4,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: const InputDecoration(
+                                hintText: "Add Description (Optional)",
+                              ),
+                              keyboardType: TextInputType.multiline,
+                            ),
+                            const Gap(16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      final picked = await showDatePicker(
+                                        context: context,
+                                        initialDate: selectedDate,
+                                        firstDate: DateTime(2000),
+                                        lastDate: DateTime(2200),
+                                      );
+                                      if (picked != null)
+                                        setModalState(
+                                          () => selectedDate = picked,
+                                        );
+                                    },
+                                    icon: const Icon(Icons.calendar_today),
+                                    label: Text(
+                                      "Due: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+                                    ),
+                                    style:
+                                        Theme.of(context)
+                                            .extension<GeneralDecoration>()
+                                            ?.secondaryButton,
+                                  ),
+                                ),
+                                const Gap(16),
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.abc),
+                                    label: const Text("Coming Soon"),
+                                    style:
+                                        Theme.of(context)
+                                            .extension<GeneralDecoration>()
+                                            ?.secondaryButton,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(16),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("Cancel"),
+                                  ),
+                                ),
+                                const Gap(12),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      if (_taskTitleController
+                                          .text
+                                          .isNotEmpty) {
+                                        if (task != null) {
+                                          _updateTask(
+                                            task,
+                                            _taskTitleController.text,
+                                            _taskBodyController.text.isNotEmpty
+                                                ? _taskBodyController.text
+                                                : null,
+                                            selectedDate,
+                                          );
+                                        } else {
+                                          _addTask(
+                                            _taskTitleController.text,
+                                            _taskBodyController.text.isNotEmpty
+                                                ? _taskBodyController.text
+                                                : null,
+                                            selectedDate,
+                                          );
+                                        }
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                                    child: const Text("Save"),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        const Gap(16),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.abc),
-                            label: const Text("Coming Soon"),
-                            style:
-                                Theme.of(context)
-                                    .extension<GeneralDecoration>()
-                                    ?.secondaryButton,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Gap(16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text("Cancel"),
-                          ),
-                        ),
-                        const Gap(12),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (_taskTitleController.text.isNotEmpty) {
-                                if (task != null) {
-                                  _updateTask(
-                                    task,
-                                    _taskTitleController.text,
-                                    _taskBodyController.text.isNotEmpty
-                                        ? _taskBodyController.text
-                                        : null,
-                                    selectedDate, // Using the current date from ValueNotifier
-                                  );
-                                } else {
-                                  _addTask(
-                                    _taskTitleController.text,
-                                    _taskBodyController.text.isNotEmpty
-                                        ? _taskBodyController.text
-                                        : null,
-                                    selectedDate, // Using the current date from ValueNotifier
-                                  );
-                                }
-                                Navigator.pop(context);
-                              }
-                            },
-                            child: const Text("Save"),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Gap(MediaQuery.of(context).viewInsets.bottom),
+                    ],
+                  ),
                 ),
-              ),
-              Gap(MediaQuery.of(context).viewInsets.bottom),
-            ],
           ),
-        );
-      },
     );
   }
 
@@ -483,6 +493,7 @@ class _TasksPageState extends State<TasksPage> {
       appBar: AppStyles.appBar("Tasks", context),
       body: _buildTaskList(),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'TasksHero',
         child: const Icon(Icons.add),
         onPressed: () => _showTaskBottomSheet(null, "Add Task"),
       ),
