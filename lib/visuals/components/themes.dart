@@ -36,6 +36,108 @@ final ThemeData lightTheme = ThemeData(
   navigationBarTheme: NavigationBarThemeData(backgroundColor: Colors.white),
   bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
 
+  // Comprehensive TextTheme for light mode mobile applications
+  textTheme: TextTheme(
+    // Large headings
+    displayLarge: TextStyle(
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+      letterSpacing: -0.5,
+      color: Colors.black87,
+    ),
+    displayMedium: TextStyle(
+      fontSize: 28,
+      fontWeight: FontWeight.bold,
+      letterSpacing: -0.5,
+      color: Colors.black87,
+    ),
+    displaySmall: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+      color: Colors.black87,
+    ),
+
+    // Headlines
+    headlineLarge: TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.w600,
+      color: Colors.black87,
+    ),
+    headlineMedium: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+      color: Colors.black87,
+    ),
+    headlineSmall: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: Colors.black87,
+    ),
+
+    // Titles
+    titleLarge: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.15,
+      color: Colors.black87,
+    ),
+    titleMedium: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.15,
+      color: Colors.black87,
+    ),
+    titleSmall: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.1,
+      color: Colors.black87,
+    ),
+
+    // Labels
+    labelLarge: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.1,
+      color: Colors.black87,
+    ),
+    labelMedium: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.5,
+      color: Colors.black87,
+    ),
+    labelSmall: TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.5,
+      color: Colors.black54,
+    ),
+
+    // Body text
+    bodyLarge: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.5,
+      height: 1.5,
+      color: Colors.black87,
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.25,
+      height: 1.4,
+      color: Colors.black87,
+    ),
+    bodySmall: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.4,
+      height: 1.3,
+      color: Colors.black54,
+    ),
+  ),
+
   extensions: <ThemeExtension>[
     GeneralDecoration(
       secondaryButton: ElevatedButton.styleFrom(
@@ -54,19 +156,7 @@ final ThemeData lightTheme = ThemeData(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.withValues(alpha: .5), width: 1),
       ),
-      taskTitleStyle: TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 16,
-        letterSpacing: 0.3,
-        decorationThickness: 4,
-      ),
-      taskBodyStyle: TextStyle(
-        fontSize: 14,
-        color: Colors.black,
-        height: 1.4,
-        decorationThickness: 4,
-        decorationColor: Colors.black54,
-      ),
+
       overdueColor: Colors.red,
       dueColor: Colors.green,
     ),
@@ -108,6 +198,108 @@ final ThemeData darkTheme = ThemeData(
   navigationBarTheme: NavigationBarThemeData(backgroundColor: Colors.black),
   bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.black),
 
+  // Comprehensive TextTheme for dark mode mobile applications
+  textTheme: TextTheme(
+    // Large headings
+    displayLarge: TextStyle(
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+      letterSpacing: -0.5,
+      color: Colors.white,
+    ),
+    displayMedium: TextStyle(
+      fontSize: 28,
+      fontWeight: FontWeight.bold,
+      letterSpacing: -0.5,
+      color: Colors.white,
+    ),
+    displaySmall: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+
+    // Headlines
+    headlineLarge: TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
+    headlineMedium: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
+    headlineSmall: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
+
+    // Titles
+    titleLarge: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.15,
+      color: Colors.white,
+    ),
+    titleMedium: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.15,
+      color: Colors.white,
+    ),
+    titleSmall: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.1,
+      color: Colors.white,
+    ),
+
+    // Labels
+    labelLarge: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.1,
+      color: Colors.white,
+    ),
+    labelMedium: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.5,
+      color: Colors.white70,
+    ),
+    labelSmall: TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.5,
+      color: Colors.white60,
+    ),
+
+    // Body text
+    bodyLarge: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.5,
+      height: 1.5,
+      color: Colors.white,
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.25,
+      height: 1.4,
+      color: Colors.white,
+    ),
+    bodySmall: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.4,
+      height: 1.3,
+      color: Colors.white70,
+    ),
+  ),
+
   extensions: <ThemeExtension>[
     GeneralDecoration(
       secondaryButton: ElevatedButton.styleFrom(
@@ -125,19 +317,6 @@ final ThemeData darkTheme = ThemeData(
       borderedContainer: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.withValues(alpha: 0.3), width: 1),
-      ),
-      taskTitleStyle: TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 16,
-        letterSpacing: 0.3,
-        decorationThickness: 4,
-      ),
-      taskBodyStyle: TextStyle(
-        fontSize: 14,
-        color: Colors.grey[400],
-        height: 1.4,
-        decorationThickness: 4,
-        decorationColor: Colors.grey[600],
       ),
       overdueColor: Colors.red,
       dueColor: Colors.grey,

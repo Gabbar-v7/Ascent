@@ -6,7 +6,7 @@ class AppStyles {
     String title,
     BuildContext context, {
     IconData icon = Icons.arrow_back_ios_rounded,
-    List<Widget> actions = const [],
+    List<Widget> actions = const <Widget>[],
     Color? backgroundColor,
   }) {
     return AppBar(
@@ -14,7 +14,7 @@ class AppStyles {
         icon: Icon(icon),
         onPressed: () => NavManager.popPage(context),
       ),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+      title: Text(title, style: Theme.of(context).textTheme.headlineLarge),
       actions: actions,
       backgroundColor: backgroundColor,
     );

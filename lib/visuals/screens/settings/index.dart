@@ -32,7 +32,12 @@ class SettingsPageState extends State<SettingsPage> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(
+          message,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+        ),
         backgroundColor: isError ? Colors.red : Colors.green,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -121,6 +126,7 @@ class SettingsPageState extends State<SettingsPage> {
     required bool isPrimary,
   }) {
     final colors = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
     final backgroundColor =
         isPrimary ? colors.primary : colors.secondaryContainer;
     final foregroundColor =
@@ -139,7 +145,10 @@ class SettingsPageState extends State<SettingsPage> {
                 ),
               )
               : Icon(icon),
-      label: Text(label),
+      label: Text(
+        label,
+        style: theme.textTheme.labelLarge?.copyWith(color: foregroundColor),
+      ),
       style: FilledButton.styleFrom(
         backgroundColor: backgroundColor,
         foregroundColor: foregroundColor,
@@ -157,6 +166,8 @@ class SettingsPageState extends State<SettingsPage> {
     required Color iconColor,
     required Color iconBackground,
   }) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         Container(
@@ -172,11 +183,11 @@ class SettingsPageState extends State<SettingsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+              Text(title, style: theme.textTheme.titleMedium),
               const Gap(4),
               Text(
                 subtitle,
-                style: TextStyle(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),

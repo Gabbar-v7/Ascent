@@ -21,6 +21,8 @@ class InProgressPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppStyles.appBar(
         "In Progress",
@@ -40,26 +42,28 @@ class InProgressPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Bold text in the center
-            Text(
-              'In Progress',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
+            // Bold text in the center using displaySmall style
+            Text('In Progress', style: theme.textTheme.displaySmall),
             const Gap(20), // Spacing
-            // Informative text
+            // Informative text using bodyLarge style
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 'This page is currently under development.\nPlease check GitHub for updates.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: theme.textTheme.bodyMedium,
               ),
             ),
             const Gap(20), // Spacing
             // Button to open GitHub URL
             ElevatedButton(
               onPressed: _launchGithubUrl,
-              child: Text('Visit GitHub'),
+              child: Text(
+                'Visit GitHub',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),

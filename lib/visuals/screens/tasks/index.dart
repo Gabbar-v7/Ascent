@@ -205,6 +205,7 @@ class _TasksPageState extends State<TasksPage> {
   // UI Components
   Widget _buildTaskList() {
     final categorizedTasks = _categorizeTasks();
+    final theme = Theme.of(context);
 
     return ListView.builder(
       itemCount:
@@ -218,13 +219,7 @@ class _TasksPageState extends State<TasksPage> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(
-                entry.key,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child: Text(entry.key, style: theme.textTheme.headlineSmall),
             ),
             ...entry.value.map(_buildTaskTile),
           ],
@@ -237,6 +232,7 @@ class _TasksPageState extends State<TasksPage> {
     final isCompleted = task.doneOn != null;
     final isOverdue = task.dueDate.isBefore(DateTime.now()) && !isCompleted;
     final taskDecoration = Theme.of(context).extension<TaskDecoration>();
+    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -246,29 +242,29 @@ class _TasksPageState extends State<TasksPage> {
         borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: taskDecoration?.borderedContainer,
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.only(top: 3, right: 9, bottom: 3, left: 3),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Checkbox(
+                    visualDensity: VisualDensity.compact,
                     value: isCompleted,
                     onChanged: (value) => _toggleTaskCompletion(task, value!),
                   ),
-                  const Gap(6),
+                  const Gap(5),
                   Expanded(
                     child: Text(
                       task.taskTitle,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: taskDecoration?.taskTitleStyle.copyWith(
-                        decoration:
-                            isCompleted ? TextDecoration.lineThrough : null,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
-                  const Gap(10),
+                  const Gap(8),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
@@ -277,7 +273,7 @@ class _TasksPageState extends State<TasksPage> {
                     decoration: taskDecoration?.dateTagContainer,
                     child: Text(
                       "${task.dueDate.day}/${task.dueDate.month}",
-                      style: TextStyle(
+                      style: theme.textTheme.bodySmall?.copyWith(
                         color:
                             isOverdue
                                 ? taskDecoration?.overdueColor
@@ -292,11 +288,11 @@ class _TasksPageState extends State<TasksPage> {
                   padding: const EdgeInsets.only(
                     left: 20,
                     right: 20,
-                    bottom: 6,
+                    bottom: 4,
                   ),
                   child: Text(
                     task.taskBody!,
-                    style: taskDecoration?.taskBodyStyle.copyWith(
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       decoration:
                           isCompleted ? TextDecoration.lineThrough : null,
                     ),
@@ -313,6 +309,7 @@ class _TasksPageState extends State<TasksPage> {
     _taskTitleController.text = task?.taskTitle ?? "";
     _taskBodyController.text = task?.taskBody ?? "";
     DateTime selectedDate = task?.dueDate ?? DateTime.now();
+    final theme = Theme.of(context);
 
     showModalBottomSheet(
       context: context,
@@ -376,7 +373,7 @@ class _TasksPageState extends State<TasksPage> {
                             TextField(
                               controller: _taskTitleController,
                               textCapitalization: TextCapitalization.sentences,
-                              style: const TextStyle(fontSize: 16),
+                              style: theme.textTheme.bodyLarge,
                               decoration: const InputDecoration(
                                 hintText: "Task Title",
                               ),
@@ -386,7 +383,7 @@ class _TasksPageState extends State<TasksPage> {
                               controller: _taskBodyController,
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: 4,
-                              style: const TextStyle(fontSize: 16),
+                              style: theme.textTheme.bodyLarge,
                               decoration: const InputDecoration(
                                 hintText: "Add Description (Optional)",
                               ),
@@ -413,6 +410,7 @@ class _TasksPageState extends State<TasksPage> {
                                     icon: const Icon(Icons.calendar_today),
                                     label: Text(
                                       "Due: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+                                      style: theme.textTheme.labelLarge,
                                     ),
                                     style:
                                         Theme.of(context)
@@ -425,7 +423,10 @@ class _TasksPageState extends State<TasksPage> {
                                   child: ElevatedButton.icon(
                                     onPressed: () {},
                                     icon: const Icon(Icons.abc),
-                                    label: const Text("Coming Soon"),
+                                    label: Text(
+                                      "Coming Soon",
+                                      style: theme.textTheme.labelLarge,
+                                    ),
                                     style:
                                         Theme.of(context)
                                             .extension<GeneralDecoration>()
@@ -440,7 +441,10 @@ class _TasksPageState extends State<TasksPage> {
                                 Expanded(
                                   child: ElevatedButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text("Cancel"),
+                                    child: Text(
+                                      "Cancel",
+                                      style: theme.textTheme.labelLarge,
+                                    ),
                                   ),
                                 ),
                                 const Gap(12),
@@ -459,6 +463,7 @@ class _TasksPageState extends State<TasksPage> {
                                                 : null,
                                             selectedDate,
                                           );
+                                          Navigator.pop(context);
                                         } else {
                                           _addTask(
                                             _taskTitleController.text,
@@ -467,11 +472,16 @@ class _TasksPageState extends State<TasksPage> {
                                                 : null,
                                             selectedDate,
                                           );
+                                          FocusScope.of(context).unfocus();
+                                          _taskTitleController.clear();
+                                          _taskBodyController.clear();
                                         }
-                                        Navigator.pop(context);
                                       }
                                     },
-                                    child: const Text("Save"),
+                                    child: Text(
+                                      "Save",
+                                      style: theme.textTheme.labelLarge,
+                                    ),
                                   ),
                                 ),
                               ],
