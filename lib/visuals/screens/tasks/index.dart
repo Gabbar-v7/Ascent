@@ -501,7 +501,33 @@ class _TasksPageState extends State<TasksPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppStyles.appBar("Tasks", context),
-      body: _buildTaskList(),
+      body:
+          _tasks.isEmpty
+              ? Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.checklist_rounded,
+                      size: 64,
+                      color: Theme.of(context).hintColor,
+                    ),
+                    const Gap(16),
+                    Text(
+                      "No tasks yet",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const Gap(8),
+                    Text(
+                      "Tap the '+' button to create a task",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).hintColor,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              : _buildTaskList(),
       floatingActionButton: FloatingActionButton(
         heroTag: 'TasksHero',
         child: const Icon(Icons.add),

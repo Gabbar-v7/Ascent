@@ -1,4 +1,5 @@
 import 'package:ascent/visuals/screens/in_progress.dart';
+import 'package:ascent/visuals/screens/notes/index.dart';
 import 'package:flutter/material.dart';
 import 'package:ascent/visuals/screens/tasks/index.dart';
 
@@ -14,7 +15,7 @@ class HomePageState extends State<HomePage> {
   late List<Widget> pageList = [
     const TasksPage(),
     InProgressPage(),
-    InProgressPage(),
+    NotesPage(),
   ];
 
   @override
@@ -42,13 +43,16 @@ class HomePageState extends State<HomePage> {
       body: IndexedStack(index: _pageIndex, children: pageList),
       bottomNavigationBar: NavigationBar(
         destinations: const <Widget>[
-          NavigationDestination(icon: Icon(Icons.checklist), label: "Tasks"),
+          NavigationDestination(
+            icon: Icon(Icons.checklist_rounded),
+            label: "Tasks",
+          ),
           NavigationDestination(
             icon: Icon(Icons.timer_outlined, size: 23),
             label: "Timer",
           ),
           NavigationDestination(
-            icon: Icon(Icons.sticky_note_2_outlined, size: 21),
+            icon: Icon(Icons.notes_rounded, size: 21),
             label: "Notes",
           ),
           NavigationDestination(
