@@ -1,4 +1,4 @@
-package com.value.ascent
+package com.ascent.android
 
 import io.flutter.embedding.android.FlutterActivity
 

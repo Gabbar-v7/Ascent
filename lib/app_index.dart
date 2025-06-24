@@ -1,18 +1,19 @@
 import 'package:ascent/l10n/generated/app_localizations.dart';
-import 'package:ascent/screen/home.dart';
+import 'package:ascent/ui-elements/components/themes.dart';
+import 'package:ascent/ui-elements/home/home_index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Index extends ConsumerStatefulWidget {
-  const Index({super.key});
+class MainApp extends ConsumerStatefulWidget {
+  const MainApp({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _IndexState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _MainAppState();
 }
 
-class _IndexState extends ConsumerState<Index> {
+class _MainAppState extends ConsumerState<MainApp> {
   @override
   void initState() {
     super.initState();
@@ -37,6 +38,8 @@ class _IndexState extends ConsumerState<Index> {
       /// Themes
       themeAnimationCurve: Curves.ease,
       themeMode: ThemeMode.system,
+      darkTheme: AppThemes.darkTheme,
+      theme: AppThemes.lightTheme,
 
       /// Localization
       locale: Locale('en'),
@@ -48,7 +51,7 @@ class _IndexState extends ConsumerState<Index> {
         GlobalCupertinoLocalizations.delegate,
       ],
 
-      home: HomePage(),
+      home: HomeIndex(),
     );
   }
 }
@@ -71,7 +74,7 @@ class _IndexState extends ConsumerState<Index> {
 
 //     /// Themes
 //     themeAnimationCurve: Curves.ease,
-//     themeMode: ThemeMode.values[themeMode.index],
+//     themeMode: ThemeMode.values[themeMode.MainApp],
 //     darkTheme: AppTheme.darkTheme(
 //       isAmoled: useAmoledDark,
 //       seedColor: useDynamicColors

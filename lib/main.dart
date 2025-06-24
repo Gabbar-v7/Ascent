@@ -1,4 +1,4 @@
-import 'package:ascent/index.dart';
+import 'package:ascent/app_index.dart';
 import 'package:ascent/services/drift_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +16,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]).then((_) {
     runApp(const ProviderScope(
-      child: Index(),
+      child: MainApp(),
     ));
   });
 }
