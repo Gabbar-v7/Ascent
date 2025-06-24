@@ -4,6 +4,7 @@ import 'package:ascent/ui-elements/home/home_index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MainApp extends ConsumerStatefulWidget {
@@ -49,6 +50,7 @@ class _MainAppState extends ConsumerState<MainApp> {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
+        FlutterQuillLocalizations.delegate,
       ],
 
       home: HomeIndex(),

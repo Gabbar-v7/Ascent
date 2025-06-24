@@ -1,11 +1,12 @@
 import 'package:ascent/ui-elements/components/scaffold_shell.dart';
+import 'package:ascent/ui-elements/home/notes.dart';
 import 'package:flutter/material.dart';
 
 class HomeIndex extends StatefulWidget {
   const HomeIndex({super.key});
 
   @override
-  State<StatefulWidget> createState() => _HomeIndexState();
+  State<HomeIndex> createState() => _HomeIndexState();
 }
 
 class _HomeIndexState extends State<HomeIndex> {
@@ -14,7 +15,7 @@ class _HomeIndexState extends State<HomeIndex> {
         icon: Icons.checklist_rounded,
         navBarTitle: "Tasks",
         appBarTitle: "Tasks",
-        body: Container()),
+        body: Text("data")),
     NavigationItem(
         icon: Icons.timer_outlined,
         navBarTitle: "Timer",
@@ -24,7 +25,7 @@ class _HomeIndexState extends State<HomeIndex> {
         icon: Icons.sticky_note_2_outlined,
         navBarTitle: "Notes",
         appBarTitle: "Notes",
-        body: Container()),
+        body: NotesIndex()),
     NavigationItem(
         icon: Icons.bubble_chart_outlined,
         navBarTitle: "Menu",

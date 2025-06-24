@@ -18,6 +18,7 @@ dependencies:
   fl_chart: ^1.0.0
   animated_flip_counter: ^0.3.4
   flutter_confetti: ^0.5.1
+  flutter_quill: ^11.4.1
   skeletonizer: ^2.0.1
   gap: ^3.0.1
 
