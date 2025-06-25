@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 FloatingActionButton tasksFloatingActionButton() => FloatingActionButton(
       onPressed: () {},
-      child: Icon(Icons.add_box_outlined),
+      child: Icon(Icons.add),
     );
 
 class TasksIndex extends StatefulWidget {
