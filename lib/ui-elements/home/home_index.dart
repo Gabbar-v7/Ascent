@@ -1,5 +1,7 @@
 import 'package:ascent/ui-elements/components/scaffold_shell.dart';
 import 'package:ascent/ui-elements/home/notes.dart';
+import 'package:ascent/ui-elements/home/tasks/tasks_index.dart';
+import 'package:ascent/ui-elements/home/timer/timer_index.dart';
 import 'package:flutter/material.dart';
 
 class HomeIndex extends StatefulWidget {
@@ -15,12 +17,14 @@ class _HomeIndexState extends State<HomeIndex> {
         icon: Icons.checklist_rounded,
         navBarTitle: "Tasks",
         appBarTitle: "Tasks",
-        body: Text("data")),
+        body: TasksIndex(),
+        floatingActionButton: tasksFloatingActionButton()),
     NavigationItem(
-        icon: Icons.timer_outlined,
-        navBarTitle: "Timer",
-        appBarTitle: "Pomodoro Timer",
-        body: Container()),
+      icon: Icons.timer_outlined,
+      navBarTitle: "Timer",
+      appBarTitle: "Pomodoro Timer",
+      body: TimerIndex(),
+    ),
     NavigationItem(
         icon: Icons.sticky_note_2_outlined,
         navBarTitle: "Notes",
