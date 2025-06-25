@@ -24,6 +24,7 @@ class _HomeIndexState extends State<HomeIndex> {
       navBarTitle: "Timer",
       appBarTitle: "Pomodoro Timer",
       body: TimerIndex(),
+      actions: timerActions(),
     ),
     NavigationItem(
         icon: Icons.sticky_note_2_outlined,

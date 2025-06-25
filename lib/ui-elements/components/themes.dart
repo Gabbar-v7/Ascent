@@ -74,7 +74,7 @@ class AppThemes {
         backgroundColor: _lightColorScheme.surface,
         foregroundColor: _lightColorScheme.onSurface,
         elevation: 0,
-        centerTitle: true,
+        centerTitle: false,
         titleTextStyle: TextStyle(
           color: _lightColorScheme.onSurface,
           fontSize: 22,
@@ -327,7 +327,7 @@ class AppThemes {
         backgroundColor: _darkColorScheme.surface,
         foregroundColor: _darkColorScheme.onSurface,
         elevation: 0,
-        centerTitle: true,
+        centerTitle: false,
         titleTextStyle: TextStyle(
           color: _darkColorScheme.onSurface,
           fontSize: 22,

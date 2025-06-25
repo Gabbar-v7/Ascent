@@ -2,6 +2,9 @@ import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+List<Widget> timerActions() =>
+    [IconButton(onPressed: () {}, icon: Icon(Icons.settings)), const Gap(10)];
+
 class TimerIndex extends StatefulWidget {
   const TimerIndex({super.key});
 
@@ -15,13 +18,11 @@ class _TimerIndexState extends State<TimerIndex> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(
-          width: double.infinity,
-        ),
+        const Gap(42),
         modeLabel("Focus"),
-        const Gap(48),
+        const Gap(32),
         animatedCounter(),
-        const Gap(76),
+        const Gap(48),
         controlButtons(),
       ],
     );
@@ -41,12 +42,12 @@ class _TimerIndexState extends State<TimerIndex> {
             color: Theme.of(context).colorScheme.onSurface, width: 2),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 18),
         child: Text(
-          "Focus",
+          label,
           style: TextStyle(
             color: Theme.of(context).colorScheme.surface,
-            fontSize: 22,
+            fontSize: 20, // Reduced from 22
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -55,8 +56,14 @@ class _TimerIndexState extends State<TimerIndex> {
   }
 
   Widget animatedCounter() {
-    const counterTextStyle =
-        TextStyle(fontSize: 100, fontWeight: FontWeight.bold);
+    // Responsive font size based on screen width
+    final screenWidth = MediaQuery.of(context).size.width;
+    final fontSize = screenWidth < 400 ? 72.0 : 85.0;
+
+    final counterTextStyle = TextStyle(
+      fontSize: fontSize,
+      fontWeight: FontWeight.bold,
+    );
 
     return Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -80,8 +87,8 @@ class _TimerIndexState extends State<TimerIndex> {
   }
 
   Widget controlButtons() {
-    const secondaryIconSize = 25.0;
-    const primaryIconSize = 48.0;
+    const secondaryIconSize = 22.0;
+    const primaryIconSize = 42.0;
     final secondaryBoxDecoration = BoxDecoration(
       color: Theme.of(
         context,
@@ -92,18 +99,19 @@ class _TimerIndexState extends State<TimerIndex> {
       color: Theme.of(
         context,
       ).colorScheme.primary.withValues(alpha: 0.2),
-      shape: BoxShape.circle,
+      borderRadius: BorderRadius.circular(10),
+      shape: BoxShape.rectangle,
     );
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      spacing: 22,
+      spacing: 18,
       children: [
         Container(
           decoration: secondaryBoxDecoration,
           child: IconButton(
             onPressed: () {},
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
             iconSize: secondaryIconSize,
           ),
         ),
@@ -111,15 +119,16 @@ class _TimerIndexState extends State<TimerIndex> {
           decoration: primaryBoxDecoration,
           child: IconButton(
             onPressed: () {},
-            icon: Icon(Icons.pause),
+            icon: const Icon(Icons.pause),
             iconSize: primaryIconSize,
+            padding: EdgeInsets.all(10),
           ),
         ),
         Container(
           decoration: secondaryBoxDecoration,
           child: IconButton(
             onPressed: () {},
-            icon: Icon(Icons.skip_next),
+            icon: const Icon(Icons.skip_next),
             iconSize: secondaryIconSize,
           ),
         )

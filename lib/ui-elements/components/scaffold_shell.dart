@@ -45,6 +45,7 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
         leading: IconButton(
             onPressed: () => NavigatorUtils.popPage(context),
             icon: Icon(Icons.arrow_back_ios_rounded)),
+        actions: widget.pages[_pageIndex].actions,
       ),
       body: widget.pages[_pageIndex].body,
       bottomNavigationBar: NavigationBar(
