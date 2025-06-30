@@ -1,6 +1,6 @@
 import 'package:ascent/l10n/generated/app_localizations.dart';
-import 'package:ascent/ui-elements/components/themes.dart';
-import 'package:ascent/ui-elements/home/home_index.dart';
+import 'package:ascent/visuals/components/themes.dart';
+import 'package:ascent/visuals/home/home_index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

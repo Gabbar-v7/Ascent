@@ -1,4 +1,4 @@
-import 'package:ascent/ui-elements/components/widgets/transition_builder.dart';
+import 'package:ascent/visuals/components/widgets/transition_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 

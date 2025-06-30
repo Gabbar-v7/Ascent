@@ -35,6 +35,33 @@ class ScaffoldShell extends StatefulWidget {
 
 class _ScaffoldShellState extends State<ScaffoldShell> {
   int _pageIndex = 0;
+  late PageController _pageController;
+  late List<Widget> _pageList;
+  late List<NavigationDestination> _navigationDestinations;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _pageIndex);
+    _pageList = widget.pages.map((item) => item.body).toList();
+    _navigationDestinations = widget.pages.map((item) {
+      return NavigationDestination(
+        icon: Icon(item.icon),
+        label: item.navBarTitle,
+      );
+    }).toList();
+  }
+
+  void _onDestinationSelected(int index) {
+    setState(() {
+      _pageIndex = index;
+    });
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOutCubic,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,18 +74,14 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
             icon: Icon(Icons.arrow_back_ios_rounded)),
         actions: widget.pages[_pageIndex].actions,
       ),
-      body: widget.pages[_pageIndex].body,
+      body: PageView(
+        controller: _pageController,
+        children: _pageList,
+      ),
       bottomNavigationBar: NavigationBar(
           selectedIndex: _pageIndex,
-          onDestinationSelected: (value) => setState(() {
-                _pageIndex = value;
-              }),
-          destinations: widget.pages.map((item) {
-            return NavigationDestination(
-              icon: Icon(item.icon),
-              label: item.navBarTitle,
-            );
-          }).toList()),
+          onDestinationSelected: _onDestinationSelected,
+          destinations: _navigationDestinations),
     );
   }
 }

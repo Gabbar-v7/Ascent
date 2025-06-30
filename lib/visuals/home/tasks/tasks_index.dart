@@ -15,8 +15,8 @@ class TasksIndex extends StatefulWidget {
 class _TasksIndexState extends State<TasksIndex> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: _taskTile(),
+    return Column(
+      children: [_taskTile()],
     );
   }
 }
