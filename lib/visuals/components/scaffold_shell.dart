@@ -22,12 +22,20 @@ class NavigationItem {
 
 /// Global Scaffold navigation bar and tab bar used throughout the app for consistent ui/ux
 class ScaffoldShell extends StatefulWidget {
-  const ScaffoldShell({
-    super.key,
-    required this.pages,
-  });
-
   final List<NavigationItem> pages;
+  final NavigationDestination? auxiliaryDestination;
+  final void Function(BuildContext)? onAuxiliaryTap;
+
+  const ScaffoldShell(
+      {super.key,
+      required this.pages,
+      this.auxiliaryDestination,
+      this.onAuxiliaryTap})
+      : assert(
+          (auxiliaryDestination == null && onAuxiliaryTap == null) ||
+              (auxiliaryDestination != null && onAuxiliaryTap != null),
+          'extraOption and onClickExtraOption must either both be null or both non-null',
+        );
 
   @override
   State<ScaffoldShell> createState() => _ScaffoldShellState();
@@ -43,24 +51,33 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _pageIndex);
-    _pageList = widget.pages.map((item) => item.body).toList();
-    _navigationDestinations = widget.pages.map((item) {
-      return NavigationDestination(
-        icon: Icon(item.icon),
-        label: item.navBarTitle,
-      );
-    }).toList();
+    _pageList = widget.pages
+        .map((item) => Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10), child: item.body))
+        .toList();
+    _navigationDestinations = [
+      ...widget.pages.map((item) => NavigationDestination(
+            icon: Icon(item.icon),
+            label: item.navBarTitle,
+          )),
+      if (widget.auxiliaryDestination != null) widget.auxiliaryDestination!,
+    ];
   }
 
   void _onDestinationSelected(int index) {
-    setState(() {
-      _pageIndex = index;
-    });
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOutCubic,
-    );
+    if (widget.auxiliaryDestination == null ||
+        index < _navigationDestinations.length - 1) {
+      setState(() {
+        _pageIndex = index;
+      });
+      _pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOutCubic,
+      );
+    } else {
+      widget.onAuxiliaryTap!(context);
+    }
   }
 
   @override
@@ -77,12 +94,9 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
             icon: Icon(Icons.arrow_back_ios_rounded)),
         actions: widget.pages[_pageIndex].actions,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: PageView(
-          controller: _pageController,
-          children: _pageList,
-        ),
+      body: PageView(
+        controller: _pageController,
+        children: _pageList,
       ),
       bottomNavigationBar: NavigationBar(
           selectedIndex: _pageIndex,

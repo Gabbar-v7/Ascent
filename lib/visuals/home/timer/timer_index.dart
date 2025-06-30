@@ -52,11 +52,7 @@ class _TimerIndexState extends State<TimerIndex> {
   }
 
   Widget animatedCounter() {
-    final counterStyle = Theme.of(context)
-        .textTheme
-        .displayMedium
-        ?.copyWith(color: Theme.of(context).colorScheme.onSurface);
-
+    final counterStyle = Theme.of(context).textTheme.displayMedium;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

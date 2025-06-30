@@ -1,4 +1,5 @@
 import 'package:ascent/visuals/components/scaffold_shell.dart';
+import 'package:ascent/visuals/home/home_menu.dart';
 import 'package:ascent/visuals/home/notes/notes_index.dart';
 import 'package:ascent/visuals/home/tasks/tasks_index.dart';
 import 'package:ascent/visuals/home/timer/timer_index.dart';
@@ -31,15 +32,15 @@ class _HomeIndexState extends State<HomeIndex> {
       body: TimerIndex(),
       actions: timerActions(),
     ),
-    NavigationItem(
-        icon: Icons.bubble_chart_outlined,
-        navBarTitle: "Menu",
-        appBarTitle: "Menu",
-        body: Container())
   ];
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldShell(pages: pages);
+    return ScaffoldShell(
+      pages: pages,
+      auxiliaryDestination: NavigationDestination(
+          icon: Icon(Icons.bubble_chart_outlined), label: "Menu"),
+      onAuxiliaryTap: showAuxiliaryMenu,
+    );
   }
 }
