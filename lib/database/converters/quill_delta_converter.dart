@@ -1,28 +1,45 @@
 import 'package:drift/drift.dart';
 import 'dart:convert';
 
-class QuillDeltaConverter extends TypeConverter<Map<String, dynamic>, String>
-    with
-        JsonTypeConverter2<Map<String, dynamic>, String, Map<String, dynamic>> {
+import 'package:flutter_quill/quill_delta.dart';
+
+// Store Flutter Quill's Delta as BLOB
+class QuillDeltaConverter extends TypeConverter<Delta, Uint8List> {
   const QuillDeltaConverter();
 
   @override
-  Map<String, dynamic> fromSql(String fromDb) {
-    return json.decode(fromDb) as Map<String, dynamic>;
+  Delta fromSql(Uint8List fromDb) {
+    try {
+      // Convert Uint8List back to string
+      final jsonString = utf8.decode(fromDb);
+
+      // Parse JSON and create Delta
+      final Map<String, dynamic> deltaJson = json.decode(jsonString);
+
+      // Create Delta from JSON
+      return Delta.fromJson(deltaJson['ops'] ?? []);
+    } catch (e) {
+      // Return empty Delta if conversion fails
+      return Delta();
+    }
   }
 
   @override
-  String toSql(Map<String, dynamic> value) {
-    return json.encode(value);
-  }
+  Uint8List toSql(Delta value) {
+    try {
+      // Convert Delta to JSON map
+      final Map<String, dynamic> deltaMap = {
+        'ops': value.toJson(),
+      };
 
-  @override
-  Map<String, dynamic> fromJson(Map<String, dynamic> json) {
-    return json;
-  }
+      // Convert to JSON string
+      final jsonString = json.encode(deltaMap);
 
-  @override
-  Map<String, dynamic> toJson(Map<String, dynamic> value) {
-    return value;
+      // Convert string to Uint8List
+      return Uint8List.fromList(utf8.encode(jsonString));
+    } catch (e) {
+      // Return empty JSON if conversion fails
+      return Uint8List.fromList(utf8.encode('{"ops":[]}'));
+    }
   }
 }

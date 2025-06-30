@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 class Notes extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get noteTitle => text().nullable()();
-  TextColumn get noteBody => text().map(QuillDeltaConverter()).nullable()();
+  BlobColumn get noteBody => blob().nullable().map(QuillDeltaConverter())();
   BoolColumn get archived => boolean().nullable()();
   BoolColumn get trashed => boolean().nullable()();
 

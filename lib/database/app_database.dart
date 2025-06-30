@@ -1,9 +1,12 @@
+import 'package:ascent/database/converters/quill_delta_converter.dart';
+import 'package:ascent/database/tables/note_table.dart';
 import 'package:drift/drift.dart';
 import 'package:ascent/database/tables/tasks_table.dart';
+import 'package:flutter_quill/quill_delta.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [Tasks])
+@DriftDatabase(tables: [Tasks, Notes])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
