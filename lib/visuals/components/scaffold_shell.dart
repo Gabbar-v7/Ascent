@@ -77,9 +77,12 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
             icon: Icon(Icons.arrow_back_ios_rounded)),
         actions: widget.pages[_pageIndex].actions,
       ),
-      body: PageView(
-        controller: _pageController,
-        children: _pageList,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: PageView(
+          controller: _pageController,
+          children: _pageList,
+        ),
       ),
       bottomNavigationBar: NavigationBar(
           selectedIndex: _pageIndex,

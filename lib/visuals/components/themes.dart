@@ -15,13 +15,26 @@ class BaseTheme {
     builders: {TargetPlatform.android: DefaultPageTransitionsBuilder()},
   );
 
-  static const _kTextTheme = TextTheme(
-      displayMedium: TextStyle(fontSize: 92, fontWeight: FontWeight.bold),
-      titleMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      bodyMedium: TextStyle(
-        fontSize: 17,
-      ),
-      bodySmall: TextStyle(fontSize: 14));
+  static TextTheme _buildTextTheme(ColorScheme colorScheme) => TextTheme(
+        displayMedium: TextStyle(
+          fontSize: 92,
+          fontWeight: FontWeight.bold,
+          color: colorScheme.onSurface,
+        ),
+        titleMedium: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: colorScheme.onSurface,
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 17,
+          color: colorScheme.onSurface,
+        ),
+        bodySmall: TextStyle(
+          fontSize: 14,
+          color: colorScheme.onSurfaceVariant,
+        ),
+      );
 
   static final materialColors = <String, MaterialColor>{
     'Amber': Colors.amber,
@@ -45,27 +58,35 @@ class BaseTheme {
     'Yellow': Colors.yellow,
   };
 
-  static ThemeData darkTheme({Color? seedColor}) => ThemeData.from(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: seedColor ?? _kSeedColor,
-          brightness: Brightness.dark,
-        ),
-      ).copyWith(
-        pageTransitionsTheme: _kPageTransitionTheme,
-        textTheme: _kTextTheme,
-        extensions: [SkeletonizerConfigData.dark(effect: _kShimmerEffect)],
-      );
+  static ThemeData darkTheme({Color? seedColor}) {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: seedColor ?? _kSeedColor,
+      brightness: Brightness.dark,
+    );
 
-  static ThemeData lightTheme({Color? seedColor}) => ThemeData.from(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: seedColor ?? _kSeedColor,
-          brightness: Brightness.light,
-        ),
-      ).copyWith(
-        pageTransitionsTheme: _kPageTransitionTheme,
-        textTheme: _kTextTheme,
-        extensions: [SkeletonizerConfigData(effect: _kShimmerEffect)],
-      );
+    return ThemeData.from(
+      useMaterial3: true,
+      colorScheme: colorScheme,
+    ).copyWith(
+      pageTransitionsTheme: _kPageTransitionTheme,
+      textTheme: _buildTextTheme(colorScheme),
+      extensions: [SkeletonizerConfigData(effect: _kShimmerEffect)],
+    );
+  }
+
+  static ThemeData lightTheme({Color? seedColor}) {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: seedColor ?? _kSeedColor,
+      brightness: Brightness.light,
+    );
+
+    return ThemeData.from(
+      useMaterial3: true,
+      colorScheme: colorScheme,
+    ).copyWith(
+      pageTransitionsTheme: _kPageTransitionTheme,
+      textTheme: _buildTextTheme(colorScheme),
+      extensions: [SkeletonizerConfigData(effect: _kShimmerEffect)],
+    );
+  }
 }
