@@ -68,7 +68,10 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
     return Scaffold(
       floatingActionButton: widget.pages[_pageIndex].floatingActionButton,
       appBar: AppBar(
-        title: Text(widget.pages[_pageIndex].appBarTitle),
+        title: Text(
+          widget.pages[_pageIndex].appBarTitle,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         leading: IconButton(
             onPressed: () => NavigatorUtils.popPage(context),
             icon: Icon(Icons.arrow_back_ios_rounded)),

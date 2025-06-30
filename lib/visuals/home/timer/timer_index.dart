@@ -43,47 +43,39 @@ class _TimerIndexState extends State<TimerIndex> {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 18),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.surface,
-            fontSize: 20, // Reduced from 22
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        child: Text(label,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.surface,
+                )),
       ),
     );
   }
 
   Widget animatedCounter() {
-    // Responsive font size based on screen width
-    final screenWidth = MediaQuery.of(context).size.width;
-    final fontSize = screenWidth < 400 ? 72.0 : 85.0;
-
-    final counterTextStyle = TextStyle(
-      fontSize: fontSize,
-      fontWeight: FontWeight.bold,
-    );
+    final counterStyle = Theme.of(context)
+        .textTheme
+        .displayMedium
+        ?.copyWith(color: Theme.of(context).colorScheme.onSurface);
 
     return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          AnimatedFlipCounter(
-            value: 25,
-            wholeDigits: 2,
-            textStyle: counterTextStyle,
-          ),
-          Text(
-            ':',
-            style: counterTextStyle,
-          ),
-          AnimatedFlipCounter(
-            value: 00,
-            wholeDigits: 2,
-            textStyle: counterTextStyle,
-          )
-        ]);
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AnimatedFlipCounter(
+          value: 25,
+          wholeDigits: 2,
+          textStyle: counterStyle,
+        ),
+        Text(
+          ':',
+          style: counterStyle,
+        ),
+        AnimatedFlipCounter(
+          value: 0,
+          wholeDigits: 2,
+          textStyle: counterStyle,
+        ),
+      ],
+    );
   }
 
   Widget controlButtons() {

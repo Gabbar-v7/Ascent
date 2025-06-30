@@ -15,6 +15,14 @@ class BaseTheme {
     builders: {TargetPlatform.android: DefaultPageTransitionsBuilder()},
   );
 
+  static const _kTextTheme = TextTheme(
+      displayMedium: TextStyle(fontSize: 92, fontWeight: FontWeight.bold),
+      titleMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      bodyMedium: TextStyle(
+        fontSize: 17,
+      ),
+      bodySmall: TextStyle(fontSize: 14));
+
   static final materialColors = <String, MaterialColor>{
     'Amber': Colors.amber,
     'Blue': Colors.blue,
@@ -45,6 +53,7 @@ class BaseTheme {
         ),
       ).copyWith(
         pageTransitionsTheme: _kPageTransitionTheme,
+        textTheme: _kTextTheme,
         extensions: [SkeletonizerConfigData.dark(effect: _kShimmerEffect)],
       );
 
@@ -56,6 +65,7 @@ class BaseTheme {
         ),
       ).copyWith(
         pageTransitionsTheme: _kPageTransitionTheme,
+        textTheme: _kTextTheme,
         extensions: [SkeletonizerConfigData(effect: _kShimmerEffect)],
       );
 }

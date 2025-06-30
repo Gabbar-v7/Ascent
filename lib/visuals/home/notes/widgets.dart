@@ -2,7 +2,7 @@ import 'package:ascent/database/app_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-Widget noteTilePlainText(Note note) {
+Widget noteTilePlainText(BuildContext context, Note note) {
   return Card(
     margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
     child: Padding(
@@ -14,10 +14,7 @@ Widget noteTilePlainText(Note note) {
           if (note.noteTitle?.isNotEmpty == true)
             Text(
               note.noteTitle!,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
 
           const SizedBox(height: 8),
@@ -28,16 +25,12 @@ Widget noteTilePlainText(Note note) {
               Document.fromDelta(note.noteBody!).toPlainText(),
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 14),
+              style: Theme.of(context).textTheme.bodySmall,
             )
           else
-            const Text(
+            Text(
               'No content',
-              style: TextStyle(
-                fontSize: 14,
-                fontStyle: FontStyle.italic,
-                color: Colors.grey,
-              ),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
         ],
       ),

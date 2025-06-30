@@ -45,7 +45,7 @@ class _NotesIndexState extends State<NotesIndex> {
   }
 
   Widget _noteTileBuilder(BuildContext context, int index) {
-    return noteTilePlainText(notes[index]);
+    return noteTilePlainText(context, notes[index]);
   }
 
   Widget _sepratorBuilder(BuildContext context, int index) {
