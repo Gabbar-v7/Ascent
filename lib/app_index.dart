@@ -39,8 +39,10 @@ class _MainAppState extends ConsumerState<MainApp> {
       /// Themes
       themeAnimationCurve: Curves.ease,
       themeMode: ThemeMode.system,
-      darkTheme: AppThemes.darkTheme,
-      theme: AppThemes.lightTheme,
+      darkTheme: BaseTheme.darkTheme(
+          seedColor: BaseTheme.materialColors['Deep Purple']),
+      theme: BaseTheme.lightTheme(
+          seedColor: BaseTheme.materialColors['Deep Purple']),
 
       /// Localization
       locale: Locale('en'),
