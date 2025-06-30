@@ -21,6 +21,11 @@ class BaseTheme {
           fontWeight: FontWeight.bold,
           color: colorScheme.onSurface,
         ),
+        displaySmall: TextStyle(
+          fontSize: 48,
+          fontWeight: FontWeight.bold,
+          color: colorScheme.onSurface,
+        ),
         titleMedium: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,

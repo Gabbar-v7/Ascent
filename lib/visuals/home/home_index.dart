@@ -1,3 +1,4 @@
+import 'package:ascent/visuals/components/in_progress.dart';
 import 'package:ascent/visuals/components/scaffold_shell.dart';
 import 'package:ascent/visuals/home/home_menu.dart';
 import 'package:ascent/visuals/home/notes/notes_index.dart';
@@ -23,7 +24,7 @@ class _HomeIndexState extends State<HomeIndex> {
         icon: Icons.checklist_rounded,
         navBarTitle: "Tasks",
         appBarTitle: "Tasks",
-        body: TasksIndex(),
+        body: InProgressPage(),
         floatingActionButton: tasksFloatingActionButton()),
     NavigationItem(
       icon: Icons.timer_outlined,
