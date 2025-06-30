@@ -1,5 +1,5 @@
 import 'package:ascent/ui-elements/components/scaffold_shell.dart';
-import 'package:ascent/ui-elements/home/notes.dart';
+import 'package:ascent/ui-elements/home/notes/notes_index.dart';
 import 'package:ascent/ui-elements/home/tasks/tasks_index.dart';
 import 'package:ascent/ui-elements/home/timer/timer_index.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +14,11 @@ class HomeIndex extends StatefulWidget {
 class _HomeIndexState extends State<HomeIndex> {
   final List<NavigationItem> pages = [
     NavigationItem(
+        icon: Icons.sticky_note_2_outlined,
+        navBarTitle: "Notes",
+        appBarTitle: "Notes",
+        body: NotesIndex()),
+    NavigationItem(
         icon: Icons.checklist_rounded,
         navBarTitle: "Tasks",
         appBarTitle: "Tasks",
@@ -26,11 +31,6 @@ class _HomeIndexState extends State<HomeIndex> {
       body: TimerIndex(),
       actions: timerActions(),
     ),
-    NavigationItem(
-        icon: Icons.sticky_note_2_outlined,
-        navBarTitle: "Notes",
-        appBarTitle: "Notes",
-        body: NotesIndex()),
     NavigationItem(
         icon: Icons.bubble_chart_outlined,
         navBarTitle: "Menu",
