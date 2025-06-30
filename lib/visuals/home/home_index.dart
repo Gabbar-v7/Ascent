@@ -36,6 +36,11 @@ class _HomeIndexState extends State<HomeIndex> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ScaffoldShell(
       pages: pages,

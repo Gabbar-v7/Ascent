@@ -1,5 +1,6 @@
 import 'package:ascent/utils/navigator_utils.dart';
 import 'package:ascent/visuals/components/in_progress.dart';
+import 'package:ascent/visuals/settings/settings_index.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -57,7 +58,11 @@ class _AuxiliaryMenuSheet extends StatelessWidget {
               size: 28,
             )),
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              NavigatorUtils.popPage(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingsIndex()));
+            },
             icon: Icon(
               Icons.settings_outlined,
               size: 27,
