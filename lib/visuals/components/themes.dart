@@ -26,6 +26,10 @@ class BaseTheme {
           fontWeight: FontWeight.bold,
           color: colorScheme.onSurface,
         ),
+        headlineSmall: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w400,
+            color: colorScheme.onSurface),
         titleMedium: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -40,28 +44,6 @@ class BaseTheme {
           color: colorScheme.onSurfaceVariant,
         ),
       );
-
-  static final materialColors = <String, MaterialColor>{
-    'Amber': Colors.amber,
-    'Blue': Colors.blue,
-    'Blue Grey': Colors.blueGrey,
-    'Brown': Colors.brown,
-    'Cyan': Colors.cyan,
-    'Deep Orange': Colors.deepOrange,
-    'Deep Purple': Colors.deepPurple,
-    'Green': Colors.green,
-    'Grey': Colors.grey,
-    'Indigo': Colors.indigo,
-    'Light Blue': Colors.lightBlue,
-    'Light Green': Colors.lightGreen,
-    'Lime': Colors.lime,
-    'Orange': Colors.orange,
-    'Pink': Colors.pink,
-    'Purple': Colors.purple,
-    'Red': Colors.red,
-    'Teal': Colors.teal,
-    'Yellow': Colors.yellow,
-  };
 
   static ThemeData darkTheme({Color? seedColor}) {
     final colorScheme = ColorScheme.fromSeed(

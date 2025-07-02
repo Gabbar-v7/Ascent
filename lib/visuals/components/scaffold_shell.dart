@@ -80,6 +80,12 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
     }
   }
 
+  void _onPageChanged(int index) {
+    setState(() {
+      _pageIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +102,7 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
       ),
       body: PageView(
         controller: _pageController,
+        onPageChanged: _onPageChanged,
         children: _pageList,
       ),
       bottomNavigationBar: NavigationBar(
