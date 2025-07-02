@@ -1,9 +1,9 @@
+import 'package:ascent/visuals/components/utils/gap_utils.dart';
 import 'package:ascent/visuals/components/utils/settings_provider.dart';
 import 'package:ascent/visuals/components/utils/item_position.dart';
-import 'package:ascent/visuals/components/widgets/xbutton.dart';
+import 'package:ascent/visuals/components/widgets/positioned_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 
 /// A settings screen widget that displays general application settings
 /// including appearance and default configuration options.
@@ -17,13 +17,13 @@ class GeneralIndex extends ConsumerWidget {
 
     return ListView(
       children: [
-        const Gap(20),
+        GapEnum.section.gap,
         _buildSectionHeader('Appearance', contextTheme),
-        const Gap(7),
+        GapEnum.sectionHeader.gap,
         _buildAppearanceSection(context, ref, contextTheme),
-        const Gap(20),
+        GapEnum.section.gap,
         _buildSectionHeader('Defaults', contextTheme),
-        const Gap(7),
+        GapEnum.sectionHeader.gap,
         _buildDefaultsSection(context, ref, contextTheme),
       ],
     );
@@ -47,17 +47,25 @@ class GeneralIndex extends ConsumerWidget {
         PositionedButton(
           title: 'Theme Mode',
           subtitle: ref.watch(settingsNotifierProvider).themeMode.name,
-          icon:
-              _getThemeModeIcon(ref.watch(settingsNotifierProvider).themeMode),
+          leading: Icon(
+              _getThemeModeIcon(ref.watch(settingsNotifierProvider).themeMode)),
+          trailing: const Icon(
+            Icons.arrow_drop_down_rounded,
+            size: 42,
+          ),
           position: ItemPosition.top,
           onTap: () => _showThemeModeDialog(context, ref),
         ),
-        const Gap(2),
+        GapEnum.sectionContent.gap,
         PositionedButton(
           title: 'Color Scheme',
           subtitle: ref.watch(settingsNotifierProvider).colorScheme.name,
           leading: _buildColorIndicator(
               ref.watch(settingsNotifierProvider).colorScheme, theme),
+          trailing: const Icon(
+            Icons.arrow_drop_down_rounded,
+            size: 42,
+          ),
           position: ItemPosition.bottom,
           onTap: () => _showColorSchemeDialog(context, ref),
         ),
@@ -73,7 +81,11 @@ class GeneralIndex extends ConsumerWidget {
         PositionedButton(
           title: 'App language',
           subtitle: ref.watch(settingsNotifierProvider).languageCode.name,
-          icon: Icons.language_outlined,
+          leading: Icon(Icons.language_outlined),
+          trailing: const Icon(
+            Icons.arrow_drop_down_rounded,
+            size: 42,
+          ),
           position: ItemPosition.none,
           onTap: () => _showLanguageDialog(context, ref),
         ),
