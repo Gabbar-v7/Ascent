@@ -337,25 +337,8 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
 
 /// Provider for SharedPreferences instance.
 ///
-/// This should be overridden in your main app initialization with the
+/// This should be overridden in main app initialization with the
 /// actual SharedPreferences instance.
-///
-/// Example:
-/// ```dart
-/// void main() async {
-///   WidgetsFlutterBinding.ensureInitialized();
-///   final prefs = await SharedPreferences.getInstance();
-///
-///   runApp(
-///     ProviderScope(
-///       overrides: [
-///         sharedPrefsProvider.overrideWithValue(prefs),
-///       ],
-///       child: MyApp(),
-///     ),
-///   );
-/// }
-/// ```
 final sharedPrefsProvider = Provider<SharedPreferences>(
   (ref) => throw UnimplementedError(
     'SharedPreferences provider must be overridden in main()',
