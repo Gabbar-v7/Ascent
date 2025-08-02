@@ -4,11 +4,11 @@
     <item android:drawable="@android:color/white" />
 
     <!-- Icon -->
-    <item>
+    <!-- <item>
         <bitmap
             android:gravity="center"
             android:src="@mipmap/ic_splash_night" />
-    </item>
+    </item> -->
 
     <!-- <item android:top="300dp">
         <bitmap

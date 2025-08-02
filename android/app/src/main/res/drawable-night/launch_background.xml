@@ -4,9 +4,9 @@
     <item android:drawable="@android:color/black" />
 
     <!-- Icon -->
-    <item>
+    <!-- <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/ic_splash" />
-    </item>
+            android:src="@mipmap/ic_splash_night" />
+    </item> -->
 </layer-list>
