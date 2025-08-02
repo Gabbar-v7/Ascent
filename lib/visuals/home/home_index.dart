@@ -1,5 +1,4 @@
 import 'package:ascent/l10n/generated/app_localizations.dart';
-import 'package:ascent/visuals/components/in_progress.dart';
 import 'package:ascent/visuals/components/scaffold_shell.dart';
 import 'package:ascent/visuals/home/home_menu.dart';
 import 'package:ascent/visuals/home/notes/notes_index.dart';
@@ -17,16 +16,16 @@ class HomeIndex extends StatefulWidget {
 class _HomeIndexState extends State<HomeIndex> {
   late final List<NavigationItem> pages = [
     NavigationItem(
+        icon: Icons.checklist_rounded,
+        navBarTitle: AppLocalizations.of(context)!.tasks_page_title,
+        appBarTitle: "Tasks",
+        body: TasksIndex(),
+        floatingActionButton: tasksFloatingActionButton()),
+    NavigationItem(
         icon: Icons.sticky_note_2_outlined,
         navBarTitle: "Notes",
         appBarTitle: "Notes",
         body: NotesIndex()),
-    NavigationItem(
-        icon: Icons.checklist_rounded,
-        navBarTitle: AppLocalizations.of(context)!.tasks_page_title,
-        appBarTitle: "Tasks",
-        body: InProgressPage(),
-        floatingActionButton: tasksFloatingActionButton()),
     NavigationItem(
       icon: Icons.timer_outlined,
       navBarTitle: "Timer",

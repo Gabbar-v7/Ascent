@@ -24,8 +24,13 @@ class _TasksIndexState extends State<TasksIndex> {
 Widget _taskTile() {
   return Card(
     child: ListTile(
+      visualDensity: VisualDensity.compact,
       title: Text("data"),
-      subtitle: Text("data\n\nawdawd"),
+      subtitle: Text(
+        "data\nawd  awdawdasdfghjksdfghjksdfghjk\nawdawd",
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
       leading: Checkbox(value: true, onChanged: (value) {}),
     ),
   );
