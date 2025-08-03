@@ -7,7 +7,6 @@ class NavigationItem {
   final String navBarTitle;
   final String appBarTitle;
   final Widget body;
-  final Widget? floatingActionButton;
   final List<Widget>? actions;
 
   const NavigationItem({
@@ -15,7 +14,6 @@ class NavigationItem {
     required this.navBarTitle,
     required this.appBarTitle,
     required this.body,
-    this.floatingActionButton,
     this.actions,
   });
 }
@@ -89,7 +87,6 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: widget.pages[_pageIndex].floatingActionButton,
       appBar: AppBar(
         title: Text(
           widget.pages[_pageIndex].appBarTitle,

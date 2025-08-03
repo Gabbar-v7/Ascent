@@ -16,11 +16,11 @@ class HomeIndex extends StatefulWidget {
 class _HomeIndexState extends State<HomeIndex> {
   late final List<NavigationItem> pages = [
     NavigationItem(
-        icon: Icons.checklist_rounded,
-        navBarTitle: AppLocalizations.of(context)!.tasks_page_title,
-        appBarTitle: "Tasks",
-        body: TasksIndex(),
-        floatingActionButton: tasksFloatingActionButton()),
+      icon: Icons.checklist_rounded,
+      navBarTitle: AppLocalizations.of(context)!.tasks_page_title,
+      appBarTitle: "Tasks",
+      body: TasksIndex(),
+    ),
     NavigationItem(
         icon: Icons.sticky_note_2_outlined,
         navBarTitle: "Notes",
