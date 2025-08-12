@@ -173,7 +173,7 @@ class _TasksIndexState extends State<TasksIndex> {
   void showTaskBottomSheet({Task? task}) {
     _taskTitleController.text = task?.taskTitle ?? "";
     _taskBodyController.text = task?.taskBody ?? "";
-    DateTime selectedDate = DateTime.now();
+    DateTime selectedDate = task?.dueDate ?? DateTime.now();
 
     showModalBottomSheet(
         context: context,
@@ -294,7 +294,7 @@ class _TasksIndexState extends State<TasksIndex> {
                                         _taskBodyController.text.isNotEmpty
                                             ? _taskBodyController.text
                                             : null,
-                                        selectedDate, // Using the current date from ValueNotifier
+                                        selectedDate,
                                       );
                                       Navigator.pop(context);
                                     } else {
@@ -303,8 +303,11 @@ class _TasksIndexState extends State<TasksIndex> {
                                         _taskBodyController.text.isNotEmpty
                                             ? _taskBodyController.text
                                             : null,
-                                        selectedDate, // Using the current date from ValueNotifier
+                                        selectedDate,
                                       );
+                                      FocusScope.of(context).unfocus();
+                                      _taskTitleController.clear();
+                                      _taskBodyController.clear();
                                     }
                                   }
                                 },
