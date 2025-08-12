@@ -296,6 +296,7 @@ class _TasksIndexState extends State<TasksIndex> {
                                             : null,
                                         selectedDate, // Using the current date from ValueNotifier
                                       );
+                                      Navigator.pop(context);
                                     } else {
                                       _addTask(
                                         _taskTitleController.text,
@@ -305,7 +306,6 @@ class _TasksIndexState extends State<TasksIndex> {
                                         selectedDate, // Using the current date from ValueNotifier
                                       );
                                     }
-                                    Navigator.pop(context);
                                   }
                                 },
                                 child: const Text("Save"),
