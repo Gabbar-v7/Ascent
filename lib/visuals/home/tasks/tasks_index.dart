@@ -108,6 +108,7 @@ class _TasksIndexState extends State<TasksIndex> {
                       task.taskTitle,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleMedium,
                     ),
                   ),
                   const Gap(10),
@@ -135,6 +136,7 @@ class _TasksIndexState extends State<TasksIndex> {
                   ),
                   child: Text(
                     task.taskBody!,
+                    style: theme.textTheme.bodyLarge,
                   ),
                 ),
             ],
@@ -194,7 +196,10 @@ class _TasksIndexState extends State<TasksIndex> {
                     child: AppBar(
                       title: Text(
                         'Create Task:',
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       leading: IconButton(
                           onPressed: () => NavigatorUtils.popPage(context),
