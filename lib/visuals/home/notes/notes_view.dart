@@ -23,10 +23,7 @@ class _NotesIndexState extends State<NotesIndex> {
       body: Column(
         children: [
           TextField(
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(fontSize: 26, fontWeight: FontWeight.w500),
+            style: Theme.of(context).textTheme.titleLarge,
             decoration: InputDecoration(
                 hintText: "Enter title...",
                 border: InputBorder.none,

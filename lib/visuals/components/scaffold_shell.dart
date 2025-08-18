@@ -90,10 +90,7 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
       appBar: AppBar(
         title: Text(
           widget.pages[_pageIndex].appBarTitle,
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         leading: IconButton(
             onPressed: () => NavigatorUtils.popPage(context),

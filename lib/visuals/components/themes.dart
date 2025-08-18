@@ -74,7 +74,7 @@ class BaseTheme {
         // Title styles - for card titles, dialog headers, toolbar titles
         titleLarge: TextStyle(
           fontSize: 22,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.bold,
           letterSpacing: 0,
           height: 1.27,
           color: colorScheme.onSurface,
