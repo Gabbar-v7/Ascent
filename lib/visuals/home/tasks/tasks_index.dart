@@ -1,5 +1,6 @@
 import 'package:ascent/database/app_database.dart';
 import 'package:ascent/services/drift_service.dart';
+import 'package:ascent/utils/navigator_utils.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -191,7 +192,13 @@ class _TasksIndexState extends State<TasksIndex> {
                   Padding(
                     padding: const EdgeInsets.only(top: 3, right: 3, left: 3),
                     child: AppBar(
-                      title: Text('Create New Task'),
+                      title: Text(
+                        'Create Task:',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      leading: IconButton(
+                          onPressed: () => NavigatorUtils.popPage(context),
+                          icon: Icon(Icons.arrow_back_ios_rounded)),
                       actions: task != null
                           ? <Widget>[
                               IconButton(
