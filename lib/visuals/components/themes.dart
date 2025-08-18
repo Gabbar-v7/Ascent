@@ -45,22 +45,6 @@ class BaseTheme {
         ),
       );
 
-  static ThemeData darkTheme({Color? seedColor}) {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: seedColor ?? _kSeedColor,
-      brightness: Brightness.dark,
-    );
-
-    return ThemeData.from(
-      useMaterial3: true,
-      colorScheme: colorScheme,
-    ).copyWith(
-      pageTransitionsTheme: _kPageTransitionTheme,
-      textTheme: _buildTextTheme(colorScheme),
-      extensions: [SkeletonizerConfigData(effect: _kShimmerEffect)],
-    );
-  }
-
   static ThemeData lightTheme({Color? seedColor}) {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor ?? _kSeedColor,
@@ -73,7 +57,27 @@ class BaseTheme {
     ).copyWith(
       pageTransitionsTheme: _kPageTransitionTheme,
       textTheme: _buildTextTheme(colorScheme),
-      extensions: [SkeletonizerConfigData(effect: _kShimmerEffect)],
+      extensions: [
+        SkeletonizerConfigData(effect: _kShimmerEffect),
+      ],
+    );
+  }
+
+  static ThemeData darkTheme({Color? seedColor}) {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: seedColor ?? _kSeedColor,
+      brightness: Brightness.dark,
+    );
+
+    return ThemeData.from(
+      useMaterial3: true,
+      colorScheme: colorScheme,
+    ).copyWith(
+      pageTransitionsTheme: _kPageTransitionTheme,
+      textTheme: _buildTextTheme(colorScheme),
+      extensions: [
+        SkeletonizerConfigData(effect: _kShimmerEffect),
+      ],
     );
   }
 }

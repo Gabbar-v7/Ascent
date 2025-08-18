@@ -5,12 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
-FloatingActionButton tasksFloatingActionButton(void Function() onPress) =>
-    FloatingActionButton(
-      onPressed: onPress,
-      child: Icon(Icons.add),
-    );
-
 class TasksIndex extends StatefulWidget {
   const TasksIndex({super.key});
 
@@ -24,6 +18,12 @@ class _TasksIndexState extends State<TasksIndex> {
   final TextEditingController _taskBodyController = TextEditingController();
   List<Task> _tasks = [];
   Map<String, List<Task>>? _categorizedTasksCache;
+
+  // Decorations
+  final dateContainer = BoxDecoration(
+    color: Colors.grey.withValues(alpha: 0.1),
+    borderRadius: BorderRadius.circular(8),
+  );
 
   @override
   void initState() {
@@ -43,9 +43,7 @@ class _TasksIndexState extends State<TasksIndex> {
     return Scaffold(
       body: _buildTaskList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showTaskBottomSheet();
-        },
+        onPressed: showTaskBottomSheet,
         child: Icon(Icons.add),
       ),
     );
@@ -83,7 +81,8 @@ class _TasksIndexState extends State<TasksIndex> {
 
   Widget _buildTaskTile(Task task) {
     final isCompleted = task.doneOn != null;
-    // final isOverdue = task.dueDate.isBefore(DateTime.now()) && !isCompleted;
+    final isOverdue = task.dueDate.isBefore(DateTime.now()) && !isCompleted;
+    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -112,12 +111,16 @@ class _TasksIndexState extends State<TasksIndex> {
                   ),
                   const Gap(10),
                   Container(
+                    decoration: dateContainer,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 6,
                     ),
                     child: Text(
                       "${task.dueDate.day}/${task.dueDate.month}",
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: isOverdue ? Colors.red : Colors.green,
+                      ),
                     ),
                   ),
                 ],
@@ -326,8 +329,8 @@ class _TasksIndexState extends State<TasksIndex> {
   }
 
   Future<void> _fetchTasks() async {
-    final today = DateTime.now();
-    final todayDate = DateTime(today.year, today.month, today.day);
+    final current = DateTime.now();
+    final todayDate = DateTime(current.year, current.month, current.day);
     final tomorrow = todayDate.add(const Duration(days: 1));
 
     final tasks = await (database.select(database.tasks)
