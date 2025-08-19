@@ -195,7 +195,7 @@ class _TasksIndexState extends State<TasksIndex> {
                     padding: const EdgeInsets.only(top: 3, right: 3, left: 3),
                     child: AppBar(
                       title: Text(
-                        'Create Task:',
+                        task != null ? 'Update Task:' : 'Create Task:',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       leading: IconButton(
