@@ -44,7 +44,7 @@ class _TasksIndexState extends State<TasksIndex> {
     return Scaffold(
       body: _buildTaskList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: showTaskBottomSheet,
+        onPressed: _showTaskBottomSheet,
         child: Icon(Icons.add),
       ),
     );
@@ -89,7 +89,7 @@ class _TasksIndexState extends State<TasksIndex> {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onDoubleTap: () => _toggleTaskCompletion(task, !isCompleted),
-        onLongPress: () => showTaskBottomSheet(task: task),
+        onLongPress: () => _showTaskBottomSheet(task: task),
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.all(8),
@@ -176,7 +176,7 @@ class _TasksIndexState extends State<TasksIndex> {
     };
   }
 
-  void showTaskBottomSheet({Task? task}) {
+  void _showTaskBottomSheet({Task? task}) {
     _taskTitleController.text = task?.taskTitle ?? "";
     _taskBodyController.text = task?.taskBody ?? "";
     DateTime selectedDate = task?.dueDate ?? DateTime.now();
@@ -256,8 +256,26 @@ class _TasksIndexState extends State<TasksIndex> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Expanded(
-                              child: OutlinedButton.icon(
-                                style: ButtonStyle(),
+                              child: FilledButton.icon(
+                                style: ButtonStyle(
+                                    shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12))),
+                                    backgroundColor:
+                                        WidgetStatePropertyAll<Color>(
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .primaryContainer),
+                                    foregroundColor:
+                                        WidgetStatePropertyAll<Color>(
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .onPrimaryContainer),
+                                    textStyle: WidgetStatePropertyAll(
+                                        Theme.of(context)
+                                            .textTheme
+                                            .labelLarge)),
                                 onPressed: () async {
                                   final picked = await showDatePicker(
                                     context: context,
@@ -273,21 +291,32 @@ class _TasksIndexState extends State<TasksIndex> {
                                 },
                                 icon: const Icon(Icons.calendar_today),
                                 label: Text(
-                                  "Due: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelLarge
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimaryContainer,
-                                      ),
-                                ),
+                                    "Due: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"),
                               ),
                             ),
                             const Gap(16),
                             Expanded(
                               child: FilledButton.icon(
+                                style: ButtonStyle(
+                                    shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12))),
+                                    backgroundColor:
+                                        WidgetStatePropertyAll<Color>(
+                                      Theme.of(context)
+                                          .colorScheme
+                                          .surfaceContainerHighest,
+                                    ),
+                                    foregroundColor:
+                                        WidgetStatePropertyAll<Color>(
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .onPrimaryContainer),
+                                    textStyle: WidgetStatePropertyAll(
+                                        Theme.of(context)
+                                            .textTheme
+                                            .labelLarge)),
                                 onPressed: () {},
                                 icon: const Icon(Icons.abc),
                                 label: const Text("Coming Soon"),
@@ -299,14 +328,46 @@ class _TasksIndexState extends State<TasksIndex> {
                         Row(
                           children: [
                             Expanded(
-                              child: FilledButton(
+                              child: OutlinedButton(
+                                style: ButtonStyle(
+                                    shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12))),
+                                    backgroundColor: WidgetStatePropertyAll(
+                                        Theme.of(context).colorScheme.surface),
+                                    foregroundColor: WidgetStatePropertyAll(
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .onSurface),
+                                    textStyle: WidgetStatePropertyAll(
+                                        Theme.of(context)
+                                            .textTheme
+                                            .titleMedium)),
                                 onPressed: () => Navigator.pop(context),
                                 child: const Text("Cancel"),
                               ),
                             ),
                             const Gap(12),
                             Expanded(
-                              child: FilledButton(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12))),
+                                    backgroundColor: WidgetStatePropertyAll(
+                                        Theme.of(context).colorScheme.primary),
+                                    foregroundColor: WidgetStatePropertyAll(
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary),
+                                    textStyle: WidgetStatePropertyAll(
+                                        Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.bold))),
                                 onPressed: () {
                                   if (_taskTitleController.text.isNotEmpty) {
                                     if (task != null) {
