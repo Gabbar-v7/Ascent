@@ -255,7 +255,7 @@ class _TasksIndexState extends State<TasksIndex> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Expanded(
-                              child: ElevatedButton.icon(
+                              child: FilledButton.icon(
                                 onPressed: () async {
                                   final picked = await showDatePicker(
                                     context: context,
@@ -277,7 +277,7 @@ class _TasksIndexState extends State<TasksIndex> {
                             ),
                             const Gap(16),
                             Expanded(
-                              child: ElevatedButton.icon(
+                              child: FilledButton.icon(
                                 onPressed: () {},
                                 icon: const Icon(Icons.abc),
                                 label: const Text("Coming Soon"),
@@ -289,14 +289,14 @@ class _TasksIndexState extends State<TasksIndex> {
                         Row(
                           children: [
                             Expanded(
-                              child: ElevatedButton(
+                              child: FilledButton(
                                 onPressed: () => Navigator.pop(context),
                                 child: const Text("Cancel"),
                               ),
                             ),
                             const Gap(12),
                             Expanded(
-                              child: ElevatedButton(
+                              child: FilledButton(
                                 onPressed: () {
                                   if (_taskTitleController.text.isNotEmpty) {
                                     if (task != null) {
