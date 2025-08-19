@@ -256,7 +256,7 @@ class _TasksIndexState extends State<TasksIndex> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Expanded(
-                              child: FilledButton.icon(
+                              child: OutlinedButton.icon(
                                 style: ButtonStyle(),
                                 onPressed: () async {
                                   final picked = await showDatePicker(
