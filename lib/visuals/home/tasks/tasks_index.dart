@@ -220,6 +220,7 @@ class _TasksIndexState extends State<TasksIndex> {
                                   Navigator.pop(context);
                                 },
                               ),
+                              const Gap(5)
                             ]
                           : <Widget>[],
                       backgroundColor: Colors.transparent,
