@@ -257,6 +257,7 @@ class _TasksIndexState extends State<TasksIndex> {
                           children: [
                             Expanded(
                               child: FilledButton.icon(
+                                style: ButtonStyle(),
                                 onPressed: () async {
                                   final picked = await showDatePicker(
                                     context: context,
@@ -273,6 +274,14 @@ class _TasksIndexState extends State<TasksIndex> {
                                 icon: const Icon(Icons.calendar_today),
                                 label: Text(
                                   "Due: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimaryContainer,
+                                      ),
                                 ),
                               ),
                             ),
