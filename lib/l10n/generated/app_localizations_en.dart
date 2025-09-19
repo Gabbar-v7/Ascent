@@ -66,7 +66,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get page_tasks_form_title_placeholder => 'Task Title';
 
   @override
-  String get page_tasks_form_description_placeholder => 'Add Description (Optional)';
+  String get page_tasks_form_description_placeholder =>
+      'Add Description (Optional)';
 
   @override
   String get page_tasks_form_label_due => 'Due';

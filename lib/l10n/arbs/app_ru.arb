@@ -1,103 +1,28 @@
 {
-  "@@locale": "ru",
+  "@@locale": "ru-RU",
   "title_tasks": "Задачи",
-  "@title_tasks": {
-    "description": "Page title for the tasks section"
-  },
-  "title_notes": "Заметка",
-  "@title_notes": {
-    "description": "Page title for the notes section"
-  },
-  "title_timer": "Таймер \"Помидор\"",
-  "@title_timer": {
-    "description": "Page title for the Pomodoro timer"
-  },
+  "title_notes": "Заметки",
+  "title_timer": "Техника Помидор",
   "title_menu": "Меню",
-  "@title_menu": {
-    "description": "Page title for the main menu"
-  },
   "title_settings": "Настройки",
-  "@title_settings": {
-    "description": "Page title for settings"
-  },
   "navigation_label_tasks": "Задачи",
-  "@navigation_label_tasks": {
-    "description": "Navigation bar label for tasks"
-  },
-  "navigation_label_notes": "Заметка",
-  "@navigation_label_notes": {
-    "description": "Navigation bar label for notes"
-  },
-  "navigation_label_timer": "Таймер",
-  "@navigation_label_timer": {
-    "description": "Navigation bar label for Pomodoro timer"
-  },
+  "navigation_label_notes": "Заметки",
+  "navigation_label_timer": "Счет",
   "navigation_label_menu": "Меню",
-  "@navigation_label_menu": {
-    "description": "Navigation bar label for the main menu"
-  },
-  "navigation_label_settings_general": "Общее",
-  "@navigation_label_settings_general": {
-    "description": "Navigation label for general settings"
-  },
-  "navigation_label_settings_database": "База данных",
-  "@navigation_label_settings_database": {
-    "description": "Navigation label for database settings"
-  },
-  "navigation_label_settings_about": "Подробно",
-  "@navigation_label_settings_about": {
-    "description": "Navigation label for about page"
-  },
+  "navigation_label_settings_general": "Общий",
+  "navigation_label_settings_database": "База",
+  "navigation_label_settings_about": "О нас",
   "page_tasks_label_today": "Сегодня",
-  "@page_tasks_label_today": {
-    "description": "Label for tasks due today"
-  },
-  "page_tasks_label_pending": "Ожидают",
-  "@page_tasks_label_pending": {
-    "description": "Label for tasks that are not yet completed"
-  },
+  "page_tasks_label_pending": "Ожидание",
   "page_tasks_label_future": "Будущее",
-  "@page_tasks_label_future": {
-    "description": "Label for upcoming tasks scheduled for future dates"
-  },
-  "page_tasks_label_complete": "Выполнен",
-  "@page_tasks_label_complete": {
-    "description": "Label for completed tasks"
-  },
-  "page_tasks_title_create_task": "Создание Задачи",
-  "@page_tasks_title_create_task": {
-    "description": "Title for the create task dialog or page"
-  },
-  "page_tasks_title_update_task": "Сохранить",
-  "@page_tasks_title_update_task": {
-    "description": "Title for the update task dialog or page"
-  },
-  "page_tasks_form_title_placeholder": "Название Задания",
-  "@page_tasks_form_title_placeholder": {
-    "description": "Placeholder text for the task title input field"
-  },
-  "page_tasks_form_description_placeholder": "Добавь описание (опционально)",
-  "@page_tasks_form_description_placeholder": {
-    "description": "Placeholder text for the task description input field"
-  },
-  "page_tasks_form_label_due": "До",
-  "@page_tasks_form_label_due": {
-    "description": "Label for the due date field"
-  },
-  "page_tasks_form_label_cancel": "Отменить",
-  "@page_tasks_form_label_cancel": {
-    "description": "Button label to cancel creating or updating a task"
-  },
+  "page_tasks_label_complete": "Выполнено",
+  "page_tasks_title_create_task": "Создать задачу",
+  "page_tasks_title_update_task": "Обновить задачу",
+  "page_tasks_form_title_placeholder": "Название задачи",
+  "page_tasks_form_description_placeholder": "Добавить описание (необязательно)",
+  "page_tasks_form_label_due": "Срок",
+  "page_tasks_form_label_cancel": "Отмена",
   "page_tasks_form_label_save": "Сохранить",
-  "@page_tasks_form_label_save": {
-    "description": "Button label to save a task"
-  },
-  "page_tasks_label_no_description": "Описания нет",
-  "@page_tasks_label_no_description": {
-    "description": "Used when a task has no description"
-  },
-  "common_label_coming_soon": "Скоро",
-  "@common_label_coming_soon": {
-    "description": "Displayed when a feature or section is not yet available"
-  }
+  "page_tasks_label_no_description": "Нет описания",
+  "common_label_coming_soon": "Скоро"
 }

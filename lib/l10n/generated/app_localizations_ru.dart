@@ -66,7 +66,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get page_tasks_form_title_placeholder => 'Название Задания';
 
   @override
-  String get page_tasks_form_description_placeholder => 'Добавь описание (опционально)';
+  String get page_tasks_form_description_placeholder =>
+      'Добавь описание (опционально)';
 
   @override
   String get page_tasks_form_label_due => 'До';
