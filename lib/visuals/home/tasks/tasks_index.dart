@@ -328,7 +328,7 @@ class _TasksIndexState extends State<TasksIndex> {
                                 onPressed: () {},
                                 icon: const Icon(Icons.abc),
                                 label: Text(AppLocalizations.of(context)
-                                    .label_coming_soon),
+                                    .common_label_coming_soon),
                               ),
                             ),
                           ],

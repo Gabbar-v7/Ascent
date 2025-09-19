@@ -17,19 +17,19 @@ class _HomeIndexState extends State<HomeIndex> {
   late final List<NavigationItem> pages = [
     NavigationItem(
       icon: Icons.checklist_rounded,
-      navBarTitle: AppLocalizations.of(context).title_tasks,
-      appBarTitle: AppLocalizations.of(context).navigation_label_tasks,
+      appBarTitle: AppLocalizations.of(context).title_tasks,
+      navBarTitle: AppLocalizations.of(context).navigation_label_tasks,
       body: TasksIndex(),
     ),
     NavigationItem(
         icon: Icons.sticky_note_2_outlined,
-        navBarTitle: AppLocalizations.of(context).title_notes,
-        appBarTitle: AppLocalizations.of(context).navigation_label_notes,
+        appBarTitle: AppLocalizations.of(context).title_notes,
+        navBarTitle: AppLocalizations.of(context).navigation_label_notes,
         body: NotesIndex()),
     NavigationItem(
       icon: Icons.timer_outlined,
-      navBarTitle: AppLocalizations.of(context).title_timer,
-      appBarTitle: AppLocalizations.of(context).navigation_label_timer,
+      appBarTitle: AppLocalizations.of(context).title_timer,
+      navBarTitle: AppLocalizations.of(context).navigation_label_timer,
       body: TimerIndex(),
       actions: timerActions(),
     ),

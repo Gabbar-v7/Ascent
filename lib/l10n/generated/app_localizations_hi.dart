@@ -81,5 +81,5 @@ class AppLocalizationsHi extends AppLocalizations {
   String get page_tasks_label_no_description => 'No description';
 
   @override
-  String get label_coming_soon => 'Coming Soon';
+  String get common_label_coming_soon => 'Coming Soon';
 }

@@ -5,9 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'app_localizations_ar.dart';
 import 'app_localizations_en.dart';
-import 'app_localizations_hi.dart';
+import 'app_localizations_ru.dart';
 
 // ignore_for_file: type=lint
 
@@ -92,9 +91,8 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
-    Locale('ar'),
     Locale('en'),
-    Locale('hi')
+    Locale('ru')
   ];
 
   /// Page title for the tasks section
@@ -235,17 +233,17 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get page_tasks_form_label_save;
 
-  ///
+  /// Used when a task has no description
   ///
   /// In en, this message translates to:
   /// **'No description'**
   String get page_tasks_label_no_description;
 
-  /// No description provided for @label_coming_soon.
+  /// Displayed when a feature or section is not yet available
   ///
   /// In en, this message translates to:
   /// **'Coming Soon'**
-  String get label_coming_soon;
+  String get common_label_coming_soon;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -257,7 +255,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ar', 'en', 'hi'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'ru'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -268,9 +266,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'ar': return AppLocalizationsAr();
     case 'en': return AppLocalizationsEn();
-    case 'hi': return AppLocalizationsHi();
+    case 'ru': return AppLocalizationsRu();
   }
 
   throw FlutterError(
