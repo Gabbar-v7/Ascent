@@ -2,7 +2,7 @@ name: ascent
 description: A blazing-fast Flutter mobile app for managing tasks, notes, and focus sessions with intuitive gestures and smooth performance.
 homepage: https://github.com/Gabbar-v7/Ascent
 publish_to: "none"
-version: 0.0.01
+version: 0.0.02
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
