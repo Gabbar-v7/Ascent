@@ -75,12 +75,17 @@ flutter run
 
 ```
 lib/
-├── database/          # Database related code
-├── visuals/           # UI components
-│   ├── components/    # Reusable UI components
-│   ├── screens/       # App screens
-│   └── utils/         # Utility functions
-└── main.dart          # App entry point
+├── app_index.dart         # App entry and state management
+├── main.dart              # Main entry point
+├── database/              # Database setup, tables, converters
+├── l10n/                  # Localization files and generated code
+├── services/              # Service layer (e.g., Drift integration)
+├── utils/                 # Utility functions and helpers
+└── visuals/               # UI and presentation layer
+    ├── components/        # Reusable widgets and layout components
+    ├── home/              # Home, notes, tasks, timer views
+    ├── settings/          # Settings screens and providers
+    └── themes.dart        # App theming
 ```
 
 ## Development
