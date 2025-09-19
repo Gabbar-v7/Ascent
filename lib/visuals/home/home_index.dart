@@ -23,13 +23,13 @@ class _HomeIndexState extends State<HomeIndex> {
     ),
     NavigationItem(
         icon: Icons.sticky_note_2_outlined,
-        navBarTitle: "Notes",
-        appBarTitle: "Notes",
+        navBarTitle: AppLocalizations.of(context).title_notes,
+        appBarTitle: AppLocalizations.of(context).navigation_label_notes,
         body: NotesIndex()),
     NavigationItem(
       icon: Icons.timer_outlined,
-      navBarTitle: "Timer",
-      appBarTitle: "Pomodoro Timer",
+      navBarTitle: AppLocalizations.of(context).title_timer,
+      appBarTitle: AppLocalizations.of(context).navigation_label_timer,
       body: TimerIndex(),
       actions: timerActions(),
     ),
@@ -45,7 +45,8 @@ class _HomeIndexState extends State<HomeIndex> {
     return ScaffoldShell(
       pages: pages,
       auxiliaryDestination: NavigationDestination(
-          icon: Icon(Icons.bubble_chart_outlined), label: "Menu"),
+          icon: Icon(Icons.bubble_chart_outlined),
+          label: AppLocalizations.of(context).navigation_label_menu),
       onAuxiliaryTap: showAuxiliaryMenu,
     );
   }

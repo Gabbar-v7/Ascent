@@ -1,0 +1,113 @@
+{
+  "@@locale": "ar",
+
+  "title_tasks": "المهام",
+  "@title_tasks": {
+    "description": "عنوان الصفحة لقسم المهام"
+  },
+
+  "title_notes": "الملاحظات",
+  "@title_notes": {
+    "description": "عنوان الصفحة لقسم الملاحظات"
+  },
+
+  "title_timer": "مؤقت بومودورو",
+  "@title_timer": {
+    "description": "عنوان الصفحة لمؤقت بومودورو"
+  },
+
+  "title_menu": "القائمة",
+  "@title_menu": {
+    "description": "عنوان الصفحة للقائمة الرئيسية"
+  },
+
+  "title_settings": "الإعدادات",
+  "@title_settings": {
+    "description": "عنوان الصفحة للإعدادات"
+  },
+
+  "navigation_label_tasks": "المهام",
+  "@navigation_label_tasks": {
+    "description": "تسمية شريط التنقل للمهام"
+  },
+
+  "navigation_label_notes": "الملاحظات",
+  "@navigation_label_notes": {
+    "description": "تسمية شريط التنقل للملاحظات"
+  },
+
+  "navigation_label_timer": "المؤقت",
+  "@navigation_label_timer": {
+    "description": "تسمية شريط التنقل لمؤقت بومودورو"
+  },
+
+  "navigation_label_menu": "القائمة",
+  "@navigation_label_menu": {
+    "description": "تسمية شريط التنقل للقائمة الرئيسية"
+  },
+
+  "navigation_label_settings_general": "عام",
+  "@navigation_label_settings_general": {
+    "description": "تسمية شريط التنقل للإعدادات العامة"
+  },
+
+  "navigation_label_settings_database": "قاعدة البيانات",
+  "@navigation_label_settings_database": {
+    "description": "تسمية شريط التنقل لإعدادات قاعدة البيانات"
+  },
+
+  "navigation_label_settings_about": "حول",
+  "@navigation_label_settings_about": {
+    "description": "تسمية شريط التنقل لصفحة حول"
+  },
+
+  "page_tasks_label_today": "اليوم",
+  "@page_tasks_label_today": {
+    "description": "تسمية للمهام المستحقة اليوم"
+  },
+
+  "page_tasks_label_pending": "قيد الانتظار",
+  "@page_tasks_label_pending": {
+    "description": "تسمية للمهام غير المكتملة بعد"
+  },
+
+  "page_tasks_label_future": "مستقبلية",
+  "@page_tasks_label_future": {
+    "description": "تسمية للمهام القادمة المجدولة لتواريخ لاحقة"
+  },
+
+  "page_tasks_title_create_task": "إنشاء مهمة",
+  "@page_tasks_title_create_task": {
+    "description": "عنوان مربع الحوار أو الصفحة لإنشاء مهمة"
+  },
+
+  "page_tasks_title_update_task": "تحديث المهمة",
+  "@page_tasks_title_update_task": {
+    "description": "عنوان مربع الحوار أو الصفحة لتحديث مهمة"
+  },
+
+  "page_tasks_form_title_placeholder": "عنوان المهمة",
+  "@page_tasks_form_title_placeholder": {
+    "description": "النص النائب لحقل إدخال عنوان المهمة"
+  },
+
+  "page_tasks_form_description_placeholder": "أضف وصفًا (اختياري)",
+  "@page_tasks_form_description_placeholder": {
+    "description": "النص النائب لحقل إدخال وصف المهمة"
+  },
+
+  "page_tasks_form_label_due": "الموعد النهائي",
+  "@page_tasks_form_label_due": {
+    "description": "تسمية لحقل تاريخ الاستحقاق"
+  },
+
+  "page_tasks_form_label_cancel": "إلغاء",
+  "@page_tasks_form_label_cancel": {
+    "description": "تسمية الزر لإلغاء إنشاء أو تحديث مهمة"
+  },
+
+  "page_tasks_form_label_save": "حفظ",
+  "@page_tasks_form_label_save": {
+    "description": "تسمية الزر لحفظ المهمة"
+  }
+}

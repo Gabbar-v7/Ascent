@@ -24,7 +24,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get title_settings => 'Settings';
 
   @override
-  String get navigation_label_tasks => 'adawdad';
+  String get navigation_label_tasks => 'Tasks';
 
   @override
   String get navigation_label_notes => 'Notes';
