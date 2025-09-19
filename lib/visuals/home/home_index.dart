@@ -17,8 +17,8 @@ class _HomeIndexState extends State<HomeIndex> {
   late final List<NavigationItem> pages = [
     NavigationItem(
       icon: Icons.checklist_rounded,
-      navBarTitle: AppLocalizations.of(context)!.tasks_page_title,
-      appBarTitle: "Tasks",
+      navBarTitle: AppLocalizations.of(context).title_tasks,
+      appBarTitle: AppLocalizations.of(context).navigation_label_tasks,
       body: TasksIndex(),
     ),
     NavigationItem(

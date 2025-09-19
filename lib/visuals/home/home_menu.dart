@@ -45,7 +45,7 @@ class _AuxiliaryMenuSheet extends StatelessWidget {
       backgroundColor: Colors.transparent,
       title: Text(
         "Menu",
-        style: Theme.of(context).textTheme.titleMedium,
+        style: Theme.of(context).textTheme.titleLarge,
       ),
       leading: IconButton(
           onPressed: () => {NavigatorUtils.popPage(context)},

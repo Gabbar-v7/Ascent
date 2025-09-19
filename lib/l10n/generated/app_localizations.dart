@@ -61,17 +61,15 @@ import 'app_localizations_en.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static AppLocalizations? of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -83,8 +81,7 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -92,17 +89,144 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('en')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en')
+  ];
 
-  /// Title of Tasks Index Page
+  /// Page title for the tasks section
   ///
   /// In en, this message translates to:
   /// **'Tasks'**
-  String get tasks_page_title;
+  String get title_tasks;
+
+  /// Page title for the notes section
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get title_notes;
+
+  /// Page title for the Pomodoro timer
+  ///
+  /// In en, this message translates to:
+  /// **'Pomodoro Timer'**
+  String get title_timer;
+
+  /// Page title for the main menu
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get title_menu;
+
+  /// Page title for settings
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get title_settings;
+
+  /// Navigation bar label for tasks
+  ///
+  /// In en, this message translates to:
+  /// **'adawdad'**
+  String get navigation_label_tasks;
+
+  /// Navigation bar label for notes
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get navigation_label_notes;
+
+  /// Navigation bar label for Pomodoro timer
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get navigation_label_timer;
+
+  /// Navigation bar label for the main menu
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get navigation_label_menu;
+
+  /// Navigation label for general settings
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get navigation_label_settings_general;
+
+  /// Navigation label for database settings
+  ///
+  /// In en, this message translates to:
+  /// **'Database'**
+  String get navigation_label_settings_database;
+
+  /// Navigation label for about page
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get navigation_label_settings_about;
+
+  /// Label for tasks due today
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get page_tasks_label_today;
+
+  /// Label for tasks that are not yet completed
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get page_tasks_label_pending;
+
+  /// Label for upcoming tasks scheduled for future dates
+  ///
+  /// In en, this message translates to:
+  /// **'Future'**
+  String get page_tasks_label_future;
+
+  /// Title for the create task dialog or page
+  ///
+  /// In en, this message translates to:
+  /// **'Create Task'**
+  String get page_tasks_title_create_task;
+
+  /// Title for the update task dialog or page
+  ///
+  /// In en, this message translates to:
+  /// **'Update Task'**
+  String get page_tasks_title_update_task;
+
+  /// Placeholder text for the task title input field
+  ///
+  /// In en, this message translates to:
+  /// **'Task Title'**
+  String get page_tasks_form_title_placeholder;
+
+  /// Placeholder text for the task description input field
+  ///
+  /// In en, this message translates to:
+  /// **'Add Description (Optional)'**
+  String get page_tasks_form_description_placeholder;
+
+  /// Label for the due date field
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get page_tasks_form_label_due;
+
+  /// Button label to cancel creating or updating a task
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get page_tasks_form_label_cancel;
+
+  /// Button label to save a task
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get page_tasks_form_label_save;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -111,23 +235,24 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en':
-      return AppLocalizationsEn();
+    case 'en': return AppLocalizationsEn();
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.'
+  );
 }
