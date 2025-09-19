@@ -54,6 +54,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get page_tasks_label_future => 'مستقبلية';
 
   @override
+  String get page_tasks_label_complete => 'Completed';
+
+  @override
   String get page_tasks_title_create_task => 'إنشاء مهمة';
 
   @override
@@ -73,4 +76,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get page_tasks_form_label_save => 'حفظ';
+
+  @override
+  String get page_tasks_label_no_description => 'No description';
+
+  @override
+  String get label_coming_soon => 'Coming Soon';
 }

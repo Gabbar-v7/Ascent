@@ -76,6 +76,11 @@
     "description": "Label for upcoming tasks scheduled for future dates"
   },
 
+  "page_tasks_label_complete": "Completed",
+  "@page_tasks_label_complete": {
+    "description": "Label for completed tasks"
+  },
+
   "page_tasks_title_create_task": "Create Task",
   "@page_tasks_title_create_task": {
     "description": "Title for the create task dialog or page"
@@ -109,5 +114,14 @@
   "page_tasks_form_label_save": "Save",
   "@page_tasks_form_label_save": {
     "description": "Button label to save a task"
-  }
+  },
+
+  "page_tasks_label_no_description": "No description",
+  "@page_tasks_label_no_description": {
+    "description": ""
+  },
+
+
+  "label_coming_soon": "Coming Soon",
+  "@label_coming_soon": {}
 }

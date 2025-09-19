@@ -54,6 +54,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get page_tasks_label_future => 'Future';
 
   @override
+  String get page_tasks_label_complete => 'Completed';
+
+  @override
   String get page_tasks_title_create_task => 'Create Task';
 
   @override
@@ -73,4 +76,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get page_tasks_form_label_save => 'Save';
+
+  @override
+  String get page_tasks_label_no_description => 'No description';
+
+  @override
+  String get label_coming_soon => 'Coming Soon';
 }

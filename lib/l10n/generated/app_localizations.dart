@@ -187,6 +187,12 @@ abstract class AppLocalizations {
   /// **'Future'**
   String get page_tasks_label_future;
 
+  /// Label for completed tasks
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get page_tasks_label_complete;
+
   /// Title for the create task dialog or page
   ///
   /// In en, this message translates to:
@@ -228,6 +234,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save'**
   String get page_tasks_form_label_save;
+
+  ///
+  ///
+  /// In en, this message translates to:
+  /// **'No description'**
+  String get page_tasks_label_no_description;
+
+  /// No description provided for @label_coming_soon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming Soon'**
+  String get label_coming_soon;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
