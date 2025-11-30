@@ -1,7 +1,7 @@
 name: ascent
 description: "A blazing-fast Flutter mobile app for managing tasks, routines and focus sessions with intuitive gestures and smooth performance."
 homepage: https://github.com/Gabbar-v7/Ascent
-publish_to: "none" 
+publish_to: "none"
 
 version: 0.0.01
 
@@ -13,15 +13,16 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
 
-  # Localizations 
+  # Localizations
   flutter_localizations:
     sdk: flutter
   intl: ^0.20.2
 
-  # UI & Widgets 
+  # UI & Widgets
   gap: ^3.0.1
+  animated_flip_counter: ^0.3.4
 
-  # Database/Storage 
+  # Database/Storage
   sqlite3: ^2.4.6
   drift: ^2.29.0
   drift_flutter: ^0.2.7
@@ -29,15 +30,15 @@ dependencies:
   path_provider: ^2.1.5
   path: ^1.9.1
 
-  # Utils 
-  riverpod: ^3.0.3
+  # Utils
+  flutter_riverpod: ^3.0.3
   url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  
+
   # Generator  => dart run builld_runner build
   build_runner: ^2.10.4
   drift_dev: ^2.29.0
@@ -51,6 +52,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:

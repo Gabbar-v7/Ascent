@@ -1,0 +1,5 @@
+{
+    "@@locale": "en",
+    "tasks_page_title": "Tasks",
+    "@tasks_page_title": {"description": "Title of Tasks Index Page"}
+}
