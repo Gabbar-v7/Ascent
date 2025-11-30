@@ -2,6 +2,7 @@ import 'package:ascent/utils/preference_provider.dart';
 import 'package:ascent/visuals/components/utils/gap_utils.dart';
 import 'package:ascent/visuals/components/utils/item_position.dart';
 import 'package:ascent/visuals/components/widgets/positioned_button.dart';
+import 'package:ascent/visuals/settings/general/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,24 +25,14 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
     return ListView(
       children: [
         GapEnum.section.gap,
-        _buildSectionHeader('Appearance', theme),
+        buildSectionHeader('Appearance', theme),
         GapEnum.sectionHeader.gap,
         _buildAppearanceSection(context, theme),
         GapEnum.section.gap,
-        _buildSectionHeader('Defaults', theme),
+        buildSectionHeader('Defaults', theme),
         GapEnum.sectionHeader.gap,
         _buildDefaultsSection(context, theme),
       ],
-    );
-  }
-
-  /// Creates a section header with consistent styling
-  Widget _buildSectionHeader(String title, ThemeData theme) {
-    return Text(
-      "  $title",
-      style: theme.textTheme.bodySmall?.copyWith(
-        color: theme.colorScheme.onSurface,
-      ),
     );
   }
 
@@ -72,17 +63,13 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
 
   /// Builds the defaults settings section containing language options
   Widget _buildDefaultsSection(BuildContext context, ThemeData theme) {
-    return Column(
-      children: [
-        PositionedButton(
-          title: 'App language',
-          subtitle: preference.language.name,
-          leading: Icon(Icons.language_outlined),
-          trailing: const Icon(Icons.arrow_drop_down_rounded, size: 42),
-          position: ItemPosition.none,
-          onTap: () => _showLanguageDialog(context),
-        ),
-      ],
+    return PositionedButton(
+      title: 'App language',
+      subtitle: preference.language.name,
+      leading: Icon(Icons.language_outlined),
+      trailing: const Icon(Icons.arrow_drop_down_rounded, size: 42),
+      position: ItemPosition.none,
+      onTap: () => _showLanguageDialog(context),
     );
   }
 
@@ -164,101 +151,6 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
           isSelected: preference.language == language,
         ),
       ),
-    );
-  }
-}
-
-/// A generic dialog widget for displaying and selecting from a list of options.
-/// This component provides a consistent interface for all settings dialogs.
-class SettingsDialog<T> extends StatelessWidget {
-  /// The title displayed at the top of the dialog
-  final String title;
-
-  /// List of available options to choose from
-  final List<T> options;
-
-  /// The currently selected option
-  final T currentSelection;
-
-  /// Callback function when an option is selected
-  final void Function(T option) onOptionSelected;
-
-  /// Builder function to create the widget for each option
-  final Widget Function(T option) optionBuilder;
-
-  const SettingsDialog({
-    super.key,
-    required this.title,
-    required this.options,
-    required this.currentSelection,
-    required this.onOptionSelected,
-    required this.optionBuilder,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(title),
-      contentPadding: const EdgeInsets.all(10),
-      content: SizedBox(
-        width: double.maxFinite,
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: options.length,
-          itemBuilder: (context, index) {
-            final option = options[index];
-            return InkWell(
-              borderRadius: BorderRadius.circular(16),
-              onTap: () {
-                onOptionSelected(option);
-                Navigator.of(context).pop();
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: optionBuilder(option),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-/// A widget representing a single option within a settings dialog.
-/// Provides consistent styling and behavior for dialog options.
-class SettingsDialogOption extends StatelessWidget {
-  /// The title text for the option
-  final String title;
-
-  /// Optional icon to display on the left side
-  final IconData? icon;
-
-  /// Optional custom widget to display on the left side instead of an icon
-  final Widget? leading;
-
-  /// Whether this option is currently selected
-  final bool isSelected;
-
-  const SettingsDialogOption({
-    super.key,
-    required this.title,
-    required this.isSelected,
-    this.icon,
-    this.leading,
-  }) : assert(
-         icon == null || leading == null,
-         'Cannot provide both icon and leading widget',
-       );
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      leading: leading ?? (icon != null ? Icon(icon) : null),
-      trailing: isSelected
-          ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
-          : null,
     );
   }
 }
