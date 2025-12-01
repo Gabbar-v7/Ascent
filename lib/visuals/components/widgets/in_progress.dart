@@ -1,3 +1,4 @@
+import 'package:ascent/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,13 +25,16 @@ class InProgressPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Bold text in the center
-          Text('In Progress', style: Theme.of(context).textTheme.displaySmall),
+          Text(
+            AppLocalizations.of(context)!.inProgress_title,
+            style: Theme.of(context).textTheme.displaySmall,
+          ),
           const Gap(20), // Spacing
           // Informative text
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              'This page is currently under development.\nPlease check GitHub for updates.',
+              AppLocalizations.of(context)!.inProgress_description,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodySmall,
             ),
@@ -40,7 +44,7 @@ class InProgressPage extends StatelessWidget {
           ElevatedButton(
             onPressed: _launchGithubUrl,
             child: Text(
-              'Visit GitHub',
+              AppLocalizations.of(context)!.inProgress_button_visitGitHub,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),

@@ -56,7 +56,6 @@ class _AppIndexState extends ConsumerState<AppIndex> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-
       home: HomeIndex(),
     );
   }

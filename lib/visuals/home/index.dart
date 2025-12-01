@@ -17,29 +17,24 @@ class _HomeIndexState extends State<HomeIndex> {
   late final List<NavigationItem> pages = [
     NavigationItem(
       icon: Icons.checklist_rounded,
-      navBarTitle: AppLocalizations.of(context)!.tasks_page_title,
-      appBarTitle: "Tasks",
+      navBarTitle: AppLocalizations.of(context)!.tasks_navTitle,
+      appBarTitle: AppLocalizations.of(context)!.tasks_title,
       body: TasksIndex(),
     ),
     NavigationItem(
       icon: Icons.timer_outlined,
-      navBarTitle: "Timer",
-      appBarTitle: "Pomodoro Timer",
+      navBarTitle: AppLocalizations.of(context)!.timer_navTitle,
+      appBarTitle: AppLocalizations.of(context)!.timer_title,
       body: TimerIndex(),
       actions: timerActions(),
     ),
     NavigationItem(
-      icon: Icons.timer_outlined,
-      navBarTitle: "Routine",
-      appBarTitle: "Routine",
+      icon: Icons.timelapse_outlined,
+      navBarTitle: AppLocalizations.of(context)!.routine_navTitle,
+      appBarTitle: AppLocalizations.of(context)!.routine_title,
       body: InProgressPage(),
     ),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +42,7 @@ class _HomeIndexState extends State<HomeIndex> {
       pages: pages,
       auxiliaryDestination: NavigationDestination(
         icon: Icon(Icons.bubble_chart_outlined),
-        label: "Menu",
+        label: AppLocalizations.of(context)!.menu_navTitle,
       ),
       onAuxiliaryTap: showAuxiliaryMenu,
     );

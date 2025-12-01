@@ -1,4 +1,5 @@
 import 'package:ascent/database/app_database.dart';
+import 'package:ascent/l10n/generated/app_localizations.dart';
 import 'package:ascent/services/drift_service.dart';
 import 'package:ascent/visuals/components/utils/navigator_utils.dart';
 import 'package:drift/drift.dart' as drift;
@@ -149,7 +150,7 @@ class _TasksIndexState extends State<TasksIndex> {
     final tomorrow = todayDate.add(const Duration(days: 1));
 
     return _categorizedTasksCache = {
-      "Today": _tasks
+      AppLocalizations.of(context)!.tasks_label_today: _tasks
           .where(
             (task) =>
                 task.doneOn == null &&
@@ -157,17 +158,19 @@ class _TasksIndexState extends State<TasksIndex> {
                 task.dueDate.isBefore(tomorrow),
           )
           .toList(),
-      "Previous": _tasks
+      AppLocalizations.of(context)!.tasks_label_previous: _tasks
           .where(
             (task) => task.doneOn == null && task.dueDate.isBefore(todayDate),
           )
           .toList(),
-      "Future": _tasks
+      AppLocalizations.of(context)!.tasks_label_future: _tasks
           .where(
             (task) => task.doneOn == null && !task.dueDate.isBefore(tomorrow),
           )
           .toList(),
-      "Completed": _tasks.where((task) => task.doneOn != null).toList(),
+      AppLocalizations.of(context)!.tasks_label_future: _tasks
+          .where((task) => task.doneOn != null)
+          .toList(),
     };
   }
 
@@ -191,7 +194,9 @@ class _TasksIndexState extends State<TasksIndex> {
                 padding: const EdgeInsets.only(top: 3, right: 3, left: 3),
                 child: AppBar(
                   title: Text(
-                    task != null ? 'Update Task:' : 'Create Task:',
+                    task != null
+                        ? AppLocalizations.of(context)!.tasks_label_updateTasks
+                        : AppLocalizations.of(context)!.tasks_label_createTasks,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   leading: IconButton(
@@ -207,7 +212,7 @@ class _TasksIndexState extends State<TasksIndex> {
                                 text:
                                     "${task.taskTitle}\n"
                                     "${task.dueDate.day}/${task.dueDate.month}/${task.dueDate.year}\n\n"
-                                    "${task.taskBody ?? "No description"}",
+                                    "${task.taskBody ?? AppLocalizations.of(context)!.tasks_label_noDescription}",
                               ),
                             ),
                           ),
@@ -235,7 +240,11 @@ class _TasksIndexState extends State<TasksIndex> {
                       controller: _taskTitleController,
                       textCapitalization: TextCapitalization.sentences,
                       style: const TextStyle(fontSize: 16),
-                      decoration: const InputDecoration(hintText: "Task Title"),
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(
+                          context,
+                        )!.tasks_input_title,
+                      ),
                     ),
                     const Gap(16),
                     TextFormField(
@@ -243,8 +252,10 @@ class _TasksIndexState extends State<TasksIndex> {
                       textCapitalization: TextCapitalization.sentences,
                       maxLines: 4,
                       style: const TextStyle(fontSize: 16),
-                      decoration: const InputDecoration(
-                        hintText: "Add Description (Optional)",
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(
+                          context,
+                        )!.tasks_input_description,
                       ),
                       keyboardType: TextInputType.multiline,
                     ),
@@ -287,7 +298,7 @@ class _TasksIndexState extends State<TasksIndex> {
                             },
                             icon: const Icon(Icons.calendar_today),
                             label: Text(
-                              "Due: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+                              "${AppLocalizations.of(context)!.tasks_button_due}: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
                             ),
                           ),
                         ),
@@ -316,7 +327,9 @@ class _TasksIndexState extends State<TasksIndex> {
                             ),
                             onPressed: () {},
                             icon: const Icon(Icons.abc),
-                            label: const Text("Coming Soon"),
+                            label: Text(
+                              AppLocalizations.of(context)!.common_comingSoon,
+                            ),
                           ),
                         ),
                       ],
@@ -343,7 +356,9 @@ class _TasksIndexState extends State<TasksIndex> {
                               ),
                             ),
                             onPressed: () => Navigator.pop(context),
-                            child: const Text("Cancel"),
+                            child: Text(
+                              AppLocalizations.of(context)!.tasks_button_cancel,
+                            ),
                           ),
                         ),
                         const Gap(12),
@@ -392,7 +407,9 @@ class _TasksIndexState extends State<TasksIndex> {
                                 }
                               }
                             },
-                            child: const Text("Save"),
+                            child: Text(
+                              AppLocalizations.of(context)!.tasks_button_save,
+                            ),
                           ),
                         ),
                       ],

@@ -1,5 +1,185 @@
 {
     "@@locale": "en",
-    "tasks_page_title": "Tasks",
-    "@tasks_page_title": {"description": "Title of Tasks Index Page"}
+    
+    "common_appName": "Ascent",
+    "@common_appName": {
+        "description": "Application name"
+    },
+    "common_comingSoon": "Coming Soon",
+    "@common_comingSoon": {
+        "description": "Label for features under development"
+    },
+
+    "tasks_title": "Tasks",
+    "@tasks_title": {
+        "description": "Title of Tasks page"
+    },
+    "tasks_navTitle": "Tasks",
+    "@tasks_navTitle": {
+        "description": "Navigation label for Tasks"
+    },
+    "tasks_label_createTasks": "Create Task:",
+    "@tasks_label_createTasks": {
+        "description": "Label for create task form"
+    },
+    "tasks_label_updateTasks": "Update Task:",
+    "@tasks_label_updateTasks": {
+        "description": "Label for update task form"
+    },
+    "tasks_input_title": "Task Title",
+    "@tasks_input_title": {
+        "description": "Placeholder for task title input field"
+    },
+    "tasks_input_description": "Add Description (Optional)",
+    "@tasks_input_description": {
+        "description": "Placeholder for task description input field"
+    },
+    "tasks_button_due": "Due",
+    "@tasks_button_due": {
+        "description": "Button to set task due date"
+    },
+    "tasks_button_cancel": "Cancel",
+    "@tasks_button_cancel": {
+        "description": "Cancel button in task form"
+    },
+    "tasks_button_save": "Save",
+    "@tasks_button_save": {
+        "description": "Save button in task form"
+    },
+    "tasks_label_today": "Today",
+    "@tasks_label_today": {
+        "description": "Label for today's tasks section"
+    },
+    "tasks_label_previous": "Previous",
+    "@tasks_label_previous": {
+        "description": "Label for previous/overdue tasks section"
+    },
+    "tasks_label_future": "Future",
+    "@tasks_label_future": {
+        "description": "Label for future tasks section"
+    },
+    "tasks_label_completed": "Completed",
+    "@tasks_label_completed": {
+        "description": "Label for completed tasks section"
+    },
+    "tasks_label_noDescription": "No Description",
+    "@tasks_label_noDescription": {
+        "description": "Placeholder text when task has no description"
+    },
+    
+    "timer_title": "Timer",
+    "@timer_title": {
+        "description": "Title of Timer page"
+    },
+    "timer_navTitle": "Timer",
+    "@timer_navTitle": {
+        "description": "Navigation label for Timer"
+    },
+    "timer_label_focus": "Focus",
+    "@timer_label_focus": {
+        "description": "Label for focus timer mode"
+    },
+
+    "routine_title": "Routine",
+    "@routine_title": {
+        "description": "Title of Routine page"
+    },
+    "routine_navTitle": "Routine",
+    "@routine_navTitle": {
+        "description": "Navigation label for Routine"
+    },
+
+    "menu_title": "Menu",
+    "@menu_title": {
+        "description": "Title of Menu page"
+    },
+    "menu_navTitle": "Menu",
+    "@menu_navTitle": {
+        "description": "Navigation label for Menu"
+    },
+
+    "inProgress_title": "In Progress",
+    "@inProgress_title": {
+        "description": "Title for features under development"
+    },
+    "inProgress_description": "This page is currently under development.\nPlease check GitHub for updates.",
+    "@inProgress_description": {
+        "description": "Description message for features under development"
+    },
+    "inProgress_button_visitGitHub": "Visit GitHub",
+    "@inProgress_button_visitGitHub": {
+        "description": "Button to visit GitHub repository"
+    },
+
+    "setting_title": "Settings",
+    "@setting_title": {
+        "description": "Title of Settings page"
+    },
+
+    "setting_general_navTitle": "General",
+    "@setting_general_navTitle": {
+        "description": "Navigation label for General settings"
+    },
+    "setting_label_appearance": "Appearance",
+    "@setting_label_appearance": {
+        "description": "Section label for appearance settings"
+    },
+    "setting_themeMode": "Theme Mode",
+    "@setting_themeMode": {
+        "description": "Label for theme mode setting"
+    },
+    "setting_themeMode_light": "Light",
+    "@setting_themeMode_light": {
+        "description": "Light theme option"
+    },
+    "setting_themeMode_dark": "Dark",
+    "@setting_themeMode_dark": {
+        "description": "Dark theme option"
+    },
+    "setting_themeMode_system": "System",
+    "@setting_themeMode_system": {
+        "description": "System theme option (follows device setting)"
+    },
+    "setting_colorScheme": "Color Scheme",
+    "@setting_colorScheme": {
+        "description": "Label for color scheme setting"
+    },
+    "setting_label_defaults": "Defaults",
+    "@setting_label_defaults": {
+        "description": "Section label for default settings"
+    },
+    "setting_language": "App language",
+    "@setting_language": {
+        "description": "Label for language setting"
+    },
+
+    "setting_database_navTitle": "Database",
+    "@setting_database_navTitle": {
+        "description": "Navigation label for Database settings"
+    },
+    "setting_label_database": "Database",
+    "@setting_label_database": {
+        "description": "Section label for database settings"
+    },
+    "setting_database_import": "Import database",
+    "@setting_database_import": {
+        "description": "Label for import database option"
+    },
+    "setting_database_importDescription": "Import database from a file",
+    "@setting_database_importDescription": {
+        "description": "Description for import database feature"
+    },
+    "setting_database_export": "Export database",
+    "@setting_database_export": {
+        "description": "Label for export database option"
+    },
+    "setting_database_exportDescription": "Export database to a file",
+    "@setting_database_exportDescription": {
+        "description": "Description for export database feature"
+    },
+
+    "setting_about_navTitle": "About",
+    "@setting_about_navTitle": {
+        "description": "Navigation label for About page"
+    }
 }

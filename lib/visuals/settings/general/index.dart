@@ -2,7 +2,7 @@ import 'package:ascent/utils/preference_provider.dart';
 import 'package:ascent/visuals/components/utils/gap_utils.dart';
 import 'package:ascent/visuals/components/utils/item_position.dart';
 import 'package:ascent/visuals/components/widgets/positioned_button.dart';
-import 'package:ascent/visuals/settings/general/components.dart';
+import 'package:ascent/visuals/settings/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,27 +17,26 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
   late final AppPreferencesNotifier preferencesNotifier = ref
       .read<AppPreferencesNotifier>(preferenceProvider.notifier);
   late final preference = ref.watch(preferenceProvider);
+  late final theme = Theme.of(context);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return ListView(
       children: [
         GapEnum.section.gap,
         buildSectionHeader('Appearance', theme),
         GapEnum.sectionHeader.gap,
-        _buildAppearanceSection(context, theme),
+        _buildAppearanceSection(),
         GapEnum.section.gap,
         buildSectionHeader('Defaults', theme),
         GapEnum.sectionHeader.gap,
-        _buildDefaultsSection(context, theme),
+        _buildDefaultsSection(),
       ],
     );
   }
 
   /// Builds the appearance settings section containing theme and color options
-  Widget _buildAppearanceSection(BuildContext context, ThemeData theme) {
+  Widget _buildAppearanceSection() {
     return Column(
       children: [
         PositionedButton(
@@ -62,7 +61,7 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
   }
 
   /// Builds the defaults settings section containing language options
-  Widget _buildDefaultsSection(BuildContext context, ThemeData theme) {
+  Widget _buildDefaultsSection() {
     return PositionedButton(
       title: 'App language',
       subtitle: preference.language.name,

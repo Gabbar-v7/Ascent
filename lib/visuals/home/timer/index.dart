@@ -1,4 +1,5 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
+import 'package:ascent/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -21,7 +22,7 @@ class _TimerIndexState extends State<TimerIndex> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Gap(42),
-        modeLabel("Focus"),
+        modeLabel(AppLocalizations.of(context)!.timer_label_focus),
         const Gap(32),
         animatedCounter(),
         const Gap(48),

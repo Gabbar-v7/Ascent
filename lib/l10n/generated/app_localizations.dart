@@ -94,11 +94,263 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[Locale('en')];
 
-  /// Title of Tasks Index Page
+  /// Application name
+  ///
+  /// In en, this message translates to:
+  /// **'Ascent'**
+  String get common_appName;
+
+  /// Label for features under development
+  ///
+  /// In en, this message translates to:
+  /// **'Coming Soon'**
+  String get common_comingSoon;
+
+  /// Title of Tasks page
   ///
   /// In en, this message translates to:
   /// **'Tasks'**
-  String get tasks_page_title;
+  String get tasks_title;
+
+  /// Navigation label for Tasks
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get tasks_navTitle;
+
+  /// Label for create task form
+  ///
+  /// In en, this message translates to:
+  /// **'Create Task:'**
+  String get tasks_label_createTasks;
+
+  /// Label for update task form
+  ///
+  /// In en, this message translates to:
+  /// **'Update Task:'**
+  String get tasks_label_updateTasks;
+
+  /// Placeholder for task title input field
+  ///
+  /// In en, this message translates to:
+  /// **'Task Title'**
+  String get tasks_input_title;
+
+  /// Placeholder for task description input field
+  ///
+  /// In en, this message translates to:
+  /// **'Add Description (Optional)'**
+  String get tasks_input_description;
+
+  /// Button to set task due date
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get tasks_button_due;
+
+  /// Cancel button in task form
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get tasks_button_cancel;
+
+  /// Save button in task form
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get tasks_button_save;
+
+  /// Label for today's tasks section
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get tasks_label_today;
+
+  /// Label for previous/overdue tasks section
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get tasks_label_previous;
+
+  /// Label for future tasks section
+  ///
+  /// In en, this message translates to:
+  /// **'Future'**
+  String get tasks_label_future;
+
+  /// Label for completed tasks section
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get tasks_label_completed;
+
+  /// Placeholder text when task has no description
+  ///
+  /// In en, this message translates to:
+  /// **'No Description'**
+  String get tasks_label_noDescription;
+
+  /// Title of Timer page
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get timer_title;
+
+  /// Navigation label for Timer
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get timer_navTitle;
+
+  /// Label for focus timer mode
+  ///
+  /// In en, this message translates to:
+  /// **'Focus'**
+  String get timer_label_focus;
+
+  /// Title of Routine page
+  ///
+  /// In en, this message translates to:
+  /// **'Routine'**
+  String get routine_title;
+
+  /// Navigation label for Routine
+  ///
+  /// In en, this message translates to:
+  /// **'Routine'**
+  String get routine_navTitle;
+
+  /// Title of Menu page
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menu_title;
+
+  /// Navigation label for Menu
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menu_navTitle;
+
+  /// Title for features under development
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get inProgress_title;
+
+  /// Description message for features under development
+  ///
+  /// In en, this message translates to:
+  /// **'This page is currently under development.\nPlease check GitHub for updates.'**
+  String get inProgress_description;
+
+  /// Button to visit GitHub repository
+  ///
+  /// In en, this message translates to:
+  /// **'Visit GitHub'**
+  String get inProgress_button_visitGitHub;
+
+  /// Title of Settings page
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get setting_title;
+
+  /// Navigation label for General settings
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get setting_general_navTitle;
+
+  /// Section label for appearance settings
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get setting_label_appearance;
+
+  /// Label for theme mode setting
+  ///
+  /// In en, this message translates to:
+  /// **'Theme Mode'**
+  String get setting_themeMode;
+
+  /// Light theme option
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get setting_themeMode_light;
+
+  /// Dark theme option
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get setting_themeMode_dark;
+
+  /// System theme option (follows device setting)
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get setting_themeMode_system;
+
+  /// Label for color scheme setting
+  ///
+  /// In en, this message translates to:
+  /// **'Color Scheme'**
+  String get setting_colorScheme;
+
+  /// Section label for default settings
+  ///
+  /// In en, this message translates to:
+  /// **'Defaults'**
+  String get setting_label_defaults;
+
+  /// Label for language setting
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get setting_language;
+
+  /// Navigation label for Database settings
+  ///
+  /// In en, this message translates to:
+  /// **'Database'**
+  String get setting_database_navTitle;
+
+  /// Section label for database settings
+  ///
+  /// In en, this message translates to:
+  /// **'Database'**
+  String get setting_label_database;
+
+  /// Label for import database option
+  ///
+  /// In en, this message translates to:
+  /// **'Import database'**
+  String get setting_database_import;
+
+  /// Description for import database feature
+  ///
+  /// In en, this message translates to:
+  /// **'Import database from a file'**
+  String get setting_database_importDescription;
+
+  /// Label for export database option
+  ///
+  /// In en, this message translates to:
+  /// **'Export database'**
+  String get setting_database_export;
+
+  /// Description for export database feature
+  ///
+  /// In en, this message translates to:
+  /// **'Export database to a file'**
+  String get setting_database_exportDescription;
+
+  /// Navigation label for About page
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get setting_about_navTitle;
 }
 
 class _AppLocalizationsDelegate

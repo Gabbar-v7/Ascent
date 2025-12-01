@@ -1,3 +1,4 @@
+import 'package:ascent/l10n/generated/app_localizations.dart';
 import 'package:ascent/visuals/components/utils/navigator_utils.dart';
 import 'package:ascent/visuals/components/widgets/in_progress.dart';
 import 'package:ascent/visuals/settings/index.dart';
@@ -43,7 +44,10 @@ class _AuxiliaryMenuSheet extends StatelessWidget {
   AppBar _appBar() {
     return AppBar(
       backgroundColor: Colors.transparent,
-      title: Text("Menu", style: Theme.of(context).textTheme.titleMedium),
+      title: Text(
+        AppLocalizations.of(context)!.menu_title,
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
       leading: IconButton(
         onPressed: () => {NavigatorUtils.popPage(context)},
         icon: Icon(Icons.arrow_back_ios_rounded),
