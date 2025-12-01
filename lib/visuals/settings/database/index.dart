@@ -14,8 +14,6 @@ class DatabaseIndex extends StatefulWidget {
 
 class _DatabaseIndexState extends State<DatabaseIndex> {
   late final ThemeData theme = Theme.of(context);
-  bool _isImporting = false;
-  bool _isExporting = false;
 
   @override
   Widget build(BuildContext context) {
