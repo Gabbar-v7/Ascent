@@ -30,7 +30,7 @@ Try it now and boost your workflow! Contributions welcome.
 
 ✔ **To-Do List** – Quick-add, swipe gestures, smart sorting  
 ✔ **Pomodoro Timer** – Focus sessions with stats tracking  
-✔ **Routines** – Lightweight & Simple
+✔ **Routines** – Lightweight & Simple  
 ✔ **Optimized UX** – Instant actions, minimal taps, silky animations
 
 ## Screenshots
