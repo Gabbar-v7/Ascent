@@ -21,6 +21,11 @@ class _TasksIndexState extends State<TasksIndex> {
   List<Task> _tasks = [];
   Map<String, List<Task>>? _categorizedTasksCache;
 
+  final dateContainer = BoxDecoration(
+    color: Colors.grey.withValues(alpha: 0.1),
+    borderRadius: BorderRadius.circular(8),
+  );
+
   @override
   void initState() {
     super.initState();
@@ -109,10 +114,7 @@ class _TasksIndexState extends State<TasksIndex> {
                   ),
                   const Gap(10),
                   Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    decoration: dateContainer,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 6,
@@ -168,7 +170,7 @@ class _TasksIndexState extends State<TasksIndex> {
             (task) => task.doneOn == null && !task.dueDate.isBefore(tomorrow),
           )
           .toList(),
-      AppLocalizations.of(context)!.tasks_label_future: _tasks
+      AppLocalizations.of(context)!.tasks_label_completed: _tasks
           .where((task) => task.doneOn != null)
           .toList(),
     };
@@ -264,7 +266,7 @@ class _TasksIndexState extends State<TasksIndex> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
-                          child: FilledButton.icon(
+                          child: FilledButton(
                             style: ButtonStyle(
                               shape: WidgetStatePropertyAll(
                                 RoundedRectangleBorder(
@@ -290,21 +292,20 @@ class _TasksIndexState extends State<TasksIndex> {
                                 firstDate: DateTime(2000),
                                 lastDate: DateTime(2200),
                               );
-                              if (picked != null) {
+                              if (picked != null && picked != selectedDate) {
                                 setModalState(() {
                                   selectedDate = picked;
                                 });
                               }
                             },
-                            icon: const Icon(Icons.calendar_today),
-                            label: Text(
+                            child: Text(
                               "${AppLocalizations.of(context)!.tasks_button_due}: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
                             ),
                           ),
                         ),
                         const Gap(16),
                         Expanded(
-                          child: FilledButton.icon(
+                          child: FilledButton(
                             style: ButtonStyle(
                               shape: WidgetStatePropertyAll(
                                 RoundedRectangleBorder(
@@ -326,8 +327,7 @@ class _TasksIndexState extends State<TasksIndex> {
                               ),
                             ),
                             onPressed: () {},
-                            icon: const Icon(Icons.abc),
-                            label: Text(
+                            child: Text(
                               AppLocalizations.of(context)!.common_comingSoon,
                             ),
                           ),
