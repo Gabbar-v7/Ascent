@@ -1,3 +1,4 @@
+import 'package:ascent/l10n/generated/app_localizations.dart';
 import 'package:ascent/utils/preference_provider.dart';
 import 'package:ascent/visuals/components/utils/gap_utils.dart';
 import 'package:ascent/visuals/components/utils/item_position.dart';
@@ -24,11 +25,17 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
     return ListView(
       children: [
         GapEnum.section.gap,
-        buildSectionHeader('Appearance', theme),
+        buildSectionHeader(
+          AppLocalizations.of(context)!.setting_label_appearance,
+          theme,
+        ),
         GapEnum.sectionHeader.gap,
         _buildAppearanceSection(),
         GapEnum.section.gap,
-        buildSectionHeader('Defaults', theme),
+        buildSectionHeader(
+          AppLocalizations.of(context)!.setting_label_defaults,
+          theme,
+        ),
         GapEnum.sectionHeader.gap,
         _buildDefaultsSection(),
       ],
@@ -40,7 +47,7 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
     return Column(
       children: [
         PositionedButton(
-          title: 'Theme Mode',
+          title: AppLocalizations.of(context)!.setting_themeMode,
           subtitle: preference.themeMode.name,
           leading: Icon(_getThemeModeIcon(preference.themeMode)),
           trailing: const Icon(Icons.arrow_drop_down_rounded, size: 42),
@@ -49,7 +56,7 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
         ),
         GapEnum.sectionContent.gap,
         PositionedButton(
-          title: 'Color Scheme',
+          title: AppLocalizations.of(context)!.setting_colorScheme,
           subtitle: preference.colorScheme.name,
           leading: _buildColorIndicator(preference.colorScheme, theme),
           trailing: const Icon(Icons.arrow_drop_down_rounded, size: 42),
@@ -63,7 +70,7 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
   /// Builds the defaults settings section containing language options
   Widget _buildDefaultsSection() {
     return PositionedButton(
-      title: 'App language',
+      title: AppLocalizations.of(context)!.setting_language,
       subtitle: preference.language.name,
       leading: Icon(Icons.language_outlined),
       trailing: const Icon(Icons.arrow_drop_down_rounded, size: 42),
@@ -104,7 +111,7 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
     showDialog(
       context: context,
       builder: (BuildContext context) => SettingsDialog<AppThemeMode>(
-        title: 'Theme Mode',
+        title: AppLocalizations.of(context)!.setting_themeMode,
         options: AppThemeMode.values,
         currentSelection: preference.themeMode,
         onOptionSelected: (mode) => preferencesNotifier.themeMode = mode,
@@ -122,7 +129,7 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
     showDialog(
       context: context,
       builder: (BuildContext context) => SettingsDialog<AppColorSchemeEnum>(
-        title: 'Color Scheme',
+        title: AppLocalizations.of(context)!.setting_colorScheme,
         options: AppColorSchemeEnum.values,
         currentSelection: preference.colorScheme,
         onOptionSelected: (scheme) => preferencesNotifier.colorScheme = scheme,
@@ -140,7 +147,7 @@ class _GeneralIndexState extends ConsumerState<GeneralIndex> {
     showDialog(
       context: context,
       builder: (BuildContext context) => SettingsDialog<AppLanguageEnum>(
-        title: 'App Language',
+        title: AppLocalizations.of(context)!.setting_language,
         options: AppLanguageEnum.values,
         currentSelection: preference.language,
         onOptionSelected: (language) => preferencesNotifier.language = language,

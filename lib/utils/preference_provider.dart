@@ -100,12 +100,12 @@ class AppPreferencesService {
 
   // Preference getters
   AppThemeMode get themeMode {
-    int index = _prefs.getInt(PreferenceKey.themeMode.string) ?? 0;
+    int index = _prefs.getInt(PreferenceKey.themeMode.string) ?? 2;
     return AppThemeMode.values[index];
   }
 
   AppColorSchemeEnum get colorScheme {
-    int index = _prefs.getInt(PreferenceKey.colorScheme.string) ?? 0;
+    int index = _prefs.getInt(PreferenceKey.colorScheme.string) ?? 2;
     return AppColorSchemeEnum.values[index];
   }
 

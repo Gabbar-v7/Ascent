@@ -181,5 +181,82 @@
     "setting_about_navTitle": "About",
     "@setting_about_navTitle": {
         "description": "Navigation label for About page"
+    },
+
+    "setting_label_project": "Project",
+    "@setting_label_project": {
+        "description": "Section label for project information"
+    },
+    "setting_about_github":"GitHub",
+    "@setting_about_github": {
+        "description": "Label for GitHub link"
+    },
+    "setting_about_githubDescription": "View the source code",
+    "@setting_about_githubDescription": {
+        "description": "Description for GitHub link option"
+    },
+    "setting_about_report": "Report an issue",
+    "@setting_about_report": {
+        "description": "Label for report issue option"
+    },
+    "setting_about_reportDescription": "Help us improve the app",
+    "@setting_about_reportDescription": {
+        "description": "Description for report issue feature"
+    },
+    "setting_about_suggest": "Suggest an idea",
+    "@setting_about_suggest": {
+        "description": "Label for suggest idea option"
+    },
+    "setting_about_suggestDescription":"Share your feature requests",
+    "@setting_about_suggestDescription": {
+        "description": "Description for suggest idea feature"
+    },
+    "setting_about_star": "Star on GitHub",
+    "@setting_about_star": {
+        "description": "Label for GitHub star option"
+    },
+    "setting_about_starDescription": "Support the project",
+    "@setting_about_starDescription": {
+        "description": "Description for GitHub star feature"
+    },
+    "setting_label_contact": "Contact",
+    "@setting_label_contact": {
+        "description": "Section label for contact information"
+    },
+    "setting_about_emal": "Email us",
+    "@setting_about_emal": {
+        "description": "Label for email contact option"
+    },
+    "setting_about_emailDescription": "#",
+    "@setting_about_emailDescription": {
+        "description": "Description for email contact option"
+    },
+    "setting_label_support": "Support Development",
+    "@setting_label_support": {
+        "description": "Section label for support options"
+    },
+    "setting_about_githubSponsor": "GitHub Sponsor",
+    "@setting_about_githubSponsor": {
+        "description": "Label for GitHub Sponsor option"
+    },
+    "setting_about_githubSponsorDescription": "Monthly Support",
+    "@setting_about_githubSponsorDescription": {
+        "description": "Description for GitHub Sponsor feature"
+    },
+    "setting_about_buyMeCoffee": "Buy me a coffee",
+    "@setting_about_buyMeCoffee": {
+        "description": "Label for Buy Me a Coffee option"
+    },
+    "setting_about_buyMeCoffeeDescription": "One-time donation",
+    "@setting_about_buyMeCoffeeDescription": {
+        "description": "Description for Buy Me a Coffee feature"
+    },
+    "setting_about_paypal": "PayPal",
+    "@setting_about_paypal": {
+        "description": "Label for PayPal donation option"
+    },
+    "setting_about_paypalDescription": "One-time donation",
+    "@setting_about_paypalDescription": {
+        "description": "Description for PayPal donation feature"
     }
 }

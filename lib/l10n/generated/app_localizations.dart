@@ -351,6 +351,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About'**
   String get setting_about_navTitle;
+
+  /// Section label for project information
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get setting_label_project;
+
+  /// Label for GitHub link
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub'**
+  String get setting_about_github;
+
+  /// Description for GitHub link option
+  ///
+  /// In en, this message translates to:
+  /// **'View the source code'**
+  String get setting_about_githubDescription;
+
+  /// Label for report issue option
+  ///
+  /// In en, this message translates to:
+  /// **'Report an issue'**
+  String get setting_about_report;
+
+  /// Description for report issue feature
+  ///
+  /// In en, this message translates to:
+  /// **'Help us improve the app'**
+  String get setting_about_reportDescription;
+
+  /// Label for suggest idea option
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest an idea'**
+  String get setting_about_suggest;
+
+  /// Description for suggest idea feature
+  ///
+  /// In en, this message translates to:
+  /// **'Share your feature requests'**
+  String get setting_about_suggestDescription;
+
+  /// Label for GitHub star option
+  ///
+  /// In en, this message translates to:
+  /// **'Star on GitHub'**
+  String get setting_about_star;
+
+  /// Description for GitHub star feature
+  ///
+  /// In en, this message translates to:
+  /// **'Support the project'**
+  String get setting_about_starDescription;
+
+  /// Section label for contact information
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get setting_label_contact;
+
+  /// Label for email contact option
+  ///
+  /// In en, this message translates to:
+  /// **'Email us'**
+  String get setting_about_emal;
+
+  /// Description for email contact option
+  ///
+  /// In en, this message translates to:
+  /// **'#'**
+  String get setting_about_emailDescription;
+
+  /// Section label for support options
+  ///
+  /// In en, this message translates to:
+  /// **'Support Development'**
+  String get setting_label_support;
+
+  /// Label for GitHub Sponsor option
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub Sponsor'**
+  String get setting_about_githubSponsor;
+
+  /// Description for GitHub Sponsor feature
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Support'**
+  String get setting_about_githubSponsorDescription;
+
+  /// Label for Buy Me a Coffee option
+  ///
+  /// In en, this message translates to:
+  /// **'Buy me a coffee'**
+  String get setting_about_buyMeCoffee;
+
+  /// Description for Buy Me a Coffee feature
+  ///
+  /// In en, this message translates to:
+  /// **'One-time donation'**
+  String get setting_about_buyMeCoffeeDescription;
+
+  /// Label for PayPal donation option
+  ///
+  /// In en, this message translates to:
+  /// **'PayPal'**
+  String get setting_about_paypal;
+
+  /// Description for PayPal donation feature
+  ///
+  /// In en, this message translates to:
+  /// **'One-time donation'**
+  String get setting_about_paypalDescription;
 }
 
 class _AppLocalizationsDelegate

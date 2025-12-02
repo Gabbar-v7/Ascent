@@ -138,4 +138,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get setting_about_navTitle => 'About';
+
+  @override
+  String get setting_label_project => 'Project';
+
+  @override
+  String get setting_about_github => 'GitHub';
+
+  @override
+  String get setting_about_githubDescription => 'View the source code';
+
+  @override
+  String get setting_about_report => 'Report an issue';
+
+  @override
+  String get setting_about_reportDescription => 'Help us improve the app';
+
+  @override
+  String get setting_about_suggest => 'Suggest an idea';
+
+  @override
+  String get setting_about_suggestDescription => 'Share your feature requests';
+
+  @override
+  String get setting_about_star => 'Star on GitHub';
+
+  @override
+  String get setting_about_starDescription => 'Support the project';
+
+  @override
+  String get setting_label_contact => 'Contact';
+
+  @override
+  String get setting_about_emal => 'Email us';
+
+  @override
+  String get setting_about_emailDescription => '#';
+
+  @override
+  String get setting_label_support => 'Support Development';
+
+  @override
+  String get setting_about_githubSponsor => 'GitHub Sponsor';
+
+  @override
+  String get setting_about_githubSponsorDescription => 'Monthly Support';
+
+  @override
+  String get setting_about_buyMeCoffee => 'Buy me a coffee';
+
+  @override
+  String get setting_about_buyMeCoffeeDescription => 'One-time donation';
+
+  @override
+  String get setting_about_paypal => 'PayPal';
+
+  @override
+  String get setting_about_paypalDescription => 'One-time donation';
 }

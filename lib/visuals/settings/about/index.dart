@@ -1,3 +1,4 @@
+import 'package:ascent/l10n/generated/app_localizations.dart';
 import 'package:ascent/visuals/components/utils/gap_utils.dart';
 import 'package:ascent/visuals/components/utils/item_position.dart';
 import 'package:ascent/visuals/components/widgets/positioned_button.dart';
@@ -20,11 +21,16 @@ class _AboutIndexState extends State<AboutIndex> {
     return ListView(
       children: [
         GapEnum.section.gap,
-        buildSectionHeader("Project", theme),
+        buildSectionHeader(
+          AppLocalizations.of(context)!.setting_label_project,
+          theme,
+        ),
         GapEnum.sectionHeader.gap,
         PositionedButton(
-          title: "GitHub",
-          subtitle: "View the source code",
+          title: AppLocalizations.of(context)!.setting_about_github,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.setting_about_githubDescription,
           leading: Icon(Icons.code, size: 28),
           trailing: Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           position: ItemPosition.top,
@@ -35,8 +41,10 @@ class _AboutIndexState extends State<AboutIndex> {
         ),
         GapEnum.sectionContent.gap,
         PositionedButton(
-          title: "Report an issue",
-          subtitle: "Help us improve the app",
+          title: AppLocalizations.of(context)!.setting_about_report,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.setting_about_reportDescription,
           leading: Icon(Icons.bug_report_outlined, size: 28),
           trailing: Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           position: ItemPosition.mid,
@@ -47,8 +55,10 @@ class _AboutIndexState extends State<AboutIndex> {
         ),
         GapEnum.sectionContent.gap,
         PositionedButton(
-          title: "Suggest an idea",
-          subtitle: "Share your feature requests",
+          title: AppLocalizations.of(context)!.setting_about_suggest,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.setting_about_suggestDescription,
           leading: Icon(Icons.lightbulb_outline_rounded, size: 28),
           trailing: Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           position: ItemPosition.mid,
@@ -59,8 +69,8 @@ class _AboutIndexState extends State<AboutIndex> {
         ),
         GapEnum.sectionContent.gap,
         PositionedButton(
-          title: "Star on GitHub",
-          subtitle: "Support the project",
+          title: AppLocalizations.of(context)!.setting_about_star,
+          subtitle: AppLocalizations.of(context)!.setting_about_starDescription,
           leading: Icon(Icons.star_outline_rounded, size: 28),
           trailing: Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           position: ItemPosition.bottom,
@@ -71,11 +81,16 @@ class _AboutIndexState extends State<AboutIndex> {
         ),
 
         GapEnum.section.gap,
-        buildSectionHeader("Contact", theme),
+        buildSectionHeader(
+          AppLocalizations.of(context)!.setting_label_contact,
+          theme,
+        ),
         GapEnum.sectionHeader.gap,
         PositionedButton(
-          title: "Email us",
-          subtitle: "#",
+          title: AppLocalizations.of(context)!.setting_about_emal,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.setting_about_emailDescription,
           leading: Icon(Icons.mail_outline, size: 28),
           trailing: Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           onTap: () =>
@@ -86,8 +101,10 @@ class _AboutIndexState extends State<AboutIndex> {
         buildSectionHeader("Support Development", theme),
         GapEnum.sectionHeader.gap,
         PositionedButton(
-          title: "GitHub sponsor",
-          subtitle: "Monthly support",
+          title: AppLocalizations.of(context)!.setting_about_githubSponsor,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.setting_about_githubSponsorDescription,
           leading: Icon(Icons.favorite_border_rounded, size: 28),
           trailing: const Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           position: ItemPosition.top,
@@ -98,8 +115,10 @@ class _AboutIndexState extends State<AboutIndex> {
         ),
         GapEnum.sectionContent.gap,
         PositionedButton(
-          title: "Buy me a coffee",
-          subtitle: "One-time donation",
+          title: AppLocalizations.of(context)!.setting_about_buyMeCoffee,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.setting_about_buyMeCoffeeDescription,
           leading: const Icon(Icons.coffee_outlined, size: 28),
           trailing: const Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           position: ItemPosition.mid,
@@ -110,8 +129,10 @@ class _AboutIndexState extends State<AboutIndex> {
         ),
         GapEnum.sectionContent.gap,
         PositionedButton(
-          title: "PayPal",
-          subtitle: "One-time donation",
+          title: AppLocalizations.of(context)!.setting_about_paypal,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.setting_about_paypalDescription,
           leading: Icon(Icons.wallet, size: 28),
           trailing: const Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           position: ItemPosition.bottom,
@@ -120,6 +141,8 @@ class _AboutIndexState extends State<AboutIndex> {
             mode: LaunchMode.externalApplication,
           ),
         ),
+
+        GapEnum.section.gap,
       ],
     );
   }
