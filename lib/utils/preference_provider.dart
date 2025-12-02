@@ -105,7 +105,7 @@ class AppPreferencesService {
   }
 
   AppColorSchemeEnum get colorScheme {
-    int index = _prefs.getInt(PreferenceKey.colorScheme.string) ?? 2;
+    int index = _prefs.getInt(PreferenceKey.colorScheme.string) ?? 1;
     return AppColorSchemeEnum.values[index];
   }
 
