@@ -1,6 +1,6 @@
 # Ascent
 
-A blazing-fast Flutter mobile app for managing tasks, notes, and focus sessions with intuitive gestures and smooth performance.
+A blazing-fast Flutter mobile app for managing tasks, routines, and focus sessions with intuitive gestures and smooth performance.
 
 Built for **speed** and **efficiency**. Perfect for productivity on the go!
 
@@ -30,7 +30,7 @@ Try it now and boost your workflow! Contributions welcome.
 
 ✔ **To-Do List** – Quick-add, swipe gestures, smart sorting  
 ✔ **Pomodoro Timer** – Focus sessions with stats tracking  
-✔ **Notes** – Lightweight & markdown-ready  
+✔ **Routines** – Lightweight & Simple
 ✔ **Optimized UX** – Instant actions, minimal taps, silky animations
 
 ## Screenshots
@@ -83,7 +83,7 @@ lib/
 ├── utils/                 # Utility functions and helpers
 └── visuals/               # UI and presentation layer
     ├── components/        # Reusable widgets and layout components
-    ├── home/              # Home, notes, tasks, timer views
+    ├── home/              # Home, routines, tasks, timer views
     ├── settings/          # Settings screens and providers
     └── themes.dart        # App theming
 ```
