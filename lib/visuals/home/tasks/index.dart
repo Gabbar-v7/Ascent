@@ -11,13 +11,14 @@ class TasksIndex extends StatefulWidget {
   const TasksIndex({super.key});
 
   @override
-  State<TasksIndex> createState() => _TasksIndexState();
+  State<TasksIndex> createState() => TasksIndexState();
 }
 
-class _TasksIndexState extends State<TasksIndex> {
+class TasksIndexState extends State<TasksIndex> {
   final database = DriftService.instance.driftDB;
   final TextEditingController _taskTitleController = TextEditingController();
-  final TextEditingController _taskBodyController = TextEditingController();
+  final TextEditingController _taskDescriptionController =
+      TextEditingController();
   List<Task> _tasks = [];
   Map<String, List<Task>>? _categorizedTasksCache;
 
@@ -35,22 +36,12 @@ class _TasksIndexState extends State<TasksIndex> {
   @override
   void dispose() {
     _taskTitleController.dispose();
-    _taskBodyController.dispose();
+    _taskDescriptionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildTaskList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showTaskBottomSheet,
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-
-  Widget _buildTaskList() {
     final categorizedTasks = _categorizeTasks();
 
     return ListView.builder(
@@ -90,7 +81,7 @@ class _TasksIndexState extends State<TasksIndex> {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onDoubleTap: () => _toggleTaskCompletion(task, !isCompleted),
-        onLongPress: () => _showTaskBottomSheet(task: task),
+        onLongPress: () => showTaskBottomSheet(task: task),
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.all(8),
@@ -106,7 +97,7 @@ class _TasksIndexState extends State<TasksIndex> {
                   const Gap(6),
                   Expanded(
                     child: Text(
-                      task.taskTitle,
+                      task.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.titleMedium,
@@ -128,14 +119,17 @@ class _TasksIndexState extends State<TasksIndex> {
                   ),
                 ],
               ),
-              if (task.taskBody?.isNotEmpty ?? false)
+              if (task.description?.isNotEmpty ?? false)
                 Padding(
                   padding: const EdgeInsets.only(
                     left: 18,
                     right: 20,
                     bottom: 6,
                   ),
-                  child: Text(task.taskBody!, style: theme.textTheme.bodyLarge),
+                  child: Text(
+                    task.description!,
+                    style: theme.textTheme.bodyLarge,
+                  ),
                 ),
             ],
           ),
@@ -176,9 +170,9 @@ class _TasksIndexState extends State<TasksIndex> {
     };
   }
 
-  void _showTaskBottomSheet({Task? task}) {
-    _taskTitleController.text = task?.taskTitle ?? "";
-    _taskBodyController.text = task?.taskBody ?? "";
+  void showTaskBottomSheet({Task? task}) {
+    _taskTitleController.text = task?.title ?? "";
+    _taskDescriptionController.text = task?.description ?? "";
     DateTime selectedDate = task?.dueDate ?? DateTime.now();
 
     showModalBottomSheet(
@@ -192,6 +186,7 @@ class _TasksIndexState extends State<TasksIndex> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Header AppBar
               Padding(
                 padding: const EdgeInsets.only(top: 3, right: 3, left: 3),
                 child: AppBar(
@@ -204,22 +199,25 @@ class _TasksIndexState extends State<TasksIndex> {
                   leading: IconButton(
                     onPressed: () => NavigatorUtils.popPage(context),
                     icon: Icon(Icons.arrow_back_ios_rounded),
+                    tooltip: "Cancel",
                   ),
                   actions: task != null
                       ? <Widget>[
                           IconButton(
                             icon: const Icon(Icons.copy_outlined, size: 20),
+                            tooltip: "Copy Task",
                             onPressed: () => Clipboard.setData(
                               ClipboardData(
                                 text:
-                                    "${task.taskTitle}\n"
-                                    "${task.dueDate.day}/${task.dueDate.month}/${task.dueDate.year}\n\n"
-                                    "${task.taskBody ?? AppLocalizations.of(context)!.tasks_label_noDescription}",
+                                    "${task.title}\n"
+                                    "    ${task.dueDate.day}/${task.dueDate.month}/${task.dueDate.year}\n"
+                                    "${task.description ?? AppLocalizations.of(context)!.tasks_label_noDescription}",
                               ),
                             ),
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete_outline, size: 26),
+                            tooltip: "Delete Task",
                             onPressed: () {
                               _deleteTask(task);
                               Navigator.pop(context);
@@ -231,6 +229,8 @@ class _TasksIndexState extends State<TasksIndex> {
                   backgroundColor: Colors.transparent,
                 ),
               ),
+
+              // Content
               Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 10,
@@ -238,6 +238,7 @@ class _TasksIndexState extends State<TasksIndex> {
                 ),
                 child: Column(
                   children: [
+                    // Title Input
                     TextField(
                       controller: _taskTitleController,
                       textCapitalization: TextCapitalization.sentences,
@@ -249,8 +250,10 @@ class _TasksIndexState extends State<TasksIndex> {
                       ),
                     ),
                     const Gap(16),
+
+                    // Description Input
                     TextFormField(
-                      controller: _taskBodyController,
+                      controller: _taskDescriptionController,
                       textCapitalization: TextCapitalization.sentences,
                       maxLines: 4,
                       style: const TextStyle(fontSize: 16),
@@ -387,8 +390,8 @@ class _TasksIndexState extends State<TasksIndex> {
                                   _updateTask(
                                     task,
                                     _taskTitleController.text,
-                                    _taskBodyController.text.isNotEmpty
-                                        ? _taskBodyController.text
+                                    _taskDescriptionController.text.isNotEmpty
+                                        ? _taskDescriptionController.text
                                         : null,
                                     selectedDate,
                                   );
@@ -396,14 +399,14 @@ class _TasksIndexState extends State<TasksIndex> {
                                 } else {
                                   _addTask(
                                     _taskTitleController.text,
-                                    _taskBodyController.text.isNotEmpty
-                                        ? _taskBodyController.text
+                                    _taskDescriptionController.text.isNotEmpty
+                                        ? _taskDescriptionController.text
                                         : null,
                                     selectedDate,
                                   );
                                   FocusScope.of(context).unfocus();
                                   _taskTitleController.clear();
-                                  _taskBodyController.clear();
+                                  _taskDescriptionController.clear();
                                 }
                               }
                             },
@@ -450,15 +453,15 @@ class _TasksIndexState extends State<TasksIndex> {
 
   Future<void> _addTask(
     String taskTitle,
-    String? taskBody,
+    String? taskDescription,
     DateTime dueDate,
   ) async {
     await database
         .into(database.tasks)
         .insert(
           TasksCompanion.insert(
-            taskTitle: taskTitle,
-            taskBody: drift.Value(taskBody),
+            title: taskTitle,
+            description: drift.Value(taskDescription),
             dueDate: dueDate,
           ),
         );
@@ -468,15 +471,15 @@ class _TasksIndexState extends State<TasksIndex> {
   Future<void> _updateTask(
     Task task,
     String newTaskTitle,
-    String? newTaskBody,
+    String? newTaskDescription,
     DateTime newDueDate,
   ) async {
     await (database.update(
       database.tasks,
     )..where((tbl) => tbl.id.equals(task.id))).write(
       TasksCompanion(
-        taskTitle: drift.Value(newTaskTitle),
-        taskBody: drift.Value(newTaskBody),
+        title: drift.Value(newTaskTitle),
+        description: drift.Value(newTaskDescription),
         dueDate: drift.Value(newDueDate),
       ),
     );

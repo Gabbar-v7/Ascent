@@ -1,7 +1,7 @@
 import 'package:ascent/l10n/generated/app_localizations.dart';
-import 'package:ascent/visuals/components/widgets/in_progress.dart';
 import 'package:ascent/visuals/components/scaffold_shell.dart';
 import 'package:ascent/visuals/home/menu.dart';
+import 'package:ascent/visuals/home/routines/index.dart';
 import 'package:ascent/visuals/home/tasks/index.dart';
 import 'package:ascent/visuals/home/timer/index.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +14,33 @@ class HomeIndex extends StatefulWidget {
 }
 
 class _HomeIndexState extends State<HomeIndex> {
+  final GlobalKey<TasksIndexState> _tasksIndexKey =
+      GlobalKey<TasksIndexState>();
+
+  final GlobalKey<RoutinesIndexState> _routinesIndexKey =
+      GlobalKey<RoutinesIndexState>();
+
   late final List<NavigationItem> pages = [
     NavigationItem(
       icon: Icons.checklist_rounded,
       navBarTitle: AppLocalizations.of(context)!.tasks_navTitle,
       appBarTitle: AppLocalizations.of(context)!.tasks_title,
-      body: TasksIndex(),
+      body: TasksIndex(key: _tasksIndexKey),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _tasksIndexKey.currentState?.showTaskBottomSheet(),
+        child: Icon(Icons.add),
+      ),
+    ),
+    NavigationItem(
+      icon: Icons.timelapse_outlined,
+      navBarTitle: AppLocalizations.of(context)!.routine_navTitle,
+      appBarTitle: AppLocalizations.of(context)!.routine_title,
+      body: RoutinesIndex(key: _routinesIndexKey),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () =>
+            _routinesIndexKey.currentState?.showRoutineBottomSheet(),
+        child: Icon(Icons.add),
+      ),
     ),
     NavigationItem(
       icon: Icons.timer_outlined,
@@ -27,12 +48,6 @@ class _HomeIndexState extends State<HomeIndex> {
       appBarTitle: AppLocalizations.of(context)!.timer_title,
       body: TimerIndex(),
       actions: timerActions(),
-    ),
-    NavigationItem(
-      icon: Icons.timelapse_outlined,
-      navBarTitle: AppLocalizations.of(context)!.routine_navTitle,
-      appBarTitle: AppLocalizations.of(context)!.routine_title,
-      body: InProgressPage(),
     ),
   ];
 

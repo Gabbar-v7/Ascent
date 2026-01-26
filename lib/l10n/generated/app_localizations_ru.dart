@@ -138,6 +138,30 @@ class AppLocalizationsRu extends AppLocalizations {
       'Импорт базы данных из файла';
 
   @override
+  String get setting_label_crashLogs => 'Журналы сбоев';
+
+  @override
+  String get setting_database_exportCrashLogs => 'Экспорт журнала сбоев';
+
+  @override
+  String get setting_database_exportCrashLogsDescription =>
+      'Экспорт журналов сбоев в json файл';
+
+  @override
+  String get setting_database_viewLogs => 'Открыть журнал';
+
+  @override
+  String get setting_database_viewLogsDescription =>
+      'Просмотреть сохраненные журналы сбоев';
+
+  @override
+  String get setting_database_clearLogs => 'Очистить логи';
+
+  @override
+  String get setting_database_clearLogsDescription =>
+      'Удалить все логи из базы данных';
+
+  @override
   String get setting_about_navTitle => 'О нас';
 
   @override
@@ -175,7 +199,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get setting_about_emal => 'Напишите нам';
 
   @override
-  String get setting_about_emailDescription => '#';
+  String get setting_about_emailDescription => 'n5ew3j1u@anonaddy.com';
 
   @override
   String get setting_label_support => 'Поддержать разработку';
@@ -187,7 +211,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get setting_about_githubSponsorDescription => 'Ежемесячная поддержка';
 
   @override
-  String get setting_about_buyMeCoffee => 'Buy me a coffee';
+  String get setting_about_buyMeCoffee => 'Купить мне кофе';
 
   @override
   String get setting_about_buyMeCoffeeDescription =>

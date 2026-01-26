@@ -59,8 +59,9 @@ enum AppColorSchemeEnum {
 /// for additional languages in the future.
 enum AppLanguageEnum {
   english(name: "English", code: "en"),
-  hindi(name: "Hindi", code: "hi"),
-  russian(name: "Русский", code: "ru");
+  hindi(name: "हिन्दी", code: "hi"),
+  russian(name: "Русский", code: "ru"),
+  french(name: "Français", code: "fr");
 
   const AppLanguageEnum({required this.name, required this.code});
 

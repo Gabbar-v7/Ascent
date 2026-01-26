@@ -138,6 +138,30 @@ class AppLocalizationsHi extends AppLocalizations {
       'डेटाबेस को किसी फ़ाइल में निर्यात करना';
 
   @override
+  String get setting_label_crashLogs => 'क्रैश लॉग';
+
+  @override
+  String get setting_database_exportCrashLogs => 'क्रैश लॉग निर्यात करें';
+
+  @override
+  String get setting_database_exportCrashLogsDescription =>
+      'क्रैश लॉग को json फ़ाइल में निर्यात करें';
+
+  @override
+  String get setting_database_viewLogs => 'लॉग देखें';
+
+  @override
+  String get setting_database_viewLogsDescription =>
+      'संग्रहीत क्रैश लॉग का अन्वेषण करें';
+
+  @override
+  String get setting_database_clearLogs => 'लॉग साफ़ करें';
+
+  @override
+  String get setting_database_clearLogsDescription =>
+      'डेटाबेस से सभी क्रैश लॉग हटाएं';
+
+  @override
   String get setting_about_navTitle => 'जानकारी';
 
   @override
@@ -174,7 +198,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get setting_about_emal => 'हमें ईमेल करें';
 
   @override
-  String get setting_about_emailDescription => '#';
+  String get setting_about_emailDescription => 'n5ew3j1u@anonaddy.com';
 
   @override
   String get setting_label_support => 'ऐप विकास मे सहयोग करें';
@@ -186,7 +210,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get setting_about_githubSponsorDescription => 'मासिक सहायता';
 
   @override
-  String get setting_about_buyMeCoffee => 'डेवलपर को सहयोग करें';
+  String get setting_about_buyMeCoffee => 'एक कॉफी खरीदो';
 
   @override
   String get setting_about_buyMeCoffeeDescription => 'एकमुश्त सहायता';

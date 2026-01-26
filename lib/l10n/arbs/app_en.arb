@@ -177,7 +177,35 @@
     "@setting_database_exportDescription": {
         "description": "Description for export database feature"
     },
-
+    "setting_label_crashLogs": "Crash logs",
+    "@setting_label_crashLogs": {
+        "description": "Section label for crash logs settings"
+    },
+    "setting_database_exportCrashLogs": "Export crash logs",
+    "@setting_database_exportCrashLogs": {
+        "description": "Label for export crash logs option"
+    },
+    "setting_database_exportCrashLogsDescription": "Export crash logs to a json file",
+    "@setting_database_exportCrashLogsDescription": {
+        "description": "Description for export crash logs feature"
+    },
+    "setting_database_viewLogs": "View Logs",
+    "@setting_database_viewLogs": {
+        "description": "Label for view logs option"
+    },
+    "setting_database_viewLogsDescription": "Explore stored crash logs",
+    "@setting_database_viewLogsDescription": {
+        "description": "Description for view logs feature"
+    },
+    "setting_database_clearLogs": "Clear logs",
+    "@setting_database_clearLogs": {
+        "description": "Label for clear logs option"
+    },
+    "setting_database_clearLogsDescription": "Delete all crash logs from database",
+    "@setting_database_clearLogsDescription": {
+        "description": "Description for clear logs feature"
+    },
+    
     "setting_about_navTitle": "About",
     "@setting_about_navTitle": {
         "description": "Navigation label for About page"
@@ -227,7 +255,7 @@
     "@setting_about_emal": {
         "description": "Label for email contact option"
     },
-    "setting_about_emailDescription": "#",
+    "setting_about_emailDescription": "n5ew3j1u@anonaddy.com",
     "@setting_about_emailDescription": {
         "description": "Description for email contact option"
     },
@@ -243,7 +271,7 @@
     "@setting_about_githubSponsorDescription": {
         "description": "Description for GitHub Sponsor feature"
     },
-    "setting_about_buyMeCoffee": "Buy me a coffee",
+    "setting_about_buyMeCoffee": "Buy Me a Coffee",
     "@setting_about_buyMeCoffee": {
         "description": "Label for Buy Me a Coffee option"
     },

@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
+import 'app_localizations_fr.dart';
 import 'app_localizations_hi.dart';
 import 'app_localizations_ru.dart';
 
@@ -96,6 +97,7 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
+    Locale('fr'),
     Locale('hi'),
     Locale('ru'),
   ];
@@ -352,6 +354,48 @@ abstract class AppLocalizations {
   /// **'Export database to a file'**
   String get setting_database_exportDescription;
 
+  /// Section label for crash logs settings
+  ///
+  /// In en, this message translates to:
+  /// **'Crash logs'**
+  String get setting_label_crashLogs;
+
+  /// Label for export crash logs option
+  ///
+  /// In en, this message translates to:
+  /// **'Export crash logs'**
+  String get setting_database_exportCrashLogs;
+
+  /// Description for export crash logs feature
+  ///
+  /// In en, this message translates to:
+  /// **'Export crash logs to a json file'**
+  String get setting_database_exportCrashLogsDescription;
+
+  /// Label for view logs option
+  ///
+  /// In en, this message translates to:
+  /// **'View Logs'**
+  String get setting_database_viewLogs;
+
+  /// Description for view logs feature
+  ///
+  /// In en, this message translates to:
+  /// **'Explore stored crash logs'**
+  String get setting_database_viewLogsDescription;
+
+  /// Label for clear logs option
+  ///
+  /// In en, this message translates to:
+  /// **'Clear logs'**
+  String get setting_database_clearLogs;
+
+  /// Description for clear logs feature
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all crash logs from database'**
+  String get setting_database_clearLogsDescription;
+
   /// Navigation label for About page
   ///
   /// In en, this message translates to:
@@ -427,7 +471,7 @@ abstract class AppLocalizations {
   /// Description for email contact option
   ///
   /// In en, this message translates to:
-  /// **'#'**
+  /// **'n5ew3j1u@anonaddy.com'**
   String get setting_about_emailDescription;
 
   /// Section label for support options
@@ -451,7 +495,7 @@ abstract class AppLocalizations {
   /// Label for Buy Me a Coffee option
   ///
   /// In en, this message translates to:
-  /// **'Buy me a coffee'**
+  /// **'Buy Me a Coffee'**
   String get setting_about_buyMeCoffee;
 
   /// Description for Buy Me a Coffee feature
@@ -484,7 +528,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'hi', 'ru'].contains(locale.languageCode);
+      <String>['en', 'fr', 'hi', 'ru'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -495,6 +539,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'en':
       return AppLocalizationsEn();
+    case 'fr':
+      return AppLocalizationsFr();
     case 'hi':
       return AppLocalizationsHi();
     case 'ru':

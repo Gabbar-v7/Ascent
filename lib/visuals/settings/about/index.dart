@@ -93,12 +93,17 @@ class _AboutIndexState extends State<AboutIndex> {
           )!.setting_about_emailDescription,
           leading: Icon(Icons.mail_outline, size: 28),
           trailing: Icon(Icons.keyboard_arrow_right_outlined, size: 32),
-          onTap: () =>
-              launchUrlString("#", mode: LaunchMode.externalApplication),
+          onTap: () => launchUrlString(
+            "mailto:n5ew3j1u@anonaddy.com",
+            mode: LaunchMode.externalApplication,
+          ),
         ),
 
         GapEnum.section.gap,
-        buildSectionHeader("Support Development", theme),
+        buildSectionHeader(
+          AppLocalizations.of(context)!.setting_label_support,
+          theme,
+        ),
         GapEnum.sectionHeader.gap,
         PositionedButton(
           title: AppLocalizations.of(context)!.setting_about_githubSponsor,
@@ -123,7 +128,7 @@ class _AboutIndexState extends State<AboutIndex> {
           trailing: const Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           position: ItemPosition.mid,
           onTap: () => launchUrlString(
-            'https://buymeacoffee.com/gabbar_v7',
+            "https://buymeacoffee.com/gabbar_v7",
             mode: LaunchMode.externalApplication,
           ),
         ),

@@ -20,9 +20,51 @@ class _DatabaseIndexState extends State<DatabaseIndex> {
     return ListView(
       children: <Widget>[
         GapEnum.section.gap,
-        buildSectionHeader("Database", theme),
+        buildSectionHeader(
+          AppLocalizations.of(context)!.setting_label_database,
+          theme,
+        ),
         GapEnum.sectionHeader.gap,
         _buildDatabaseSection(),
+
+        GapEnum.section.gap,
+        buildSectionHeader(
+          AppLocalizations.of(context)!.setting_label_crashLogs,
+          theme,
+        ),
+        GapEnum.sectionHeader.gap,
+        PositionedButton(
+          title: AppLocalizations.of(context)!.setting_database_exportCrashLogs,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.setting_database_exportCrashLogsDescription,
+          leading: Icon(Icons.file_upload_outlined, size: 28),
+          trailing: const Icon(Icons.keyboard_arrow_right_outlined, size: 32),
+          position: ItemPosition.top,
+          onTap: () {},
+        ),
+        GapEnum.sectionContent.gap,
+        PositionedButton(
+          title: AppLocalizations.of(context)!.setting_database_viewLogs,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.setting_database_viewLogsDescription,
+          leading: Icon(Icons.description_outlined, size: 28),
+          trailing: const Icon(Icons.keyboard_arrow_right_outlined, size: 32),
+          position: ItemPosition.mid,
+          onTap: () {},
+        ),
+        GapEnum.sectionContent.gap,
+        PositionedButton(
+          title: AppLocalizations.of(context)!.setting_database_clearLogs,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.setting_database_clearLogsDescription,
+          leading: Icon(Icons.delete_sweep_outlined, size: 28),
+          trailing: const Icon(Icons.keyboard_arrow_right_outlined, size: 32),
+          position: ItemPosition.bottom,
+          onTap: () {},
+        ),
       ],
     );
   }

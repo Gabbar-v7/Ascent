@@ -21,11 +21,10 @@ class _TimerIndexState extends State<TimerIndex> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Gap(42),
         modeLabel(AppLocalizations.of(context)!.timer_label_focus),
-        const Gap(32),
+        const Gap(42),
         animatedCounter(),
-        const Gap(48),
+        const Gap(78),
         controlButtons(),
       ],
     );
@@ -50,7 +49,7 @@ class _TimerIndexState extends State<TimerIndex> {
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 18),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
             color: Theme.of(context).colorScheme.surface,
           ),
         ),
@@ -59,7 +58,9 @@ class _TimerIndexState extends State<TimerIndex> {
   }
 
   Widget animatedCounter() {
-    final counterStyle = Theme.of(context).textTheme.displayMedium;
+    final counterStyle = Theme.of(
+      context,
+    ).textTheme.displayLarge!.copyWith(fontWeight: FontWeight.bold);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -71,8 +72,8 @@ class _TimerIndexState extends State<TimerIndex> {
   }
 
   Widget controlButtons() {
-    const secondaryIconSize = 22.0;
-    const primaryIconSize = 42.0;
+    const secondaryIconSize = 42.0;
+    const primaryIconSize = 62.0;
     final secondaryBoxDecoration = BoxDecoration(
       color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
       shape: BoxShape.circle,
@@ -91,7 +92,7 @@ class _TimerIndexState extends State<TimerIndex> {
           decoration: secondaryBoxDecoration,
           child: IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh_rounded),
             iconSize: secondaryIconSize,
           ),
         ),
@@ -108,7 +109,7 @@ class _TimerIndexState extends State<TimerIndex> {
           decoration: secondaryBoxDecoration,
           child: IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.skip_next),
+            icon: const Icon(Icons.skip_next_rounded),
             iconSize: secondaryIconSize,
           ),
         ),

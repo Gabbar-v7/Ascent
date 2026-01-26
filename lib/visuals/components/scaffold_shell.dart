@@ -7,6 +7,7 @@ class NavigationItem {
   final String navBarTitle;
   final String appBarTitle;
   final Widget body;
+  final FloatingActionButton? floatingActionButton;
   final List<Widget>? actions;
 
   const NavigationItem({
@@ -14,6 +15,7 @@ class NavigationItem {
     required this.navBarTitle,
     required this.appBarTitle,
     required this.body,
+    this.floatingActionButton,
     this.actions,
   });
 }
@@ -109,6 +111,7 @@ class _ScaffoldShellState extends State<ScaffoldShell> {
         onPageChanged: _onPageChanged,
         children: _pageList,
       ),
+      floatingActionButton: widget.pages[_pageIndex].floatingActionButton,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _pageIndex,
         onDestinationSelected: _onDestinationSelected,

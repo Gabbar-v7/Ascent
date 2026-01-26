@@ -20,6 +20,7 @@ dependencies:
 
   # UI & Widgets
   gap: ^3.0.1
+  flutter_confetti: ^0.5.1
   animated_flip_counter: ^0.3.4
 
   # Database/Storage

@@ -1,9 +1,10 @@
+import 'package:ascent/database/tables/routines_table.dart';
 import 'package:drift/drift.dart';
 import 'package:ascent/database/tables/tasks_table.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [Tasks])
+@DriftDatabase(tables: [Tasks, Routines])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 

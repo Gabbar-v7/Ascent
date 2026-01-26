@@ -137,6 +137,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setting_database_exportDescription => 'Export database to a file';
 
   @override
+  String get setting_label_crashLogs => 'Crash logs';
+
+  @override
+  String get setting_database_exportCrashLogs => 'Export crash logs';
+
+  @override
+  String get setting_database_exportCrashLogsDescription =>
+      'Export crash logs to a json file';
+
+  @override
+  String get setting_database_viewLogs => 'View Logs';
+
+  @override
+  String get setting_database_viewLogsDescription =>
+      'Explore stored crash logs';
+
+  @override
+  String get setting_database_clearLogs => 'Clear logs';
+
+  @override
+  String get setting_database_clearLogsDescription =>
+      'Delete all crash logs from database';
+
+  @override
   String get setting_about_navTitle => 'About';
 
   @override
@@ -173,7 +197,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setting_about_emal => 'Email us';
 
   @override
-  String get setting_about_emailDescription => '#';
+  String get setting_about_emailDescription => 'n5ew3j1u@anonaddy.com';
 
   @override
   String get setting_label_support => 'Support Development';
@@ -185,7 +209,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setting_about_githubSponsorDescription => 'Monthly Support';
 
   @override
-  String get setting_about_buyMeCoffee => 'Buy me a coffee';
+  String get setting_about_buyMeCoffee => 'Buy Me a Coffee';
 
   @override
   String get setting_about_buyMeCoffeeDescription => 'One-time donation';
