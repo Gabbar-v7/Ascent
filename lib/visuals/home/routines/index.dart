@@ -366,6 +366,7 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                   ],
                 ),
               ),
+              Gap(MediaQuery.of(context).viewInsets.bottom),
             ],
           ),
         ),

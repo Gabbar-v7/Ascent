@@ -1,9 +1,16 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:ascent/l10n/generated/app_localizations.dart';
+import 'package:ascent/services/drift_service.dart';
+import 'package:ascent/utils/drift_utils.dart';
 import 'package:ascent/visuals/components/utils/gap_utils.dart';
 import 'package:ascent/visuals/components/utils/item_position.dart';
 import 'package:ascent/visuals/components/widgets/positioned_button.dart';
 import 'package:ascent/visuals/settings/components.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DatabaseIndex extends StatefulWidget {
   const DatabaseIndex({super.key});
@@ -14,6 +21,8 @@ class DatabaseIndex extends StatefulWidget {
 
 class _DatabaseIndexState extends State<DatabaseIndex> {
   late final ThemeData theme = Theme.of(context);
+  bool _isImporting = false;
+  bool _isExporting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +87,12 @@ class _DatabaseIndexState extends State<DatabaseIndex> {
             context,
           )!.setting_database_importDescription,
           leading: Icon(Icons.file_download_outlined, size: 28),
-          trailing: Icon(Icons.keyboard_arrow_right_outlined, size: 32),
+          trailing: _isImporting
+              ? CircularProgressIndicator(
+                  constraints: BoxConstraints(maxHeight: 32, maxWidth: 32),
+                  strokeWidth: 2,
+                )
+              : Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           position: ItemPosition.top,
           onTap: _importDatabase,
         ),
@@ -89,7 +103,12 @@ class _DatabaseIndexState extends State<DatabaseIndex> {
             context,
           )!.setting_database_exportDescription,
           leading: Icon(Icons.file_upload_outlined, size: 28),
-          trailing: Icon(Icons.keyboard_arrow_right_outlined, size: 32),
+          trailing: _isExporting
+              ? CircularProgressIndicator(
+                  constraints: BoxConstraints(maxHeight: 32, maxWidth: 32),
+                  strokeWidth: 2,
+                )
+              : Icon(Icons.keyboard_arrow_right_outlined, size: 32),
           position: ItemPosition.bottom,
           onTap: _exportDatabase,
         ),
@@ -97,7 +116,82 @@ class _DatabaseIndexState extends State<DatabaseIndex> {
     );
   }
 
-  void _importDatabase() {}
+  void _importDatabase() async {
+    try {
+      setState(() => _isImporting = true);
 
-  void _exportDatabase() {}
+      /// Original DB file
+      final originalDbFile = File(await getDatabasePath());
+      final result = await FilePicker.platform.pickFiles(
+        compressionQuality: 0,
+        type: FileType.custom,
+        allowedExtensions: ['bak'],
+      );
+
+      if (result == null ||
+          result.count < 1 ||
+          result.files.first.extension != 'bak') {
+        throw Exception('Either selected file is null or invalid extension');
+      }
+
+      /// Backup DB file
+      final backupFile = File(result.files.first.xFile.path);
+
+      if (await backupFile.exists()) {
+        /// dispose, clean, copy
+        await DriftService.instance.driftDB.close();
+        await originalDbFile.delete();
+        await backupFile.copy(originalDbFile.path);
+
+        /// Restart app
+        await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      } else {
+        throw Exception('Backup file does not exist');
+      }
+    } catch (e) {
+      debugPrint("Error occurred while importing database: $e");
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error importing database: $e")));
+    } finally {
+      if (mounted) {
+        setState(() => _isImporting = false);
+      }
+    }
+  }
+
+  void _exportDatabase() async {
+    try {
+      setState(() => _isExporting = true);
+
+      final dbFile = File(await getDatabasePath());
+      if (!await dbFile.exists()) {
+        throw Exception('Database file not found at ${dbFile.path}');
+      }
+
+      final dbFileBytes = await dbFile.readAsBytes();
+
+      final resultPath = await FilePicker.platform.saveFile(
+        fileName: "Ascent (1).bak",
+        bytes: Uint8List.fromList(dbFileBytes),
+        type: FileType.custom,
+        allowedExtensions: ['bak'],
+      );
+
+      if (resultPath == null) {
+        throw Exception('User aborted the exporting operation');
+      }
+    } catch (e) {
+      debugPrint("Error occurred while exporting database: $e");
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error exporting database: $e")));
+    } finally {
+      if (mounted) {
+        setState(() => _isExporting = false);
+      }
+    }
+  }
 }
