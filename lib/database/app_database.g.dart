@@ -434,30 +434,44 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
-  @override
-  late final GeneratedColumn<String> body = GeneratedColumn<String>(
-    'body',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _frequencyMeta = const VerificationMeta(
-    'frequency',
+  static const VerificationMeta _repeatDaysMaskMeta = const VerificationMeta(
+    'repeatDaysMask',
   );
   @override
-  late final GeneratedColumn<int> frequency = GeneratedColumn<int>(
-    'frequency',
+  late final GeneratedColumn<int> repeatDaysMask = GeneratedColumn<int>(
+    'repeat_days_mask',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _streakMeta = const VerificationMeta('streak');
+  static const VerificationMeta _targetCountMeta = const VerificationMeta(
+    'targetCount',
+  );
   @override
-  late final GeneratedColumn<int> streak = GeneratedColumn<int>(
-    'streak',
+  late final GeneratedColumn<int> targetCount = GeneratedColumn<int>(
+    'target_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _notifyAtOffsetMeta = const VerificationMeta(
+    'notifyAtOffset',
+  );
+  @override
+  late final GeneratedColumn<int> notifyAtOffset = GeneratedColumn<int>(
+    'notify_at_offset',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _reminderOffsetMinutesMeta =
+      const VerificationMeta('reminderOffsetMinutes');
+  @override
+  late final GeneratedColumn<int> reminderOffsetMinutes = GeneratedColumn<int>(
+    'reminder_offset_minutes',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -476,14 +490,31 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
       'CHECK ("notify" IN (0, 1))',
     ),
   );
+  static const VerificationMeta _isArchivedMeta = const VerificationMeta(
+    'isArchived',
+  );
+  @override
+  late final GeneratedColumn<bool> isArchived = GeneratedColumn<bool>(
+    'is_archived',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_archived" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
     title,
-    body,
-    frequency,
-    streak,
+    repeatDaysMask,
+    targetCount,
+    notifyAtOffset,
+    reminderOffsetMinutes,
     notify,
+    isArchived,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -508,30 +539,58 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
-    if (data.containsKey('body')) {
+    if (data.containsKey('repeat_days_mask')) {
       context.handle(
-        _bodyMeta,
-        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
-      );
-    }
-    if (data.containsKey('frequency')) {
-      context.handle(
-        _frequencyMeta,
-        frequency.isAcceptableOrUnknown(data['frequency']!, _frequencyMeta),
+        _repeatDaysMaskMeta,
+        repeatDaysMask.isAcceptableOrUnknown(
+          data['repeat_days_mask']!,
+          _repeatDaysMaskMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_frequencyMeta);
+      context.missing(_repeatDaysMaskMeta);
     }
-    if (data.containsKey('streak')) {
+    if (data.containsKey('target_count')) {
       context.handle(
-        _streakMeta,
-        streak.isAcceptableOrUnknown(data['streak']!, _streakMeta),
+        _targetCountMeta,
+        targetCount.isAcceptableOrUnknown(
+          data['target_count']!,
+          _targetCountMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_targetCountMeta);
+    }
+    if (data.containsKey('notify_at_offset')) {
+      context.handle(
+        _notifyAtOffsetMeta,
+        notifyAtOffset.isAcceptableOrUnknown(
+          data['notify_at_offset']!,
+          _notifyAtOffsetMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_notifyAtOffsetMeta);
+    }
+    if (data.containsKey('reminder_offset_minutes')) {
+      context.handle(
+        _reminderOffsetMinutesMeta,
+        reminderOffsetMinutes.isAcceptableOrUnknown(
+          data['reminder_offset_minutes']!,
+          _reminderOffsetMinutesMeta,
+        ),
       );
     }
     if (data.containsKey('notify')) {
       context.handle(
         _notifyMeta,
         notify.isAcceptableOrUnknown(data['notify']!, _notifyMeta),
+      );
+    }
+    if (data.containsKey('is_archived')) {
+      context.handle(
+        _isArchivedMeta,
+        isArchived.isAcceptableOrUnknown(data['is_archived']!, _isArchivedMeta),
       );
     }
     return context;
@@ -551,22 +610,30 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
         DriftSqlType.string,
         data['${effectivePrefix}title'],
       )!,
-      body: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}body'],
-      ),
-      frequency: attachedDatabase.typeMapping.read(
+      repeatDaysMask: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}frequency'],
+        data['${effectivePrefix}repeat_days_mask'],
       )!,
-      streak: attachedDatabase.typeMapping.read(
+      targetCount: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}streak'],
+        data['${effectivePrefix}target_count'],
+      )!,
+      notifyAtOffset: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}notify_at_offset'],
+      )!,
+      reminderOffsetMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}reminder_offset_minutes'],
       )!,
       notify: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}notify'],
       ),
+      isArchived: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_archived'],
+      )!,
     );
   }
 
@@ -579,31 +646,35 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
 class Routine extends DataClass implements Insertable<Routine> {
   final int id;
   final String title;
-  final String? body;
-  final int frequency;
-  final int streak;
+  final int repeatDaysMask;
+  final int targetCount;
+  final int notifyAtOffset;
+  final int reminderOffsetMinutes;
   final bool? notify;
+  final bool isArchived;
   const Routine({
     required this.id,
     required this.title,
-    this.body,
-    required this.frequency,
-    required this.streak,
+    required this.repeatDaysMask,
+    required this.targetCount,
+    required this.notifyAtOffset,
+    required this.reminderOffsetMinutes,
     this.notify,
+    required this.isArchived,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['title'] = Variable<String>(title);
-    if (!nullToAbsent || body != null) {
-      map['body'] = Variable<String>(body);
-    }
-    map['frequency'] = Variable<int>(frequency);
-    map['streak'] = Variable<int>(streak);
+    map['repeat_days_mask'] = Variable<int>(repeatDaysMask);
+    map['target_count'] = Variable<int>(targetCount);
+    map['notify_at_offset'] = Variable<int>(notifyAtOffset);
+    map['reminder_offset_minutes'] = Variable<int>(reminderOffsetMinutes);
     if (!nullToAbsent || notify != null) {
       map['notify'] = Variable<bool>(notify);
     }
+    map['is_archived'] = Variable<bool>(isArchived);
     return map;
   }
 
@@ -611,12 +682,14 @@ class Routine extends DataClass implements Insertable<Routine> {
     return RoutinesCompanion(
       id: Value(id),
       title: Value(title),
-      body: body == null && nullToAbsent ? const Value.absent() : Value(body),
-      frequency: Value(frequency),
-      streak: Value(streak),
+      repeatDaysMask: Value(repeatDaysMask),
+      targetCount: Value(targetCount),
+      notifyAtOffset: Value(notifyAtOffset),
+      reminderOffsetMinutes: Value(reminderOffsetMinutes),
       notify: notify == null && nullToAbsent
           ? const Value.absent()
           : Value(notify),
+      isArchived: Value(isArchived),
     );
   }
 
@@ -628,10 +701,14 @@ class Routine extends DataClass implements Insertable<Routine> {
     return Routine(
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
-      body: serializer.fromJson<String?>(json['body']),
-      frequency: serializer.fromJson<int>(json['frequency']),
-      streak: serializer.fromJson<int>(json['streak']),
+      repeatDaysMask: serializer.fromJson<int>(json['repeatDaysMask']),
+      targetCount: serializer.fromJson<int>(json['targetCount']),
+      notifyAtOffset: serializer.fromJson<int>(json['notifyAtOffset']),
+      reminderOffsetMinutes: serializer.fromJson<int>(
+        json['reminderOffsetMinutes'],
+      ),
       notify: serializer.fromJson<bool?>(json['notify']),
+      isArchived: serializer.fromJson<bool>(json['isArchived']),
     );
   }
   @override
@@ -640,36 +717,54 @@ class Routine extends DataClass implements Insertable<Routine> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
-      'body': serializer.toJson<String?>(body),
-      'frequency': serializer.toJson<int>(frequency),
-      'streak': serializer.toJson<int>(streak),
+      'repeatDaysMask': serializer.toJson<int>(repeatDaysMask),
+      'targetCount': serializer.toJson<int>(targetCount),
+      'notifyAtOffset': serializer.toJson<int>(notifyAtOffset),
+      'reminderOffsetMinutes': serializer.toJson<int>(reminderOffsetMinutes),
       'notify': serializer.toJson<bool?>(notify),
+      'isArchived': serializer.toJson<bool>(isArchived),
     };
   }
 
   Routine copyWith({
     int? id,
     String? title,
-    Value<String?> body = const Value.absent(),
-    int? frequency,
-    int? streak,
+    int? repeatDaysMask,
+    int? targetCount,
+    int? notifyAtOffset,
+    int? reminderOffsetMinutes,
     Value<bool?> notify = const Value.absent(),
+    bool? isArchived,
   }) => Routine(
     id: id ?? this.id,
     title: title ?? this.title,
-    body: body.present ? body.value : this.body,
-    frequency: frequency ?? this.frequency,
-    streak: streak ?? this.streak,
+    repeatDaysMask: repeatDaysMask ?? this.repeatDaysMask,
+    targetCount: targetCount ?? this.targetCount,
+    notifyAtOffset: notifyAtOffset ?? this.notifyAtOffset,
+    reminderOffsetMinutes: reminderOffsetMinutes ?? this.reminderOffsetMinutes,
     notify: notify.present ? notify.value : this.notify,
+    isArchived: isArchived ?? this.isArchived,
   );
   Routine copyWithCompanion(RoutinesCompanion data) {
     return Routine(
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
-      body: data.body.present ? data.body.value : this.body,
-      frequency: data.frequency.present ? data.frequency.value : this.frequency,
-      streak: data.streak.present ? data.streak.value : this.streak,
+      repeatDaysMask: data.repeatDaysMask.present
+          ? data.repeatDaysMask.value
+          : this.repeatDaysMask,
+      targetCount: data.targetCount.present
+          ? data.targetCount.value
+          : this.targetCount,
+      notifyAtOffset: data.notifyAtOffset.present
+          ? data.notifyAtOffset.value
+          : this.notifyAtOffset,
+      reminderOffsetMinutes: data.reminderOffsetMinutes.present
+          ? data.reminderOffsetMinutes.value
+          : this.reminderOffsetMinutes,
       notify: data.notify.present ? data.notify.value : this.notify,
+      isArchived: data.isArchived.present
+          ? data.isArchived.value
+          : this.isArchived,
     );
   }
 
@@ -678,87 +773,116 @@ class Routine extends DataClass implements Insertable<Routine> {
     return (StringBuffer('Routine(')
           ..write('id: $id, ')
           ..write('title: $title, ')
-          ..write('body: $body, ')
-          ..write('frequency: $frequency, ')
-          ..write('streak: $streak, ')
-          ..write('notify: $notify')
+          ..write('repeatDaysMask: $repeatDaysMask, ')
+          ..write('targetCount: $targetCount, ')
+          ..write('notifyAtOffset: $notifyAtOffset, ')
+          ..write('reminderOffsetMinutes: $reminderOffsetMinutes, ')
+          ..write('notify: $notify, ')
+          ..write('isArchived: $isArchived')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, body, frequency, streak, notify);
-
-  get selectedDays => null;
+  int get hashCode => Object.hash(
+    id,
+    title,
+    repeatDaysMask,
+    targetCount,
+    notifyAtOffset,
+    reminderOffsetMinutes,
+    notify,
+    isArchived,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Routine &&
           other.id == this.id &&
           other.title == this.title &&
-          other.body == this.body &&
-          other.frequency == this.frequency &&
-          other.streak == this.streak &&
-          other.notify == this.notify);
+          other.repeatDaysMask == this.repeatDaysMask &&
+          other.targetCount == this.targetCount &&
+          other.notifyAtOffset == this.notifyAtOffset &&
+          other.reminderOffsetMinutes == this.reminderOffsetMinutes &&
+          other.notify == this.notify &&
+          other.isArchived == this.isArchived);
 }
 
 class RoutinesCompanion extends UpdateCompanion<Routine> {
   final Value<int> id;
   final Value<String> title;
-  final Value<String?> body;
-  final Value<int> frequency;
-  final Value<int> streak;
+  final Value<int> repeatDaysMask;
+  final Value<int> targetCount;
+  final Value<int> notifyAtOffset;
+  final Value<int> reminderOffsetMinutes;
   final Value<bool?> notify;
+  final Value<bool> isArchived;
   const RoutinesCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
-    this.body = const Value.absent(),
-    this.frequency = const Value.absent(),
-    this.streak = const Value.absent(),
+    this.repeatDaysMask = const Value.absent(),
+    this.targetCount = const Value.absent(),
+    this.notifyAtOffset = const Value.absent(),
+    this.reminderOffsetMinutes = const Value.absent(),
     this.notify = const Value.absent(),
+    this.isArchived = const Value.absent(),
   });
   RoutinesCompanion.insert({
     this.id = const Value.absent(),
     required String title,
-    this.body = const Value.absent(),
-    required int frequency,
-    this.streak = const Value.absent(),
+    required int repeatDaysMask,
+    required int targetCount,
+    required int notifyAtOffset,
+    this.reminderOffsetMinutes = const Value.absent(),
     this.notify = const Value.absent(),
+    this.isArchived = const Value.absent(),
   }) : title = Value(title),
-       frequency = Value(frequency);
+       repeatDaysMask = Value(repeatDaysMask),
+       targetCount = Value(targetCount),
+       notifyAtOffset = Value(notifyAtOffset);
   static Insertable<Routine> custom({
     Expression<int>? id,
     Expression<String>? title,
-    Expression<String>? body,
-    Expression<int>? frequency,
-    Expression<int>? streak,
+    Expression<int>? repeatDaysMask,
+    Expression<int>? targetCount,
+    Expression<int>? notifyAtOffset,
+    Expression<int>? reminderOffsetMinutes,
     Expression<bool>? notify,
+    Expression<bool>? isArchived,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (title != null) 'title': title,
-      if (body != null) 'body': body,
-      if (frequency != null) 'frequency': frequency,
-      if (streak != null) 'streak': streak,
+      if (repeatDaysMask != null) 'repeat_days_mask': repeatDaysMask,
+      if (targetCount != null) 'target_count': targetCount,
+      if (notifyAtOffset != null) 'notify_at_offset': notifyAtOffset,
+      if (reminderOffsetMinutes != null)
+        'reminder_offset_minutes': reminderOffsetMinutes,
       if (notify != null) 'notify': notify,
+      if (isArchived != null) 'is_archived': isArchived,
     });
   }
 
   RoutinesCompanion copyWith({
     Value<int>? id,
     Value<String>? title,
-    Value<String?>? body,
-    Value<int>? frequency,
-    Value<int>? streak,
+    Value<int>? repeatDaysMask,
+    Value<int>? targetCount,
+    Value<int>? notifyAtOffset,
+    Value<int>? reminderOffsetMinutes,
     Value<bool?>? notify,
+    Value<bool>? isArchived,
   }) {
     return RoutinesCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
-      body: body ?? this.body,
-      frequency: frequency ?? this.frequency,
-      streak: streak ?? this.streak,
+      repeatDaysMask: repeatDaysMask ?? this.repeatDaysMask,
+      targetCount: targetCount ?? this.targetCount,
+      notifyAtOffset: notifyAtOffset ?? this.notifyAtOffset,
+      reminderOffsetMinutes:
+          reminderOffsetMinutes ?? this.reminderOffsetMinutes,
       notify: notify ?? this.notify,
+      isArchived: isArchived ?? this.isArchived,
     );
   }
 
@@ -771,17 +895,25 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     if (title.present) {
       map['title'] = Variable<String>(title.value);
     }
-    if (body.present) {
-      map['body'] = Variable<String>(body.value);
+    if (repeatDaysMask.present) {
+      map['repeat_days_mask'] = Variable<int>(repeatDaysMask.value);
     }
-    if (frequency.present) {
-      map['frequency'] = Variable<int>(frequency.value);
+    if (targetCount.present) {
+      map['target_count'] = Variable<int>(targetCount.value);
     }
-    if (streak.present) {
-      map['streak'] = Variable<int>(streak.value);
+    if (notifyAtOffset.present) {
+      map['notify_at_offset'] = Variable<int>(notifyAtOffset.value);
+    }
+    if (reminderOffsetMinutes.present) {
+      map['reminder_offset_minutes'] = Variable<int>(
+        reminderOffsetMinutes.value,
+      );
     }
     if (notify.present) {
       map['notify'] = Variable<bool>(notify.value);
+    }
+    if (isArchived.present) {
+      map['is_archived'] = Variable<bool>(isArchived.value);
     }
     return map;
   }
@@ -791,10 +923,12 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     return (StringBuffer('RoutinesCompanion(')
           ..write('id: $id, ')
           ..write('title: $title, ')
-          ..write('body: $body, ')
-          ..write('frequency: $frequency, ')
-          ..write('streak: $streak, ')
-          ..write('notify: $notify')
+          ..write('repeatDaysMask: $repeatDaysMask, ')
+          ..write('targetCount: $targetCount, ')
+          ..write('notifyAtOffset: $notifyAtOffset, ')
+          ..write('reminderOffsetMinutes: $reminderOffsetMinutes, ')
+          ..write('notify: $notify, ')
+          ..write('isArchived: $isArchived')
           ..write(')'))
         .toString();
   }
@@ -1024,19 +1158,23 @@ typedef $$RoutinesTableCreateCompanionBuilder =
     RoutinesCompanion Function({
       Value<int> id,
       required String title,
-      Value<String?> body,
-      required int frequency,
-      Value<int> streak,
+      required int repeatDaysMask,
+      required int targetCount,
+      required int notifyAtOffset,
+      Value<int> reminderOffsetMinutes,
       Value<bool?> notify,
+      Value<bool> isArchived,
     });
 typedef $$RoutinesTableUpdateCompanionBuilder =
     RoutinesCompanion Function({
       Value<int> id,
       Value<String> title,
-      Value<String?> body,
-      Value<int> frequency,
-      Value<int> streak,
+      Value<int> repeatDaysMask,
+      Value<int> targetCount,
+      Value<int> notifyAtOffset,
+      Value<int> reminderOffsetMinutes,
       Value<bool?> notify,
+      Value<bool> isArchived,
     });
 
 class $$RoutinesTableFilterComposer
@@ -1058,23 +1196,33 @@ class $$RoutinesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get body => $composableBuilder(
-    column: $table.body,
+  ColumnFilters<int> get repeatDaysMask => $composableBuilder(
+    column: $table.repeatDaysMask,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get frequency => $composableBuilder(
-    column: $table.frequency,
+  ColumnFilters<int> get targetCount => $composableBuilder(
+    column: $table.targetCount,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get streak => $composableBuilder(
-    column: $table.streak,
+  ColumnFilters<int> get notifyAtOffset => $composableBuilder(
+    column: $table.notifyAtOffset,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get reminderOffsetMinutes => $composableBuilder(
+    column: $table.reminderOffsetMinutes,
     builder: (column) => ColumnFilters(column),
   );
 
   ColumnFilters<bool> get notify => $composableBuilder(
     column: $table.notify,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isArchived => $composableBuilder(
+    column: $table.isArchived,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1098,23 +1246,33 @@ class $$RoutinesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get body => $composableBuilder(
-    column: $table.body,
+  ColumnOrderings<int> get repeatDaysMask => $composableBuilder(
+    column: $table.repeatDaysMask,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get frequency => $composableBuilder(
-    column: $table.frequency,
+  ColumnOrderings<int> get targetCount => $composableBuilder(
+    column: $table.targetCount,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get streak => $composableBuilder(
-    column: $table.streak,
+  ColumnOrderings<int> get notifyAtOffset => $composableBuilder(
+    column: $table.notifyAtOffset,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get reminderOffsetMinutes => $composableBuilder(
+    column: $table.reminderOffsetMinutes,
     builder: (column) => ColumnOrderings(column),
   );
 
   ColumnOrderings<bool> get notify => $composableBuilder(
     column: $table.notify,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isArchived => $composableBuilder(
+    column: $table.isArchived,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -1134,17 +1292,33 @@ class $$RoutinesTableAnnotationComposer
   GeneratedColumn<String> get title =>
       $composableBuilder(column: $table.title, builder: (column) => column);
 
-  GeneratedColumn<String> get body =>
-      $composableBuilder(column: $table.body, builder: (column) => column);
+  GeneratedColumn<int> get repeatDaysMask => $composableBuilder(
+    column: $table.repeatDaysMask,
+    builder: (column) => column,
+  );
 
-  GeneratedColumn<int> get frequency =>
-      $composableBuilder(column: $table.frequency, builder: (column) => column);
+  GeneratedColumn<int> get targetCount => $composableBuilder(
+    column: $table.targetCount,
+    builder: (column) => column,
+  );
 
-  GeneratedColumn<int> get streak =>
-      $composableBuilder(column: $table.streak, builder: (column) => column);
+  GeneratedColumn<int> get notifyAtOffset => $composableBuilder(
+    column: $table.notifyAtOffset,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get reminderOffsetMinutes => $composableBuilder(
+    column: $table.reminderOffsetMinutes,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get notify =>
       $composableBuilder(column: $table.notify, builder: (column) => column);
+
+  GeneratedColumn<bool> get isArchived => $composableBuilder(
+    column: $table.isArchived,
+    builder: (column) => column,
+  );
 }
 
 class $$RoutinesTableTableManager
@@ -1177,33 +1351,41 @@ class $$RoutinesTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
-                Value<String?> body = const Value.absent(),
-                Value<int> frequency = const Value.absent(),
-                Value<int> streak = const Value.absent(),
+                Value<int> repeatDaysMask = const Value.absent(),
+                Value<int> targetCount = const Value.absent(),
+                Value<int> notifyAtOffset = const Value.absent(),
+                Value<int> reminderOffsetMinutes = const Value.absent(),
                 Value<bool?> notify = const Value.absent(),
+                Value<bool> isArchived = const Value.absent(),
               }) => RoutinesCompanion(
                 id: id,
                 title: title,
-                body: body,
-                frequency: frequency,
-                streak: streak,
+                repeatDaysMask: repeatDaysMask,
+                targetCount: targetCount,
+                notifyAtOffset: notifyAtOffset,
+                reminderOffsetMinutes: reminderOffsetMinutes,
                 notify: notify,
+                isArchived: isArchived,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 required String title,
-                Value<String?> body = const Value.absent(),
-                required int frequency,
-                Value<int> streak = const Value.absent(),
+                required int repeatDaysMask,
+                required int targetCount,
+                required int notifyAtOffset,
+                Value<int> reminderOffsetMinutes = const Value.absent(),
                 Value<bool?> notify = const Value.absent(),
+                Value<bool> isArchived = const Value.absent(),
               }) => RoutinesCompanion.insert(
                 id: id,
                 title: title,
-                body: body,
-                frequency: frequency,
-                streak: streak,
+                repeatDaysMask: repeatDaysMask,
+                targetCount: targetCount,
+                notifyAtOffset: notifyAtOffset,
+                reminderOffsetMinutes: reminderOffsetMinutes,
                 notify: notify,
+                isArchived: isArchived,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

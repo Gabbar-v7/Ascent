@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:ascent/l10n/generated/app_localizations.dart';
 import 'package:ascent/services/drift_service.dart';
