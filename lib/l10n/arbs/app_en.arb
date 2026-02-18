@@ -80,7 +80,7 @@
         "description": "Label for focus timer mode"
     },
 
-    "routine_title": "Routine",
+    "routine_title": "Routines",
     "@routine_title": {
         "description": "Title of Routine page"
     },

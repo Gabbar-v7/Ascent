@@ -219,7 +219,7 @@ abstract class AppLocalizations {
   /// Title of Routine page
   ///
   /// In en, this message translates to:
-  /// **'Routine'**
+  /// **'Routines'**
   String get routine_title;
 
   /// Navigation label for Routine

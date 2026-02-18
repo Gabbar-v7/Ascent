@@ -483,9 +483,9 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
   late final GeneratedColumn<bool> notify = GeneratedColumn<bool>(
     'notify',
     aliasedName,
-    true,
+    false,
     type: DriftSqlType.bool,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'CHECK ("notify" IN (0, 1))',
     ),
@@ -586,6 +586,8 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
         _notifyMeta,
         notify.isAcceptableOrUnknown(data['notify']!, _notifyMeta),
       );
+    } else if (isInserting) {
+      context.missing(_notifyMeta);
     }
     if (data.containsKey('is_archived')) {
       context.handle(
@@ -629,7 +631,7 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
       notify: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}notify'],
-      ),
+      )!,
       isArchived: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_archived'],
@@ -650,7 +652,7 @@ class Routine extends DataClass implements Insertable<Routine> {
   final int targetCount;
   final int notifyAtOffset;
   final int reminderOffsetMinutes;
-  final bool? notify;
+  final bool notify;
   final bool isArchived;
   const Routine({
     required this.id,
@@ -659,7 +661,7 @@ class Routine extends DataClass implements Insertable<Routine> {
     required this.targetCount,
     required this.notifyAtOffset,
     required this.reminderOffsetMinutes,
-    this.notify,
+    required this.notify,
     required this.isArchived,
   });
   @override
@@ -671,9 +673,7 @@ class Routine extends DataClass implements Insertable<Routine> {
     map['target_count'] = Variable<int>(targetCount);
     map['notify_at_offset'] = Variable<int>(notifyAtOffset);
     map['reminder_offset_minutes'] = Variable<int>(reminderOffsetMinutes);
-    if (!nullToAbsent || notify != null) {
-      map['notify'] = Variable<bool>(notify);
-    }
+    map['notify'] = Variable<bool>(notify);
     map['is_archived'] = Variable<bool>(isArchived);
     return map;
   }
@@ -686,9 +686,7 @@ class Routine extends DataClass implements Insertable<Routine> {
       targetCount: Value(targetCount),
       notifyAtOffset: Value(notifyAtOffset),
       reminderOffsetMinutes: Value(reminderOffsetMinutes),
-      notify: notify == null && nullToAbsent
-          ? const Value.absent()
-          : Value(notify),
+      notify: Value(notify),
       isArchived: Value(isArchived),
     );
   }
@@ -707,7 +705,7 @@ class Routine extends DataClass implements Insertable<Routine> {
       reminderOffsetMinutes: serializer.fromJson<int>(
         json['reminderOffsetMinutes'],
       ),
-      notify: serializer.fromJson<bool?>(json['notify']),
+      notify: serializer.fromJson<bool>(json['notify']),
       isArchived: serializer.fromJson<bool>(json['isArchived']),
     );
   }
@@ -721,7 +719,7 @@ class Routine extends DataClass implements Insertable<Routine> {
       'targetCount': serializer.toJson<int>(targetCount),
       'notifyAtOffset': serializer.toJson<int>(notifyAtOffset),
       'reminderOffsetMinutes': serializer.toJson<int>(reminderOffsetMinutes),
-      'notify': serializer.toJson<bool?>(notify),
+      'notify': serializer.toJson<bool>(notify),
       'isArchived': serializer.toJson<bool>(isArchived),
     };
   }
@@ -733,7 +731,7 @@ class Routine extends DataClass implements Insertable<Routine> {
     int? targetCount,
     int? notifyAtOffset,
     int? reminderOffsetMinutes,
-    Value<bool?> notify = const Value.absent(),
+    bool? notify,
     bool? isArchived,
   }) => Routine(
     id: id ?? this.id,
@@ -742,7 +740,7 @@ class Routine extends DataClass implements Insertable<Routine> {
     targetCount: targetCount ?? this.targetCount,
     notifyAtOffset: notifyAtOffset ?? this.notifyAtOffset,
     reminderOffsetMinutes: reminderOffsetMinutes ?? this.reminderOffsetMinutes,
-    notify: notify.present ? notify.value : this.notify,
+    notify: notify ?? this.notify,
     isArchived: isArchived ?? this.isArchived,
   );
   Routine copyWithCompanion(RoutinesCompanion data) {
@@ -815,7 +813,7 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
   final Value<int> targetCount;
   final Value<int> notifyAtOffset;
   final Value<int> reminderOffsetMinutes;
-  final Value<bool?> notify;
+  final Value<bool> notify;
   final Value<bool> isArchived;
   const RoutinesCompanion({
     this.id = const Value.absent(),
@@ -834,12 +832,13 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     required int targetCount,
     required int notifyAtOffset,
     this.reminderOffsetMinutes = const Value.absent(),
-    this.notify = const Value.absent(),
+    required bool notify,
     this.isArchived = const Value.absent(),
   }) : title = Value(title),
        repeatDaysMask = Value(repeatDaysMask),
        targetCount = Value(targetCount),
-       notifyAtOffset = Value(notifyAtOffset);
+       notifyAtOffset = Value(notifyAtOffset),
+       notify = Value(notify);
   static Insertable<Routine> custom({
     Expression<int>? id,
     Expression<String>? title,
@@ -870,7 +869,7 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     Value<int>? targetCount,
     Value<int>? notifyAtOffset,
     Value<int>? reminderOffsetMinutes,
-    Value<bool?>? notify,
+    Value<bool>? notify,
     Value<bool>? isArchived,
   }) {
     return RoutinesCompanion(
@@ -1162,7 +1161,7 @@ typedef $$RoutinesTableCreateCompanionBuilder =
       required int targetCount,
       required int notifyAtOffset,
       Value<int> reminderOffsetMinutes,
-      Value<bool?> notify,
+      required bool notify,
       Value<bool> isArchived,
     });
 typedef $$RoutinesTableUpdateCompanionBuilder =
@@ -1173,7 +1172,7 @@ typedef $$RoutinesTableUpdateCompanionBuilder =
       Value<int> targetCount,
       Value<int> notifyAtOffset,
       Value<int> reminderOffsetMinutes,
-      Value<bool?> notify,
+      Value<bool> notify,
       Value<bool> isArchived,
     });
 
@@ -1355,7 +1354,7 @@ class $$RoutinesTableTableManager
                 Value<int> targetCount = const Value.absent(),
                 Value<int> notifyAtOffset = const Value.absent(),
                 Value<int> reminderOffsetMinutes = const Value.absent(),
-                Value<bool?> notify = const Value.absent(),
+                Value<bool> notify = const Value.absent(),
                 Value<bool> isArchived = const Value.absent(),
               }) => RoutinesCompanion(
                 id: id,
@@ -1375,7 +1374,7 @@ class $$RoutinesTableTableManager
                 required int targetCount,
                 required int notifyAtOffset,
                 Value<int> reminderOffsetMinutes = const Value.absent(),
-                Value<bool?> notify = const Value.absent(),
+                required bool notify,
                 Value<bool> isArchived = const Value.absent(),
               }) => RoutinesCompanion.insert(
                 id: id,

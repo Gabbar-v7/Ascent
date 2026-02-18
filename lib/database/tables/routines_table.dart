@@ -9,7 +9,7 @@ class Routines extends Table {
   IntColumn get notifyAtOffset => integer()();
   IntColumn get reminderOffsetMinutes =>
       integer().withDefault(const Constant(0))();
-  BoolColumn get notify => boolean().nullable()();
+  BoolColumn get notify => boolean()();
 
   // Metadata
   BoolColumn get isArchived => boolean().withDefault(const Constant(false))();

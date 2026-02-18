@@ -66,7 +66,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timer_label_focus => 'Focus';
 
   @override
-  String get routine_title => 'Routine';
+  String get routine_title => 'Routines';
 
   @override
   String get routine_navTitle => 'Routine';
