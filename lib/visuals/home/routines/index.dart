@@ -1,6 +1,8 @@
 import 'package:ascent/database/app_database.dart';
+import 'package:ascent/services/dayofweek_service.dart';
 import 'package:ascent/services/drift_service.dart';
-import 'package:ascent/visuals/home/routines/ukn.dart';
+import 'package:ascent/visuals/components/utils/navigator_utils.dart';
+import 'package:ascent/visuals/components/utils/datetime_utils.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,9 +20,6 @@ class RoutinesIndexState extends State<RoutinesIndex> {
   final TextEditingController _routineTitleController = TextEditingController();
   List<Routine> _routines = [];
 
-  // Days of week selection
-  static const List<String> _daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-
   @override
   void initState() {
     super.initState();
@@ -35,25 +34,23 @@ class RoutinesIndexState extends State<RoutinesIndex> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    return ListView.builder(
       itemCount: _routines.length,
-      separatorBuilder: (context, index) => const Gap(16),
       itemBuilder: (BuildContext context, int index) =>
           _buildRoutineTile(_routines[index]),
     );
   }
 
   Widget _buildRoutineTile(Routine routine) {
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
 
-    return Material(
-      color: colorScheme.surfaceContainer,
-      borderRadius: BorderRadius.circular(20),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
           // Handle routine tap
         },
+        onDoubleTap: () {},
         onLongPress: () => showRoutineBottomSheet(routine: routine),
         borderRadius: BorderRadius.circular(20),
         child: ListTile(
@@ -68,22 +65,28 @@ class RoutinesIndexState extends State<RoutinesIndex> {
           ),
           title: Text(
             routine.title,
-            style: textTheme.titleMedium,
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.titleMedium,
           ),
           subtitle: Row(
             children: [
               Icon(
                 Icons.schedule_rounded,
-                size: 12,
-                color: colorScheme.onSurfaceVariant,
+                size: 13,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
               const Gap(4),
-              Text(routine.title, style: textTheme.bodySmall),
+              Text(
+                formatMinutesOffsetToTime(routine.timeOfDay, context),
+                style: theme.textTheme.bodySmall,
+              ),
             ],
           ),
-          trailing: Text("x3", style: textTheme.titleLarge),
+          trailing: Text(
+            "x${routine.targetCount}",
+            style: theme.textTheme.titleLarge,
+          ),
         ),
       ),
     );
@@ -91,10 +94,13 @@ class RoutinesIndexState extends State<RoutinesIndex> {
 
   void showRoutineBottomSheet({Routine? routine}) {
     _routineTitleController.text = routine?.title ?? "";
-    List<bool> _selectedDays = List.filled(7, false);
-    DateTime selectedDate = DateTime.now();
-    TimeOfDay selectedTime = TimeOfDay.now();
-    int goalCount = 1;
+    int selectedWeekDaysMask = routine?.repeatDaysMask ?? 0;
+    int targetCount = routine?.targetCount ?? 1;
+    TimeOfDay selectedTime = routine != null
+        ? minutesOffsetToTimeOfDay(routine.timeOfDay)
+        : TimeOfDay.now();
+    bool notify = routine?.notify ?? false;
+    int reminderOffsetMinutes = routine?.reminderOffsetMinutes ?? 0;
 
     showModalBottomSheet(
       context: context,
@@ -112,11 +118,11 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                 padding: const EdgeInsets.only(top: 3, right: 3, left: 3),
                 child: AppBar(
                   title: Text(
-                    routine != null ? "Edit Routine" : "New Routine",
+                    routine != null ? "Update Routine:" : "Create Routine:",
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   leading: IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => NavigatorUtils.popPage(context),
                     icon: const Icon(Icons.arrow_back_ios_rounded),
                     tooltip: 'Cancel',
                   ),
@@ -124,21 +130,19 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                       ? <Widget>[
                           IconButton(
                             icon: const Icon(Icons.copy_outlined, size: 20),
-                            tooltip: 'Copy routine',
+                            tooltip: 'Copy Routine',
                             onPressed: () {
                               Clipboard.setData(
-                                ClipboardData(
-                                  text: "Copied Routine: ${routine.title}",
-                                ),
+                                ClipboardData(text: routine.title),
                               );
                             },
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete_outline, size: 26),
-                            tooltip: 'Delete routine',
+                            tooltip: 'Delete Routine',
                             onPressed: () {
                               _deleteRoutine(routine);
-                              Navigator.pop(context);
+                              NavigatorUtils.popPage(context);
                             },
                           ),
                           const Gap(5),
@@ -178,60 +182,59 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                     const Gap(8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(_daysOfWeek.length, (index) {
-                        final isSelected = _selectedDays[index];
+                      children: DayOfWeek.values.map((day) {
+                        // Check if this specific day bit is "on" in the mask
+                        final isSelected = DayOfWeekService.isDaySelected(
+                          selectedWeekDaysMask,
+                          day,
+                        );
+
+                        // Get first letter for the UI (M, T, W, etc.)
+                        final dayLabel = day.name.substring(0, 1).toUpperCase();
+
                         return GestureDetector(
                           onTap: () {
                             setModalState(() {
-                              _selectedDays[index] = !_selectedDays[index];
+                              // Toggle the bit in the mask
+                              selectedWeekDaysMask = DayOfWeekService.toggleDay(
+                                selectedWeekDaysMask,
+                                day,
+                              );
                             });
-                            // Haptic feedback
                             HapticFeedback.selectionClick();
                           },
-                          onHorizontalDragUpdate: (details) => print(index),
-                          child: Semantics(
-                            label:
-                                '${_daysOfWeek[index]}, ${isSelected ? "selected" : "not selected"}',
-                            button: true,
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isSelected
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.transparent,
+                              border: Border.all(
                                 color: isSelected
                                     ? Theme.of(context).colorScheme.primary
-                                    : Colors.transparent,
-                                border: Border.all(
-                                  color: isSelected
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(
-                                          context,
-                                        ).colorScheme.outline.withOpacity(0.5),
-                                  width: 2,
-                                ),
+                                    : Theme.of(context).colorScheme.outline
+                                          .withValues(alpha: .5),
+                                width: 2,
                               ),
-                              child: Center(
-                                child: Text(
-                                  _daysOfWeek[index],
-                                  style: TextStyle(
-                                    color: isSelected
-                                        ? Theme.of(
-                                            context,
-                                          ).colorScheme.onPrimary
-                                        : Theme.of(
-                                            context,
-                                          ).colorScheme.onSurface,
-                                    fontWeight: isSelected
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                    fontSize: 14,
-                                  ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                dayLabel,
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.onPrimary
+                                      : Theme.of(context).colorScheme.onSurface,
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
                                 ),
                               ),
                             ),
                           ),
                         );
-                      }),
+                      }).toList(),
                     ),
                     const Gap(20),
 
@@ -258,20 +261,8 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                                 Theme.of(context).textTheme.labelLarge,
                               ),
                             ),
-                            onPressed: () async {
-                              final picked = await showDatePicker(
-                                context: context,
-                                initialDate: selectedDate,
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2200),
-                              );
-                              if (picked != null && picked != selectedDate) {
-                                setModalState(() {
-                                  selectedDate = picked;
-                                });
-                              }
-                            },
-                            child: Text("Goal: x$goalCount/day"),
+                            onPressed: () {},
+                            child: Text("Goal: x$targetCount/day"),
                           ),
                         ),
                         const Gap(16),
@@ -358,24 +349,35 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                               ),
                             ),
                             onPressed: () {
-                              if (_routineTitleController.text.isNotEmpty) {
+                              if (_routineTitleController.text.isNotEmpty &&
+                                  selectedWeekDaysMask > 0) {
                                 if (routine != null) {
-                                  _updateRoutine();
-                                  Navigator.pop(context);
+                                  _updateRoutine(
+                                    routine,
+                                    newRoutineTitle:
+                                        _routineTitleController.text,
+                                    newRepeatDaysMask: selectedWeekDaysMask,
+                                    newTargetCount: targetCount,
+                                    newTimeOfDay:
+                                        selectedTime.hour * 60 +
+                                        selectedTime.minute,
+                                    newNotify: notify,
+                                    newReminderOffsetMinutes: 0,
+                                  );
                                 } else {
                                   _addRoutine(
-                                    _routineTitleController.text,
-                                    127,
-                                    goalCount,
-                                    selectedTime.hour * 60 +
+                                    routineTitle: _routineTitleController.text,
+                                    repeatDaysMask: selectedWeekDaysMask,
+                                    targetCount: targetCount,
+                                    timeOfDay:
+                                        selectedTime.hour * 60 +
                                         selectedTime.minute,
-                                    0,
-                                    false,
-                                    false,
+                                    notify: notify,
+                                    reminderOffsetMinutes:
+                                        reminderOffsetMinutes,
                                   );
-                                  FocusScope.of(context).unfocus();
-                                  _routineTitleController.clear();
                                 }
+                                Navigator.pop(context);
                               }
                             },
                             child: Text("Save"),
@@ -394,19 +396,38 @@ class RoutinesIndexState extends State<RoutinesIndex> {
     );
   }
 
-  // Goal Picker Dialog Widget
+  Future<void> _fetchRoutines() async {
+    DateTime current = DateTime.now();
+    int todayBitMask = DayOfWeekService.dateMask(current);
 
-  void _updateRoutine() {}
+    final routines =
+        await (database.select(database.routines)
+              ..where(
+                (tbl) => tbl.repeatDaysMask
+                    .bitwiseAnd(drift.Constant(todayBitMask))
+                    .equals(todayBitMask),
+              )
+              ..orderBy([
+                (tbl) => drift.OrderingTerm(
+                  expression: tbl.timeOfDay,
+                  mode: drift.OrderingMode.asc,
+                ),
+              ]))
+            .get();
 
-  void _addRoutine(
-    String routineTitle,
-    int repeatDaysMask,
-    int targetCount,
-    int notifyAtOffset,
-    int reminderOffsetMinutes,
-    bool notify,
-    bool isArchived,
-  ) async {
+    setState(() {
+      _routines = routines;
+    });
+  }
+
+  Future<void> _addRoutine({
+    required String routineTitle,
+    required int repeatDaysMask,
+    required int targetCount,
+    required int timeOfDay,
+    required bool notify,
+    required int reminderOffsetMinutes,
+  }) async {
     await database
         .into(database.routines)
         .insert(
@@ -414,119 +435,65 @@ class RoutinesIndexState extends State<RoutinesIndex> {
             title: routineTitle,
             repeatDaysMask: repeatDaysMask,
             targetCount: targetCount,
-            notifyAtOffset: notifyAtOffset,
+            timeOfDay: timeOfDay,
             reminderOffsetMinutes: drift.Value(reminderOffsetMinutes),
             notify: notify,
-            isArchived: drift.Value(isArchived),
           ),
         );
+    await _fetchRoutines();
   }
 
-  void _deleteRoutine(Routine routine) async {}
-
-  Future<void> _fetchRoutines() async {
-    int todayBit = Ukn.getDayOfWeekBit(DateTime.now());
-
-    final routines =
-        await (database.select(database.routines)..where((tbl) {
-              // Perform the bitwise AND and check if the result is > 0
-              return tbl.repeatDaysMask
-                  .bitwiseAnd(drift.Constant(todayBit))
-                  .isBiggerThan(drift.Constant(0));
-            }))
-            .get();
-
-    setState(() {
-      _routines = routines;
-    });
-  }
-}
-
-class _GoalPickerDialog extends StatefulWidget {
-  final int initialValue;
-
-  const _GoalPickerDialog({required this.initialValue});
-
-  @override
-  State<_GoalPickerDialog> createState() => _GoalPickerDialogState();
-}
-
-class _GoalPickerDialogState extends State<_GoalPickerDialog> {
-  late int selectedGoal;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedGoal = widget.initialValue;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Set Daily Goal'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text('How many times per day?'),
-          const Gap(16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.remove_circle_outline),
-                onPressed: selectedGoal > 1
-                    ? () {
-                        setState(() {
-                          selectedGoal--;
-                        });
-                      }
-                    : null,
-              ),
-              const Gap(16),
-              Text(
-                'x$selectedGoal',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Gap(16),
-              IconButton(
-                icon: const Icon(Icons.add_circle_outline),
-                onPressed: selectedGoal < 10
-                    ? () {
-                        setState(() {
-                          selectedGoal++;
-                        });
-                      }
-                    : null,
-              ),
-            ],
-          ),
-          const Gap(8),
-          Slider(
-            value: selectedGoal.toDouble(),
-            min: 1,
-            max: 10,
-            divisions: 9,
-            label: 'x$selectedGoal',
-            onChanged: (value) {
-              setState(() {
-                selectedGoal = value.toInt();
-              });
-            },
-          ),
-        ],
+  Future<void> _updateRoutine(
+    Routine routine, {
+    String? newRoutineTitle,
+    int? newRepeatDaysMask,
+    int? newTargetCount,
+    int? newTimeOfDay,
+    bool? newNotify,
+    int? newReminderOffsetMinutes,
+    bool? newIsArchived,
+  }) async {
+    await (database.update(
+      database.routines,
+    )..where((tbl) => tbl.id.equals(routine.id))).write(
+      RoutinesCompanion(
+        // Only update if a new value is provided, otherwise keep the old one
+        title: newRoutineTitle != null
+            ? drift.Value(newRoutineTitle)
+            : const drift.Value.absent(),
+        repeatDaysMask: newRepeatDaysMask != null
+            ? drift.Value(newRepeatDaysMask)
+            : const drift.Value.absent(),
+        targetCount: newTargetCount != null
+            ? drift.Value(newTargetCount)
+            : const drift.Value.absent(),
+        timeOfDay: newTimeOfDay != null
+            ? drift.Value(newTimeOfDay)
+            : const drift.Value.absent(),
+        notify: newNotify != null
+            ? drift.Value(newNotify)
+            : const drift.Value.absent(),
+        reminderOffsetMinutes: newReminderOffsetMinutes != null
+            ? drift.Value(newReminderOffsetMinutes)
+            : const drift.Value.absent(),
+        isArchived: newIsArchived != null
+            ? drift.Value(newIsArchived)
+            : const drift.Value.absent(),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        FilledButton(
-          onPressed: () => Navigator.pop(context, selectedGoal),
-          child: const Text('Set Goal'),
-        ),
-      ],
     );
+    await _fetchRoutines();
+  }
+
+  Future<void> _toggleRoutineCompletion(
+    Routine routine,
+    bool isDone,
+    DateTime date,
+  ) async {}
+
+  Future<void> _deleteRoutine(Routine routine) async {
+    await (database.delete(
+      database.routines,
+    )..where((tbl) => tbl.id.equals(routine.id))).go();
+    await _fetchRoutines();
   }
 }

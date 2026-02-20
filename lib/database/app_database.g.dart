@@ -456,27 +456,16 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _notifyAtOffsetMeta = const VerificationMeta(
-    'notifyAtOffset',
+  static const VerificationMeta _timeOfDayMeta = const VerificationMeta(
+    'timeOfDay',
   );
   @override
-  late final GeneratedColumn<int> notifyAtOffset = GeneratedColumn<int>(
-    'notify_at_offset',
+  late final GeneratedColumn<int> timeOfDay = GeneratedColumn<int>(
+    'time_of_day',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
-  );
-  static const VerificationMeta _reminderOffsetMinutesMeta =
-      const VerificationMeta('reminderOffsetMinutes');
-  @override
-  late final GeneratedColumn<int> reminderOffsetMinutes = GeneratedColumn<int>(
-    'reminder_offset_minutes',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0),
   );
   static const VerificationMeta _notifyMeta = const VerificationMeta('notify');
   @override
@@ -489,6 +478,17 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'CHECK ("notify" IN (0, 1))',
     ),
+  );
+  static const VerificationMeta _reminderOffsetMinutesMeta =
+      const VerificationMeta('reminderOffsetMinutes');
+  @override
+  late final GeneratedColumn<int> reminderOffsetMinutes = GeneratedColumn<int>(
+    'reminder_offset_minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
   );
   static const VerificationMeta _isArchivedMeta = const VerificationMeta(
     'isArchived',
@@ -511,9 +511,9 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
     title,
     repeatDaysMask,
     targetCount,
-    notifyAtOffset,
-    reminderOffsetMinutes,
+    timeOfDay,
     notify,
+    reminderOffsetMinutes,
     isArchived,
   ];
   @override
@@ -561,16 +561,21 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
     } else if (isInserting) {
       context.missing(_targetCountMeta);
     }
-    if (data.containsKey('notify_at_offset')) {
+    if (data.containsKey('time_of_day')) {
       context.handle(
-        _notifyAtOffsetMeta,
-        notifyAtOffset.isAcceptableOrUnknown(
-          data['notify_at_offset']!,
-          _notifyAtOffsetMeta,
-        ),
+        _timeOfDayMeta,
+        timeOfDay.isAcceptableOrUnknown(data['time_of_day']!, _timeOfDayMeta),
       );
     } else if (isInserting) {
-      context.missing(_notifyAtOffsetMeta);
+      context.missing(_timeOfDayMeta);
+    }
+    if (data.containsKey('notify')) {
+      context.handle(
+        _notifyMeta,
+        notify.isAcceptableOrUnknown(data['notify']!, _notifyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_notifyMeta);
     }
     if (data.containsKey('reminder_offset_minutes')) {
       context.handle(
@@ -580,14 +585,6 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
           _reminderOffsetMinutesMeta,
         ),
       );
-    }
-    if (data.containsKey('notify')) {
-      context.handle(
-        _notifyMeta,
-        notify.isAcceptableOrUnknown(data['notify']!, _notifyMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_notifyMeta);
     }
     if (data.containsKey('is_archived')) {
       context.handle(
@@ -620,17 +617,17 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
         DriftSqlType.int,
         data['${effectivePrefix}target_count'],
       )!,
-      notifyAtOffset: attachedDatabase.typeMapping.read(
+      timeOfDay: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}notify_at_offset'],
-      )!,
-      reminderOffsetMinutes: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}reminder_offset_minutes'],
+        data['${effectivePrefix}time_of_day'],
       )!,
       notify: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}notify'],
+      )!,
+      reminderOffsetMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}reminder_offset_minutes'],
       )!,
       isArchived: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
@@ -650,18 +647,18 @@ class Routine extends DataClass implements Insertable<Routine> {
   final String title;
   final int repeatDaysMask;
   final int targetCount;
-  final int notifyAtOffset;
-  final int reminderOffsetMinutes;
+  final int timeOfDay;
   final bool notify;
+  final int reminderOffsetMinutes;
   final bool isArchived;
   const Routine({
     required this.id,
     required this.title,
     required this.repeatDaysMask,
     required this.targetCount,
-    required this.notifyAtOffset,
-    required this.reminderOffsetMinutes,
+    required this.timeOfDay,
     required this.notify,
+    required this.reminderOffsetMinutes,
     required this.isArchived,
   });
   @override
@@ -671,9 +668,9 @@ class Routine extends DataClass implements Insertable<Routine> {
     map['title'] = Variable<String>(title);
     map['repeat_days_mask'] = Variable<int>(repeatDaysMask);
     map['target_count'] = Variable<int>(targetCount);
-    map['notify_at_offset'] = Variable<int>(notifyAtOffset);
-    map['reminder_offset_minutes'] = Variable<int>(reminderOffsetMinutes);
+    map['time_of_day'] = Variable<int>(timeOfDay);
     map['notify'] = Variable<bool>(notify);
+    map['reminder_offset_minutes'] = Variable<int>(reminderOffsetMinutes);
     map['is_archived'] = Variable<bool>(isArchived);
     return map;
   }
@@ -684,9 +681,9 @@ class Routine extends DataClass implements Insertable<Routine> {
       title: Value(title),
       repeatDaysMask: Value(repeatDaysMask),
       targetCount: Value(targetCount),
-      notifyAtOffset: Value(notifyAtOffset),
-      reminderOffsetMinutes: Value(reminderOffsetMinutes),
+      timeOfDay: Value(timeOfDay),
       notify: Value(notify),
+      reminderOffsetMinutes: Value(reminderOffsetMinutes),
       isArchived: Value(isArchived),
     );
   }
@@ -701,11 +698,11 @@ class Routine extends DataClass implements Insertable<Routine> {
       title: serializer.fromJson<String>(json['title']),
       repeatDaysMask: serializer.fromJson<int>(json['repeatDaysMask']),
       targetCount: serializer.fromJson<int>(json['targetCount']),
-      notifyAtOffset: serializer.fromJson<int>(json['notifyAtOffset']),
+      timeOfDay: serializer.fromJson<int>(json['timeOfDay']),
+      notify: serializer.fromJson<bool>(json['notify']),
       reminderOffsetMinutes: serializer.fromJson<int>(
         json['reminderOffsetMinutes'],
       ),
-      notify: serializer.fromJson<bool>(json['notify']),
       isArchived: serializer.fromJson<bool>(json['isArchived']),
     );
   }
@@ -717,9 +714,9 @@ class Routine extends DataClass implements Insertable<Routine> {
       'title': serializer.toJson<String>(title),
       'repeatDaysMask': serializer.toJson<int>(repeatDaysMask),
       'targetCount': serializer.toJson<int>(targetCount),
-      'notifyAtOffset': serializer.toJson<int>(notifyAtOffset),
-      'reminderOffsetMinutes': serializer.toJson<int>(reminderOffsetMinutes),
+      'timeOfDay': serializer.toJson<int>(timeOfDay),
       'notify': serializer.toJson<bool>(notify),
+      'reminderOffsetMinutes': serializer.toJson<int>(reminderOffsetMinutes),
       'isArchived': serializer.toJson<bool>(isArchived),
     };
   }
@@ -729,18 +726,18 @@ class Routine extends DataClass implements Insertable<Routine> {
     String? title,
     int? repeatDaysMask,
     int? targetCount,
-    int? notifyAtOffset,
-    int? reminderOffsetMinutes,
+    int? timeOfDay,
     bool? notify,
+    int? reminderOffsetMinutes,
     bool? isArchived,
   }) => Routine(
     id: id ?? this.id,
     title: title ?? this.title,
     repeatDaysMask: repeatDaysMask ?? this.repeatDaysMask,
     targetCount: targetCount ?? this.targetCount,
-    notifyAtOffset: notifyAtOffset ?? this.notifyAtOffset,
-    reminderOffsetMinutes: reminderOffsetMinutes ?? this.reminderOffsetMinutes,
+    timeOfDay: timeOfDay ?? this.timeOfDay,
     notify: notify ?? this.notify,
+    reminderOffsetMinutes: reminderOffsetMinutes ?? this.reminderOffsetMinutes,
     isArchived: isArchived ?? this.isArchived,
   );
   Routine copyWithCompanion(RoutinesCompanion data) {
@@ -753,13 +750,11 @@ class Routine extends DataClass implements Insertable<Routine> {
       targetCount: data.targetCount.present
           ? data.targetCount.value
           : this.targetCount,
-      notifyAtOffset: data.notifyAtOffset.present
-          ? data.notifyAtOffset.value
-          : this.notifyAtOffset,
+      timeOfDay: data.timeOfDay.present ? data.timeOfDay.value : this.timeOfDay,
+      notify: data.notify.present ? data.notify.value : this.notify,
       reminderOffsetMinutes: data.reminderOffsetMinutes.present
           ? data.reminderOffsetMinutes.value
           : this.reminderOffsetMinutes,
-      notify: data.notify.present ? data.notify.value : this.notify,
       isArchived: data.isArchived.present
           ? data.isArchived.value
           : this.isArchived,
@@ -773,9 +768,9 @@ class Routine extends DataClass implements Insertable<Routine> {
           ..write('title: $title, ')
           ..write('repeatDaysMask: $repeatDaysMask, ')
           ..write('targetCount: $targetCount, ')
-          ..write('notifyAtOffset: $notifyAtOffset, ')
-          ..write('reminderOffsetMinutes: $reminderOffsetMinutes, ')
+          ..write('timeOfDay: $timeOfDay, ')
           ..write('notify: $notify, ')
+          ..write('reminderOffsetMinutes: $reminderOffsetMinutes, ')
           ..write('isArchived: $isArchived')
           ..write(')'))
         .toString();
@@ -787,9 +782,9 @@ class Routine extends DataClass implements Insertable<Routine> {
     title,
     repeatDaysMask,
     targetCount,
-    notifyAtOffset,
-    reminderOffsetMinutes,
+    timeOfDay,
     notify,
+    reminderOffsetMinutes,
     isArchived,
   );
   @override
@@ -800,9 +795,9 @@ class Routine extends DataClass implements Insertable<Routine> {
           other.title == this.title &&
           other.repeatDaysMask == this.repeatDaysMask &&
           other.targetCount == this.targetCount &&
-          other.notifyAtOffset == this.notifyAtOffset &&
-          other.reminderOffsetMinutes == this.reminderOffsetMinutes &&
+          other.timeOfDay == this.timeOfDay &&
           other.notify == this.notify &&
+          other.reminderOffsetMinutes == this.reminderOffsetMinutes &&
           other.isArchived == this.isArchived);
 }
 
@@ -811,18 +806,18 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
   final Value<String> title;
   final Value<int> repeatDaysMask;
   final Value<int> targetCount;
-  final Value<int> notifyAtOffset;
-  final Value<int> reminderOffsetMinutes;
+  final Value<int> timeOfDay;
   final Value<bool> notify;
+  final Value<int> reminderOffsetMinutes;
   final Value<bool> isArchived;
   const RoutinesCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.repeatDaysMask = const Value.absent(),
     this.targetCount = const Value.absent(),
-    this.notifyAtOffset = const Value.absent(),
-    this.reminderOffsetMinutes = const Value.absent(),
+    this.timeOfDay = const Value.absent(),
     this.notify = const Value.absent(),
+    this.reminderOffsetMinutes = const Value.absent(),
     this.isArchived = const Value.absent(),
   });
   RoutinesCompanion.insert({
@@ -830,23 +825,23 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     required String title,
     required int repeatDaysMask,
     required int targetCount,
-    required int notifyAtOffset,
-    this.reminderOffsetMinutes = const Value.absent(),
+    required int timeOfDay,
     required bool notify,
+    this.reminderOffsetMinutes = const Value.absent(),
     this.isArchived = const Value.absent(),
   }) : title = Value(title),
        repeatDaysMask = Value(repeatDaysMask),
        targetCount = Value(targetCount),
-       notifyAtOffset = Value(notifyAtOffset),
+       timeOfDay = Value(timeOfDay),
        notify = Value(notify);
   static Insertable<Routine> custom({
     Expression<int>? id,
     Expression<String>? title,
     Expression<int>? repeatDaysMask,
     Expression<int>? targetCount,
-    Expression<int>? notifyAtOffset,
-    Expression<int>? reminderOffsetMinutes,
+    Expression<int>? timeOfDay,
     Expression<bool>? notify,
+    Expression<int>? reminderOffsetMinutes,
     Expression<bool>? isArchived,
   }) {
     return RawValuesInsertable({
@@ -854,10 +849,10 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
       if (title != null) 'title': title,
       if (repeatDaysMask != null) 'repeat_days_mask': repeatDaysMask,
       if (targetCount != null) 'target_count': targetCount,
-      if (notifyAtOffset != null) 'notify_at_offset': notifyAtOffset,
+      if (timeOfDay != null) 'time_of_day': timeOfDay,
+      if (notify != null) 'notify': notify,
       if (reminderOffsetMinutes != null)
         'reminder_offset_minutes': reminderOffsetMinutes,
-      if (notify != null) 'notify': notify,
       if (isArchived != null) 'is_archived': isArchived,
     });
   }
@@ -867,9 +862,9 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     Value<String>? title,
     Value<int>? repeatDaysMask,
     Value<int>? targetCount,
-    Value<int>? notifyAtOffset,
-    Value<int>? reminderOffsetMinutes,
+    Value<int>? timeOfDay,
     Value<bool>? notify,
+    Value<int>? reminderOffsetMinutes,
     Value<bool>? isArchived,
   }) {
     return RoutinesCompanion(
@@ -877,10 +872,10 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
       title: title ?? this.title,
       repeatDaysMask: repeatDaysMask ?? this.repeatDaysMask,
       targetCount: targetCount ?? this.targetCount,
-      notifyAtOffset: notifyAtOffset ?? this.notifyAtOffset,
+      timeOfDay: timeOfDay ?? this.timeOfDay,
+      notify: notify ?? this.notify,
       reminderOffsetMinutes:
           reminderOffsetMinutes ?? this.reminderOffsetMinutes,
-      notify: notify ?? this.notify,
       isArchived: isArchived ?? this.isArchived,
     );
   }
@@ -900,16 +895,16 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     if (targetCount.present) {
       map['target_count'] = Variable<int>(targetCount.value);
     }
-    if (notifyAtOffset.present) {
-      map['notify_at_offset'] = Variable<int>(notifyAtOffset.value);
+    if (timeOfDay.present) {
+      map['time_of_day'] = Variable<int>(timeOfDay.value);
+    }
+    if (notify.present) {
+      map['notify'] = Variable<bool>(notify.value);
     }
     if (reminderOffsetMinutes.present) {
       map['reminder_offset_minutes'] = Variable<int>(
         reminderOffsetMinutes.value,
       );
-    }
-    if (notify.present) {
-      map['notify'] = Variable<bool>(notify.value);
     }
     if (isArchived.present) {
       map['is_archived'] = Variable<bool>(isArchived.value);
@@ -924,10 +919,262 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
           ..write('title: $title, ')
           ..write('repeatDaysMask: $repeatDaysMask, ')
           ..write('targetCount: $targetCount, ')
-          ..write('notifyAtOffset: $notifyAtOffset, ')
-          ..write('reminderOffsetMinutes: $reminderOffsetMinutes, ')
+          ..write('timeOfDay: $timeOfDay, ')
           ..write('notify: $notify, ')
+          ..write('reminderOffsetMinutes: $reminderOffsetMinutes, ')
           ..write('isArchived: $isArchived')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $RoutineLogsTable extends RoutineLogs
+    with TableInfo<$RoutineLogsTable, RoutineLog> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RoutineLogsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _routineIdMeta = const VerificationMeta(
+    'routineId',
+  );
+  @override
+  late final GeneratedColumn<int> routineId = GeneratedColumn<int>(
+    'routine_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES routines (id)',
+    ),
+  );
+  static const VerificationMeta _doneOnMeta = const VerificationMeta('doneOn');
+  @override
+  late final GeneratedColumn<DateTime> doneOn = GeneratedColumn<DateTime>(
+    'done_on',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, routineId, doneOn];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'routine_logs';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RoutineLog> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('routine_id')) {
+      context.handle(
+        _routineIdMeta,
+        routineId.isAcceptableOrUnknown(data['routine_id']!, _routineIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_routineIdMeta);
+    }
+    if (data.containsKey('done_on')) {
+      context.handle(
+        _doneOnMeta,
+        doneOn.isAcceptableOrUnknown(data['done_on']!, _doneOnMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_doneOnMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RoutineLog map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RoutineLog(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      routineId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}routine_id'],
+      )!,
+      doneOn: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}done_on'],
+      )!,
+    );
+  }
+
+  @override
+  $RoutineLogsTable createAlias(String alias) {
+    return $RoutineLogsTable(attachedDatabase, alias);
+  }
+}
+
+class RoutineLog extends DataClass implements Insertable<RoutineLog> {
+  final int id;
+  final int routineId;
+  final DateTime doneOn;
+  const RoutineLog({
+    required this.id,
+    required this.routineId,
+    required this.doneOn,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['routine_id'] = Variable<int>(routineId);
+    map['done_on'] = Variable<DateTime>(doneOn);
+    return map;
+  }
+
+  RoutineLogsCompanion toCompanion(bool nullToAbsent) {
+    return RoutineLogsCompanion(
+      id: Value(id),
+      routineId: Value(routineId),
+      doneOn: Value(doneOn),
+    );
+  }
+
+  factory RoutineLog.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RoutineLog(
+      id: serializer.fromJson<int>(json['id']),
+      routineId: serializer.fromJson<int>(json['routineId']),
+      doneOn: serializer.fromJson<DateTime>(json['doneOn']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'routineId': serializer.toJson<int>(routineId),
+      'doneOn': serializer.toJson<DateTime>(doneOn),
+    };
+  }
+
+  RoutineLog copyWith({int? id, int? routineId, DateTime? doneOn}) =>
+      RoutineLog(
+        id: id ?? this.id,
+        routineId: routineId ?? this.routineId,
+        doneOn: doneOn ?? this.doneOn,
+      );
+  RoutineLog copyWithCompanion(RoutineLogsCompanion data) {
+    return RoutineLog(
+      id: data.id.present ? data.id.value : this.id,
+      routineId: data.routineId.present ? data.routineId.value : this.routineId,
+      doneOn: data.doneOn.present ? data.doneOn.value : this.doneOn,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RoutineLog(')
+          ..write('id: $id, ')
+          ..write('routineId: $routineId, ')
+          ..write('doneOn: $doneOn')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, routineId, doneOn);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RoutineLog &&
+          other.id == this.id &&
+          other.routineId == this.routineId &&
+          other.doneOn == this.doneOn);
+}
+
+class RoutineLogsCompanion extends UpdateCompanion<RoutineLog> {
+  final Value<int> id;
+  final Value<int> routineId;
+  final Value<DateTime> doneOn;
+  const RoutineLogsCompanion({
+    this.id = const Value.absent(),
+    this.routineId = const Value.absent(),
+    this.doneOn = const Value.absent(),
+  });
+  RoutineLogsCompanion.insert({
+    this.id = const Value.absent(),
+    required int routineId,
+    required DateTime doneOn,
+  }) : routineId = Value(routineId),
+       doneOn = Value(doneOn);
+  static Insertable<RoutineLog> custom({
+    Expression<int>? id,
+    Expression<int>? routineId,
+    Expression<DateTime>? doneOn,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (routineId != null) 'routine_id': routineId,
+      if (doneOn != null) 'done_on': doneOn,
+    });
+  }
+
+  RoutineLogsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? routineId,
+    Value<DateTime>? doneOn,
+  }) {
+    return RoutineLogsCompanion(
+      id: id ?? this.id,
+      routineId: routineId ?? this.routineId,
+      doneOn: doneOn ?? this.doneOn,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (routineId.present) {
+      map['routine_id'] = Variable<int>(routineId.value);
+    }
+    if (doneOn.present) {
+      map['done_on'] = Variable<DateTime>(doneOn.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RoutineLogsCompanion(')
+          ..write('id: $id, ')
+          ..write('routineId: $routineId, ')
+          ..write('doneOn: $doneOn')
           ..write(')'))
         .toString();
   }
@@ -938,11 +1185,16 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $TasksTable tasks = $TasksTable(this);
   late final $RoutinesTable routines = $RoutinesTable(this);
+  late final $RoutineLogsTable routineLogs = $RoutineLogsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [tasks, routines];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    tasks,
+    routines,
+    routineLogs,
+  ];
 }
 
 typedef $$TasksTableCreateCompanionBuilder =
@@ -1159,9 +1411,9 @@ typedef $$RoutinesTableCreateCompanionBuilder =
       required String title,
       required int repeatDaysMask,
       required int targetCount,
-      required int notifyAtOffset,
-      Value<int> reminderOffsetMinutes,
+      required int timeOfDay,
       required bool notify,
+      Value<int> reminderOffsetMinutes,
       Value<bool> isArchived,
     });
 typedef $$RoutinesTableUpdateCompanionBuilder =
@@ -1170,11 +1422,34 @@ typedef $$RoutinesTableUpdateCompanionBuilder =
       Value<String> title,
       Value<int> repeatDaysMask,
       Value<int> targetCount,
-      Value<int> notifyAtOffset,
-      Value<int> reminderOffsetMinutes,
+      Value<int> timeOfDay,
       Value<bool> notify,
+      Value<int> reminderOffsetMinutes,
       Value<bool> isArchived,
     });
+
+final class $$RoutinesTableReferences
+    extends BaseReferences<_$AppDatabase, $RoutinesTable, Routine> {
+  $$RoutinesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$RoutineLogsTable, List<RoutineLog>>
+  _routineLogsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.routineLogs,
+    aliasName: $_aliasNameGenerator(db.routines.id, db.routineLogs.routineId),
+  );
+
+  $$RoutineLogsTableProcessedTableManager get routineLogsRefs {
+    final manager = $$RoutineLogsTableTableManager(
+      $_db,
+      $_db.routineLogs,
+    ).filter((f) => f.routineId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_routineLogsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
 
 class $$RoutinesTableFilterComposer
     extends Composer<_$AppDatabase, $RoutinesTable> {
@@ -1205,13 +1480,8 @@ class $$RoutinesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get notifyAtOffset => $composableBuilder(
-    column: $table.notifyAtOffset,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get reminderOffsetMinutes => $composableBuilder(
-    column: $table.reminderOffsetMinutes,
+  ColumnFilters<int> get timeOfDay => $composableBuilder(
+    column: $table.timeOfDay,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1220,10 +1490,40 @@ class $$RoutinesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<int> get reminderOffsetMinutes => $composableBuilder(
+    column: $table.reminderOffsetMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<bool> get isArchived => $composableBuilder(
     column: $table.isArchived,
     builder: (column) => ColumnFilters(column),
   );
+
+  Expression<bool> routineLogsRefs(
+    Expression<bool> Function($$RoutineLogsTableFilterComposer f) f,
+  ) {
+    final $$RoutineLogsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.routineLogs,
+      getReferencedColumn: (t) => t.routineId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RoutineLogsTableFilterComposer(
+            $db: $db,
+            $table: $db.routineLogs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$RoutinesTableOrderingComposer
@@ -1255,18 +1555,18 @@ class $$RoutinesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get notifyAtOffset => $composableBuilder(
-    column: $table.notifyAtOffset,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get reminderOffsetMinutes => $composableBuilder(
-    column: $table.reminderOffsetMinutes,
+  ColumnOrderings<int> get timeOfDay => $composableBuilder(
+    column: $table.timeOfDay,
     builder: (column) => ColumnOrderings(column),
   );
 
   ColumnOrderings<bool> get notify => $composableBuilder(
     column: $table.notify,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get reminderOffsetMinutes => $composableBuilder(
+    column: $table.reminderOffsetMinutes,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1301,23 +1601,46 @@ class $$RoutinesTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<int> get notifyAtOffset => $composableBuilder(
-    column: $table.notifyAtOffset,
-    builder: (column) => column,
-  );
+  GeneratedColumn<int> get timeOfDay =>
+      $composableBuilder(column: $table.timeOfDay, builder: (column) => column);
+
+  GeneratedColumn<bool> get notify =>
+      $composableBuilder(column: $table.notify, builder: (column) => column);
 
   GeneratedColumn<int> get reminderOffsetMinutes => $composableBuilder(
     column: $table.reminderOffsetMinutes,
     builder: (column) => column,
   );
 
-  GeneratedColumn<bool> get notify =>
-      $composableBuilder(column: $table.notify, builder: (column) => column);
-
   GeneratedColumn<bool> get isArchived => $composableBuilder(
     column: $table.isArchived,
     builder: (column) => column,
   );
+
+  Expression<T> routineLogsRefs<T extends Object>(
+    Expression<T> Function($$RoutineLogsTableAnnotationComposer a) f,
+  ) {
+    final $$RoutineLogsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.routineLogs,
+      getReferencedColumn: (t) => t.routineId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RoutineLogsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.routineLogs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$RoutinesTableTableManager
@@ -1331,9 +1654,9 @@ class $$RoutinesTableTableManager
           $$RoutinesTableAnnotationComposer,
           $$RoutinesTableCreateCompanionBuilder,
           $$RoutinesTableUpdateCompanionBuilder,
-          (Routine, BaseReferences<_$AppDatabase, $RoutinesTable, Routine>),
+          (Routine, $$RoutinesTableReferences),
           Routine,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool routineLogsRefs})
         > {
   $$RoutinesTableTableManager(_$AppDatabase db, $RoutinesTable table)
     : super(
@@ -1352,18 +1675,18 @@ class $$RoutinesTableTableManager
                 Value<String> title = const Value.absent(),
                 Value<int> repeatDaysMask = const Value.absent(),
                 Value<int> targetCount = const Value.absent(),
-                Value<int> notifyAtOffset = const Value.absent(),
-                Value<int> reminderOffsetMinutes = const Value.absent(),
+                Value<int> timeOfDay = const Value.absent(),
                 Value<bool> notify = const Value.absent(),
+                Value<int> reminderOffsetMinutes = const Value.absent(),
                 Value<bool> isArchived = const Value.absent(),
               }) => RoutinesCompanion(
                 id: id,
                 title: title,
                 repeatDaysMask: repeatDaysMask,
                 targetCount: targetCount,
-                notifyAtOffset: notifyAtOffset,
-                reminderOffsetMinutes: reminderOffsetMinutes,
+                timeOfDay: timeOfDay,
                 notify: notify,
+                reminderOffsetMinutes: reminderOffsetMinutes,
                 isArchived: isArchived,
               ),
           createCompanionCallback:
@@ -1372,24 +1695,57 @@ class $$RoutinesTableTableManager
                 required String title,
                 required int repeatDaysMask,
                 required int targetCount,
-                required int notifyAtOffset,
-                Value<int> reminderOffsetMinutes = const Value.absent(),
+                required int timeOfDay,
                 required bool notify,
+                Value<int> reminderOffsetMinutes = const Value.absent(),
                 Value<bool> isArchived = const Value.absent(),
               }) => RoutinesCompanion.insert(
                 id: id,
                 title: title,
                 repeatDaysMask: repeatDaysMask,
                 targetCount: targetCount,
-                notifyAtOffset: notifyAtOffset,
-                reminderOffsetMinutes: reminderOffsetMinutes,
+                timeOfDay: timeOfDay,
                 notify: notify,
+                reminderOffsetMinutes: reminderOffsetMinutes,
                 isArchived: isArchived,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$RoutinesTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({routineLogsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (routineLogsRefs) db.routineLogs],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (routineLogsRefs)
+                    await $_getPrefetchedData<
+                      Routine,
+                      $RoutinesTable,
+                      RoutineLog
+                    >(
+                      currentTable: table,
+                      referencedTable: $$RoutinesTableReferences
+                          ._routineLogsRefsTable(db),
+                      managerFromTypedResult: (p0) => $$RoutinesTableReferences(
+                        db,
+                        table,
+                        p0,
+                      ).routineLogsRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.routineId == item.id),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
         ),
       );
 }
@@ -1404,9 +1760,284 @@ typedef $$RoutinesTableProcessedTableManager =
       $$RoutinesTableAnnotationComposer,
       $$RoutinesTableCreateCompanionBuilder,
       $$RoutinesTableUpdateCompanionBuilder,
-      (Routine, BaseReferences<_$AppDatabase, $RoutinesTable, Routine>),
+      (Routine, $$RoutinesTableReferences),
       Routine,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool routineLogsRefs})
+    >;
+typedef $$RoutineLogsTableCreateCompanionBuilder =
+    RoutineLogsCompanion Function({
+      Value<int> id,
+      required int routineId,
+      required DateTime doneOn,
+    });
+typedef $$RoutineLogsTableUpdateCompanionBuilder =
+    RoutineLogsCompanion Function({
+      Value<int> id,
+      Value<int> routineId,
+      Value<DateTime> doneOn,
+    });
+
+final class $$RoutineLogsTableReferences
+    extends BaseReferences<_$AppDatabase, $RoutineLogsTable, RoutineLog> {
+  $$RoutineLogsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $RoutinesTable _routineIdTable(_$AppDatabase db) =>
+      db.routines.createAlias(
+        $_aliasNameGenerator(db.routineLogs.routineId, db.routines.id),
+      );
+
+  $$RoutinesTableProcessedTableManager get routineId {
+    final $_column = $_itemColumn<int>('routine_id')!;
+
+    final manager = $$RoutinesTableTableManager(
+      $_db,
+      $_db.routines,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_routineIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$RoutineLogsTableFilterComposer
+    extends Composer<_$AppDatabase, $RoutineLogsTable> {
+  $$RoutineLogsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get doneOn => $composableBuilder(
+    column: $table.doneOn,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$RoutinesTableFilterComposer get routineId {
+    final $$RoutinesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.routineId,
+      referencedTable: $db.routines,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RoutinesTableFilterComposer(
+            $db: $db,
+            $table: $db.routines,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RoutineLogsTableOrderingComposer
+    extends Composer<_$AppDatabase, $RoutineLogsTable> {
+  $$RoutineLogsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get doneOn => $composableBuilder(
+    column: $table.doneOn,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$RoutinesTableOrderingComposer get routineId {
+    final $$RoutinesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.routineId,
+      referencedTable: $db.routines,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RoutinesTableOrderingComposer(
+            $db: $db,
+            $table: $db.routines,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RoutineLogsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RoutineLogsTable> {
+  $$RoutineLogsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get doneOn =>
+      $composableBuilder(column: $table.doneOn, builder: (column) => column);
+
+  $$RoutinesTableAnnotationComposer get routineId {
+    final $$RoutinesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.routineId,
+      referencedTable: $db.routines,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RoutinesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.routines,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RoutineLogsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $RoutineLogsTable,
+          RoutineLog,
+          $$RoutineLogsTableFilterComposer,
+          $$RoutineLogsTableOrderingComposer,
+          $$RoutineLogsTableAnnotationComposer,
+          $$RoutineLogsTableCreateCompanionBuilder,
+          $$RoutineLogsTableUpdateCompanionBuilder,
+          (RoutineLog, $$RoutineLogsTableReferences),
+          RoutineLog,
+          PrefetchHooks Function({bool routineId})
+        > {
+  $$RoutineLogsTableTableManager(_$AppDatabase db, $RoutineLogsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RoutineLogsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RoutineLogsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RoutineLogsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> routineId = const Value.absent(),
+                Value<DateTime> doneOn = const Value.absent(),
+              }) => RoutineLogsCompanion(
+                id: id,
+                routineId: routineId,
+                doneOn: doneOn,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int routineId,
+                required DateTime doneOn,
+              }) => RoutineLogsCompanion.insert(
+                id: id,
+                routineId: routineId,
+                doneOn: doneOn,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$RoutineLogsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({routineId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (routineId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.routineId,
+                                referencedTable: $$RoutineLogsTableReferences
+                                    ._routineIdTable(db),
+                                referencedColumn: $$RoutineLogsTableReferences
+                                    ._routineIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$RoutineLogsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $RoutineLogsTable,
+      RoutineLog,
+      $$RoutineLogsTableFilterComposer,
+      $$RoutineLogsTableOrderingComposer,
+      $$RoutineLogsTableAnnotationComposer,
+      $$RoutineLogsTableCreateCompanionBuilder,
+      $$RoutineLogsTableUpdateCompanionBuilder,
+      (RoutineLog, $$RoutineLogsTableReferences),
+      RoutineLog,
+      PrefetchHooks Function({bool routineId})
     >;
 
 class $AppDatabaseManager {
@@ -1416,4 +2047,6 @@ class $AppDatabaseManager {
       $$TasksTableTableManager(_db, _db.tasks);
   $$RoutinesTableTableManager get routines =>
       $$RoutinesTableTableManager(_db, _db.routines);
+  $$RoutineLogsTableTableManager get routineLogs =>
+      $$RoutineLogsTableTableManager(_db, _db.routineLogs);
 }

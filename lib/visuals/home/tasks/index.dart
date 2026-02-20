@@ -138,38 +138,6 @@ class TasksIndexState extends State<TasksIndex> {
     );
   }
 
-  Map<String, List<Task>> _categorizeTasks() {
-    if (_categorizedTasksCache != null) return _categorizedTasksCache!;
-
-    final today = DateTime.now();
-    final todayDate = DateTime(today.year, today.month, today.day);
-    final tomorrow = todayDate.add(const Duration(days: 1));
-
-    return _categorizedTasksCache = {
-      AppLocalizations.of(context)!.tasks_label_today: _tasks
-          .where(
-            (task) =>
-                task.doneOn == null &&
-                !task.dueDate.isBefore(todayDate) &&
-                task.dueDate.isBefore(tomorrow),
-          )
-          .toList(),
-      AppLocalizations.of(context)!.tasks_label_previous: _tasks
-          .where(
-            (task) => task.doneOn == null && task.dueDate.isBefore(todayDate),
-          )
-          .toList(),
-      AppLocalizations.of(context)!.tasks_label_future: _tasks
-          .where(
-            (task) => task.doneOn == null && !task.dueDate.isBefore(tomorrow),
-          )
-          .toList(),
-      AppLocalizations.of(context)!.tasks_label_completed: _tasks
-          .where((task) => task.doneOn != null)
-          .toList(),
-    };
-  }
-
   void showTaskBottomSheet({Task? task}) {
     _taskTitleController.text = task?.title ?? "";
     _taskDescriptionController.text = task?.description ?? "";
@@ -220,7 +188,7 @@ class TasksIndexState extends State<TasksIndex> {
                             tooltip: "Delete Task",
                             onPressed: () {
                               _deleteTask(task);
-                              Navigator.pop(context);
+                              NavigatorUtils.popPage(context);
                             },
                           ),
                           const Gap(5),
@@ -428,21 +396,61 @@ class TasksIndexState extends State<TasksIndex> {
     );
   }
 
-  Future<void> _fetchTasks() async {
-    final current = DateTime.now();
-    final todayDate = DateTime(current.year, current.month, current.day);
+  Map<String, List<Task>> _categorizeTasks() {
+    if (_categorizedTasksCache != null) return _categorizedTasksCache!;
+
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
     final tomorrow = todayDate.add(const Duration(days: 1));
 
+    return _categorizedTasksCache = {
+      AppLocalizations.of(context)!.tasks_label_today: _tasks
+          .where(
+            (task) =>
+                task.doneOn == null &&
+                !task.dueDate.isBefore(todayDate) &&
+                task.dueDate.isBefore(tomorrow),
+          )
+          .toList(),
+      AppLocalizations.of(context)!.tasks_label_previous: _tasks
+          .where(
+            (task) => task.doneOn == null && task.dueDate.isBefore(todayDate),
+          )
+          .toList(),
+      AppLocalizations.of(context)!.tasks_label_future: _tasks
+          .where(
+            (task) => task.doneOn == null && !task.dueDate.isBefore(tomorrow),
+          )
+          .toList(),
+      AppLocalizations.of(context)!.tasks_label_completed: _tasks
+          .where((task) => task.doneOn != null)
+          .toList(),
+    };
+  }
+
+  Future<void> _fetchTasks() async {
+    final current = DateTime.now();
+    final today = DateTime(current.year, current.month, current.day);
+    final tomorrow = today.add(const Duration(days: 1));
+
     final tasks =
-        await (database.select(database.tasks)..where(
-              (tbl) =>
-                  tbl.doneOn.isNull() |
-                  (tbl.doneOn.isBiggerThan(drift.Constant(todayDate)) &
-                      tbl.doneOn.isSmallerThan(drift.Constant(tomorrow))),
-            ))
+        await (database.select(database.tasks)
+              ..where(
+                (tbl) =>
+                    tbl.doneOn.isNull() |
+                    tbl.doneOn.isBetween(
+                      drift.Constant(today),
+                      drift.Constant(tomorrow),
+                    ),
+              )
+              ..orderBy([
+                (tbl) => drift.OrderingTerm(
+                  expression: tbl.dueDate,
+                  mode: drift.OrderingMode.asc,
+                ),
+              ]))
             .get();
 
-    tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
     if (mounted) {
       setState(() {
         _tasks = tasks;

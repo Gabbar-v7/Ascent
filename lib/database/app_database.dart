@@ -4,7 +4,7 @@ import 'package:ascent/database/tables/tasks_table.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [Tasks, Routines])
+@DriftDatabase(tables: [Tasks, Routines, RoutineLogs])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
