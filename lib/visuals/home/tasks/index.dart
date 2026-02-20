@@ -167,13 +167,11 @@ class TasksIndexState extends State<TasksIndex> {
                   leading: IconButton(
                     onPressed: () => NavigatorUtils.popPage(context),
                     icon: Icon(Icons.arrow_back_ios_rounded),
-                    tooltip: "Cancel",
                   ),
                   actions: task != null
                       ? <Widget>[
                           IconButton(
                             icon: const Icon(Icons.copy_outlined, size: 20),
-                            tooltip: "Copy Task",
                             onPressed: () => Clipboard.setData(
                               ClipboardData(
                                 text:
@@ -185,7 +183,6 @@ class TasksIndexState extends State<TasksIndex> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete_outline, size: 26),
-                            tooltip: "Delete Task",
                             onPressed: () {
                               _deleteTask(task);
                               NavigatorUtils.popPage(context);

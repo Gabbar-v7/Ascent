@@ -3,6 +3,7 @@ import 'package:ascent/services/dayofweek_service.dart';
 import 'package:ascent/services/drift_service.dart';
 import 'package:ascent/visuals/components/utils/navigator_utils.dart';
 import 'package:ascent/visuals/components/utils/datetime_utils.dart';
+import 'package:ascent/visuals/components/widgets/dateline_picker.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ class RoutinesIndexState extends State<RoutinesIndex> {
   final database = DriftService.instance.driftDB;
   final TextEditingController _routineTitleController = TextEditingController();
   List<Routine> _routines = [];
+  DateTime _activeDate = DateTime.now();
 
   @override
   void initState() {
@@ -34,10 +36,26 @@ class RoutinesIndexState extends State<RoutinesIndex> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: _routines.length,
-      itemBuilder: (BuildContext context, int index) =>
-          _buildRoutineTile(_routines[index]),
+    return Column(
+      children: [
+        DatelinePicker(
+          selectedDate: _activeDate,
+          onDateSelected: (value) {
+            setState(() {
+              _activeDate = value;
+            });
+            _fetchRoutines();
+          },
+        ),
+        Divider(indent: 10, endIndent: 10),
+        Expanded(
+          child: ListView.builder(
+            itemCount: _routines.length,
+            itemBuilder: (BuildContext context, int index) =>
+                _buildRoutineTile(_routines[index]),
+          ),
+        ),
+      ],
     );
   }
 
@@ -124,13 +142,11 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                   leading: IconButton(
                     onPressed: () => NavigatorUtils.popPage(context),
                     icon: const Icon(Icons.arrow_back_ios_rounded),
-                    tooltip: 'Cancel',
                   ),
                   actions: routine != null
                       ? <Widget>[
                           IconButton(
                             icon: const Icon(Icons.copy_outlined, size: 20),
-                            tooltip: 'Copy Routine',
                             onPressed: () {
                               Clipboard.setData(
                                 ClipboardData(text: routine.title),
@@ -139,7 +155,6 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete_outline, size: 26),
-                            tooltip: 'Delete Routine',
                             onPressed: () {
                               _deleteRoutine(routine);
                               NavigatorUtils.popPage(context);
@@ -397,15 +412,14 @@ class RoutinesIndexState extends State<RoutinesIndex> {
   }
 
   Future<void> _fetchRoutines() async {
-    DateTime current = DateTime.now();
-    int todayBitMask = DayOfWeekService.dateMask(current);
+    int activeDayMask = DayOfWeekService.dateMask(_activeDate);
 
     final routines =
         await (database.select(database.routines)
               ..where(
                 (tbl) => tbl.repeatDaysMask
-                    .bitwiseAnd(drift.Constant(todayBitMask))
-                    .equals(todayBitMask),
+                    .bitwiseAnd(drift.Constant(activeDayMask))
+                    .equals(activeDayMask),
               )
               ..orderBy([
                 (tbl) => drift.OrderingTerm(
@@ -484,6 +498,7 @@ class RoutinesIndexState extends State<RoutinesIndex> {
     await _fetchRoutines();
   }
 
+  // ignore: unused_element
   Future<void> _toggleRoutineCompletion(
     Routine routine,
     bool isDone,
