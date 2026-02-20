@@ -1,6 +1,8 @@
 import 'package:ascent/database/app_database.dart';
 import 'package:ascent/services/dayofweek_service.dart';
 import 'package:ascent/services/drift_service.dart';
+import 'package:ascent/utils/extensions/datetime.x.dart';
+import 'package:ascent/utils/extensions/timeofday.x.dart';
 import 'package:ascent/visuals/components/utils/navigator_utils.dart';
 import 'package:ascent/visuals/components/utils/datetime_utils.dart';
 import 'package:ascent/visuals/components/widgets/dateline_picker.dart';
@@ -19,8 +21,9 @@ class RoutinesIndex extends StatefulWidget {
 class RoutinesIndexState extends State<RoutinesIndex> {
   final database = DriftService.instance.driftDB;
   final TextEditingController _routineTitleController = TextEditingController();
-  List<Routine> _routines = [];
-  DateTime _activeDate = DateTime.now();
+  List<RoutineProgress> _routineProgressList = [];
+  // Use start of day to reduce comparision
+  DateTime _activeDate = DateTime.now().startOfDay;
 
   @override
   void initState() {
@@ -50,17 +53,20 @@ class RoutinesIndexState extends State<RoutinesIndex> {
         Divider(indent: 10, endIndent: 10),
         Expanded(
           child: ListView.builder(
-            itemCount: _routines.length,
+            itemCount: _routineProgressList.length,
             itemBuilder: (BuildContext context, int index) =>
-                _buildRoutineTile(_routines[index]),
+                _buildRoutineTile(_routineProgressList[index]),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildRoutineTile(Routine routine) {
+  Widget _buildRoutineTile(RoutineProgress routineProgress) {
     final theme = Theme.of(context);
+    final Routine routine = routineProgress.routine;
+    final bool isCompleted = routineProgress.isCompleted;
+    final int currentStreak = routineProgress.currentStreak;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -68,7 +74,8 @@ class RoutinesIndexState extends State<RoutinesIndex> {
         onTap: () {
           // Handle routine tap
         },
-        onDoubleTap: () {},
+        onDoubleTap: () =>
+            _toggleRoutineCompletion(routine, !isCompleted, _activeDate),
         onLongPress: () => showRoutineBottomSheet(routine: routine),
         borderRadius: BorderRadius.circular(20),
         child: ListTile(
@@ -77,8 +84,9 @@ class RoutinesIndexState extends State<RoutinesIndex> {
             scale: 1.2,
             child: Checkbox(
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              value: true,
-              onChanged: (value) {},
+              value: isCompleted,
+              onChanged: (value) =>
+                  _toggleRoutineCompletion(routine, value!, _activeDate),
             ),
           ),
           title: Text(
@@ -101,10 +109,7 @@ class RoutinesIndexState extends State<RoutinesIndex> {
               ),
             ],
           ),
-          trailing: Text(
-            "x${routine.targetCount}",
-            style: theme.textTheme.titleLarge,
-          ),
+          trailing: Text("x$currentStreak", style: theme.textTheme.titleLarge),
         ),
       ),
     );
@@ -373,9 +378,7 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                                         _routineTitleController.text,
                                     newRepeatDaysMask: selectedWeekDaysMask,
                                     newTargetCount: targetCount,
-                                    newTimeOfDay:
-                                        selectedTime.hour * 60 +
-                                        selectedTime.minute,
+                                    newTimeOfDay: selectedTime.toInt,
                                     newNotify: notify,
                                     newReminderOffsetMinutes: 0,
                                   );
@@ -384,9 +387,7 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                                     routineTitle: _routineTitleController.text,
                                     repeatDaysMask: selectedWeekDaysMask,
                                     targetCount: targetCount,
-                                    timeOfDay:
-                                        selectedTime.hour * 60 +
-                                        selectedTime.minute,
+                                    timeOfDay: selectedTime.toInt,
                                     notify: notify,
                                     reminderOffsetMinutes:
                                         reminderOffsetMinutes,
@@ -413,24 +414,50 @@ class RoutinesIndexState extends State<RoutinesIndex> {
 
   Future<void> _fetchRoutines() async {
     int activeDayMask = DayOfWeekService.dateMask(_activeDate);
+    DateTime monthStart = _activeDate.startOfMonth;
 
-    final routines =
-        await (database.select(database.routines)
+    final isCompleted = database.routineLogs.doneOn.max().equals(_activeDate);
+
+    final rows =
+        await (database.select(database.routines).join([
+                drift.leftOuterJoin(
+                  database.routineLogs,
+                  database.routineLogs.routineId.equalsExp(
+                        database.routines.id,
+                      ) &
+                      database.routineLogs.doneOn.isBetween(
+                        drift.Constant(monthStart),
+                        drift.Constant(_activeDate),
+                      ),
+                ),
+              ])
               ..where(
-                (tbl) => tbl.repeatDaysMask
+                database.routines.repeatDaysMask
                     .bitwiseAnd(drift.Constant(activeDayMask))
                     .equals(activeDayMask),
               )
+              ..addColumns([database.routineLogs.id.count(), isCompleted])
+              ..groupBy([database.routines.id])
               ..orderBy([
-                (tbl) => drift.OrderingTerm(
-                  expression: tbl.timeOfDay,
+                drift.OrderingTerm(
+                  expression: database.routines.timeOfDay,
                   mode: drift.OrderingMode.asc,
                 ),
               ]))
             .get();
 
+    final routineProgressList = rows
+        .map((row) {
+          return RoutineProgress(
+            row.readTable(database.routines),
+            row.read(isCompleted) ?? false,
+            row.read(database.routineLogs.id.count())!,
+          );
+        })
+        .toList(growable: false);
+
     setState(() {
-      _routines = routines;
+      _routineProgressList = routineProgressList;
     });
   }
 
@@ -503,7 +530,27 @@ class RoutinesIndexState extends State<RoutinesIndex> {
     Routine routine,
     bool isDone,
     DateTime date,
-  ) async {}
+  ) async {
+    isDone
+        ? await database
+              .into(database.routineLogs)
+              .insert(
+                RoutineLogsCompanion(
+                  routineId: drift.Value(routine.id),
+                  doneOn: drift.Value(date),
+                ),
+              )
+        : await (database.delete(database.routineLogs)..where(
+                (tbl) =>
+                    tbl.routineId.equals(routine.id) &
+                    tbl.doneOn.isBetween(
+                      drift.Constant(date),
+                      drift.Constant(date.add(Duration(days: 1))),
+                    ),
+              ))
+              .go();
+    await _fetchRoutines();
+  }
 
   Future<void> _deleteRoutine(Routine routine) async {
     await (database.delete(
@@ -511,4 +558,12 @@ class RoutinesIndexState extends State<RoutinesIndex> {
     )..where((tbl) => tbl.id.equals(routine.id))).go();
     await _fetchRoutines();
   }
+}
+
+class RoutineProgress {
+  final Routine routine;
+  final bool isCompleted;
+  final int currentStreak;
+
+  RoutineProgress(this.routine, this.isCompleted, this.currentStreak);
 }
