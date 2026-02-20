@@ -121,7 +121,7 @@ class RoutinesIndexState extends State<RoutinesIndex> {
     int targetCount = routine?.targetCount ?? 1;
     TimeOfDay selectedTime = routine != null
         ? minutesOffsetToTimeOfDay(routine.timeOfDay)
-        : TimeOfDay.now();
+        : TimeOfDay(hour: 6, minute: 0);
     bool notify = routine?.notify ?? false;
     int reminderOffsetMinutes = routine?.reminderOffsetMinutes ?? 0;
 
@@ -364,8 +364,7 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                                 Theme.of(context).colorScheme.onPrimary,
                               ),
                               textStyle: WidgetStatePropertyAll(
-                                Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
+                                Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
                             onPressed: () {

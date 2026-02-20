@@ -1,6 +1,7 @@
 import 'package:ascent/database/app_database.dart';
 import 'package:ascent/l10n/generated/app_localizations.dart';
 import 'package:ascent/services/drift_service.dart';
+import 'package:ascent/utils/extensions/datetime.x.dart';
 import 'package:ascent/visuals/components/utils/navigator_utils.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class TasksIndexState extends State<TasksIndex> {
       TextEditingController();
   List<Task> _tasks = [];
   Map<String, List<Task>>? _categorizedTasksCache;
+  final DateTime today = DateTime.now().startOfDay;
 
   final dateContainer = BoxDecoration(
     color: Colors.grey.withValues(alpha: 0.1),
@@ -74,7 +76,7 @@ class TasksIndexState extends State<TasksIndex> {
 
   Widget _buildTaskTile(Task task) {
     final isCompleted = task.doneOn != null;
-    final isOverdue = task.dueDate.isBefore(DateTime.now()) && !isCompleted;
+    final isOverdue = task.dueDate.isBefore(today) && !isCompleted;
     final theme = Theme.of(context);
 
     return Padding(
@@ -141,7 +143,7 @@ class TasksIndexState extends State<TasksIndex> {
   void showTaskBottomSheet({Task? task}) {
     _taskTitleController.text = task?.title ?? "";
     _taskDescriptionController.text = task?.description ?? "";
-    DateTime selectedDate = task?.dueDate ?? DateTime.now();
+    DateTime selectedDate = task?.dueDate ?? today;
 
     showModalBottomSheet(
       context: context,
@@ -345,8 +347,7 @@ class TasksIndexState extends State<TasksIndex> {
                                 Theme.of(context).colorScheme.onPrimary,
                               ),
                               textStyle: WidgetStatePropertyAll(
-                                Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
+                                Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
                             onPressed: () {
@@ -396,38 +397,39 @@ class TasksIndexState extends State<TasksIndex> {
   Map<String, List<Task>> _categorizeTasks() {
     if (_categorizedTasksCache != null) return _categorizedTasksCache!;
 
-    final today = DateTime.now();
-    final todayDate = DateTime(today.year, today.month, today.day);
-    final tomorrow = todayDate.add(const Duration(days: 1));
+    final l10n = AppLocalizations.of(context)!;
+    final tomorrow = today.add(const Duration(days: 1));
 
-    return _categorizedTasksCache = {
-      AppLocalizations.of(context)!.tasks_label_today: _tasks
-          .where(
-            (task) =>
-                task.doneOn == null &&
-                !task.dueDate.isBefore(todayDate) &&
-                task.dueDate.isBefore(tomorrow),
-          )
-          .toList(),
-      AppLocalizations.of(context)!.tasks_label_previous: _tasks
-          .where(
-            (task) => task.doneOn == null && task.dueDate.isBefore(todayDate),
-          )
-          .toList(),
-      AppLocalizations.of(context)!.tasks_label_future: _tasks
-          .where(
-            (task) => task.doneOn == null && !task.dueDate.isBefore(tomorrow),
-          )
-          .toList(),
-      AppLocalizations.of(context)!.tasks_label_completed: _tasks
-          .where((task) => task.doneOn != null)
-          .toList(),
+    // Initialize the map with empty lists
+    final Map<String, List<Task>> categories = {
+      l10n.tasks_label_today: [],
+      l10n.tasks_label_previous: [],
+      l10n.tasks_label_future: [],
+      l10n.tasks_label_completed: [],
     };
+
+    for (final task in _tasks) {
+      // 1. Check completion status
+      if (task.doneOn != null) {
+        categories[l10n.tasks_label_completed]!.add(task);
+        continue;
+      }
+
+      // 2. Categorize by date
+      if (task.dueDate.isBefore(today)) {
+        categories[l10n.tasks_label_previous]!.add(task);
+      } else if (task.dueDate.isBefore(tomorrow)) {
+        // Since it's NOT before today, but IS before tomorrow, it's today
+        categories[l10n.tasks_label_today]!.add(task);
+      } else {
+        categories[l10n.tasks_label_future]!.add(task);
+      }
+    }
+
+    return _categorizedTasksCache = categories;
   }
 
   Future<void> _fetchTasks() async {
-    final current = DateTime.now();
-    final today = DateTime(current.year, current.month, current.day);
     final tomorrow = today.add(const Duration(days: 1));
 
     final tasks =
