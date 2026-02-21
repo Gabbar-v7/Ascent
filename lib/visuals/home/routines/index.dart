@@ -309,7 +309,7 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                             onPressed: () async {
                               final picked = await showTimePicker(
                                 context: context,
-                                initialTime: TimeOfDay(hour: 6, minute: 0),
+                                initialTime: selectedTime,
                               );
 
                               if (picked != null && picked != selectedTime) {
