@@ -91,7 +91,7 @@ class BaseTheme {
     // Label styles - for buttons, tabs, form labels
     labelLarge: TextStyle(
       fontSize: 14,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w500,
       letterSpacing: 0.1,
       height: 1.43,
       color: colorScheme.onSurface,
