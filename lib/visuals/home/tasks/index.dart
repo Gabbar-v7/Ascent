@@ -327,7 +327,9 @@ class TasksIndexState extends State<TasksIndex> {
                             ),
                             onPressed: () => Navigator.pop(context),
                             child: Text(
-                              AppLocalizations.of(context)!.tasks_button_cancel,
+                              AppLocalizations.of(
+                                context,
+                              )!.common_button_cancel,
                             ),
                           ),
                         ),
@@ -377,7 +379,7 @@ class TasksIndexState extends State<TasksIndex> {
                               }
                             },
                             child: Text(
-                              AppLocalizations.of(context)!.tasks_button_save,
+                              AppLocalizations.of(context)!.common_button_save,
                             ),
                           ),
                         ),

@@ -9,6 +9,14 @@
     "@common_comingSoon": {
         "description": "Label for features under development"
     },
+     "common_button_cancel": "Cancel",
+    "@common_button_cancel": {
+        "description": "Cancel button label"
+    },
+    "common_button_save": "Save",
+    "@common_button_save": {
+        "description": "Save button label"
+    },
 
     "tasks_title": "Tasks",
     "@tasks_title": {
@@ -37,14 +45,6 @@
     "tasks_button_due": "Due",
     "@tasks_button_due": {
         "description": "Button to set task due date"
-    },
-    "tasks_button_cancel": "Cancel",
-    "@tasks_button_cancel": {
-        "description": "Cancel button in task form"
-    },
-    "tasks_button_save": "Save",
-    "@tasks_button_save": {
-        "description": "Save button in task form"
     },
     "tasks_label_today": "Today",
     "@tasks_label_today": {
@@ -87,6 +87,30 @@
     "routine_navTitle": "Routine",
     "@routine_navTitle": {
         "description": "Navigation label for Routine"
+    },
+    "routine_label_createRoutine": "Create Routine:",
+    "@routine_label_createRoutine": {
+        "description": "Label for create routine form"
+    },
+    "routine_label_updateRoutine": "Update Routine:",
+    "@routine_label_updateRoutine": {
+        "description": "Label for update routine form"
+    },
+    "routine_input_title": "Routine Title",
+    "@routine_input_title": {
+        "description": "Placeholder for routine title input field"
+    },
+    "routine_label_frequency": "Frequency",
+    "@routine_label_frequency": {
+        "description": "Label for routine frequency setting"
+    },
+    "routine_button_goal": "Goal",
+    "@routine_button_goal": {
+        "description": "Button label for setting routine goal"
+    },
+    "routine_button_time": "Time",
+    "@routine_button_time": {
+        "description": "Button label for setting routine time"
     },
 
     "menu_title": "Menu",

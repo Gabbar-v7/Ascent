@@ -93,7 +93,7 @@ class _DatelinePickerState extends State<DatelinePicker> {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      "${date.day}",
+                      date.day.toString(),
                       style: TextStyle(
                         color: isSelected
                             ? theme.colorScheme.surface

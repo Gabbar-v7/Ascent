@@ -1,4 +1,5 @@
 import 'package:ascent/database/app_database.dart';
+import 'package:ascent/l10n/generated/app_localizations.dart';
 import 'package:ascent/services/dayofweek_service.dart';
 import 'package:ascent/services/drift_service.dart';
 import 'package:ascent/utils/extensions/datetime.x.dart';
@@ -141,7 +142,13 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                 padding: const EdgeInsets.only(top: 3, right: 3, left: 3),
                 child: AppBar(
                   title: Text(
-                    routine != null ? "Update Routine:" : "Create Routine:",
+                    routine != null
+                        ? AppLocalizations.of(
+                            context,
+                          )!.routine_label_updateRoutine
+                        : AppLocalizations.of(
+                            context,
+                          )!.routine_label_createRoutine,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   leading: IconButton(
@@ -186,15 +193,17 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                       controller: _routineTitleController,
                       textCapitalization: TextCapitalization.sentences,
                       style: const TextStyle(fontSize: 16),
-                      decoration: const InputDecoration(
-                        hintText: "Enter routine title:",
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(
+                          context,
+                        )!.routine_input_title,
                       ),
                     ),
                     const Gap(16),
 
                     // Frequency Section
                     Text(
-                      "   Frequency",
+                      "  ${AppLocalizations.of(context)!.routine_label_frequency}",
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -282,7 +291,9 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                               ),
                             ),
                             onPressed: () {},
-                            child: Text("Goal: x$targetCount/day"),
+                            child: Text(
+                              "${AppLocalizations.of(context)!.routine_button_goal}: x$targetCount/day",
+                            ),
                           ),
                         ),
                         const Gap(16),
@@ -317,7 +328,7 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                               }
                             },
                             child: Text(
-                              "Time: ${selectedTime.format(context)}",
+                              "${AppLocalizations.of(context)!.routine_button_time}: ${selectedTime.format(context)}",
                             ),
                           ),
                         ),
@@ -345,7 +356,11 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                               ),
                             ),
                             onPressed: () => Navigator.pop(context),
-                            child: Text("Cancel"),
+                            child: Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.common_button_cancel,
+                            ),
                           ),
                         ),
                         const Gap(12),
@@ -395,7 +410,9 @@ class RoutinesIndexState extends State<RoutinesIndex> {
                                 Navigator.pop(context);
                               }
                             },
-                            child: Text("Save"),
+                            child: Text(
+                              AppLocalizations.of(context)!.common_button_save,
+                            ),
                           ),
                         ),
                       ],

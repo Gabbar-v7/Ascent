@@ -15,6 +15,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get common_comingSoon => 'जल्द आ रहा है';
 
   @override
+  String get common_button_cancel => 'Cancel';
+
+  @override
+  String get common_button_save => 'Save';
+
+  @override
   String get tasks_title => 'कार्य';
 
   @override
@@ -34,12 +40,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get tasks_button_due => 'देय';
-
-  @override
-  String get tasks_button_cancel => 'रद्द करें';
-
-  @override
-  String get tasks_button_save => 'सहेज';
 
   @override
   String get tasks_label_today => 'आज';
@@ -70,6 +70,24 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get routine_navTitle => 'दिनचर्या';
+
+  @override
+  String get routine_label_createRoutine => 'Create Routine:';
+
+  @override
+  String get routine_label_updateRoutine => 'Update Routine:';
+
+  @override
+  String get routine_input_title => 'Routine Title';
+
+  @override
+  String get routine_label_frequency => 'Frequency';
+
+  @override
+  String get routine_button_goal => 'Goal';
+
+  @override
+  String get routine_button_time => 'Time';
 
   @override
   String get menu_title => 'सूची';

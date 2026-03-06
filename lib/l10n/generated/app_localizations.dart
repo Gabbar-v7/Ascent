@@ -114,6 +114,18 @@ abstract class AppLocalizations {
   /// **'Coming Soon'**
   String get common_comingSoon;
 
+  /// Cancel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get common_button_cancel;
+
+  /// Save button label
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get common_button_save;
+
   /// Title of Tasks page
   ///
   /// In en, this message translates to:
@@ -155,18 +167,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Due'**
   String get tasks_button_due;
-
-  /// Cancel button in task form
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get tasks_button_cancel;
-
-  /// Save button in task form
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get tasks_button_save;
 
   /// Label for today's tasks section
   ///
@@ -227,6 +227,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Routine'**
   String get routine_navTitle;
+
+  /// Label for create routine form
+  ///
+  /// In en, this message translates to:
+  /// **'Create Routine:'**
+  String get routine_label_createRoutine;
+
+  /// Label for update routine form
+  ///
+  /// In en, this message translates to:
+  /// **'Update Routine:'**
+  String get routine_label_updateRoutine;
+
+  /// Placeholder for routine title input field
+  ///
+  /// In en, this message translates to:
+  /// **'Routine Title'**
+  String get routine_input_title;
+
+  /// Label for routine frequency setting
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get routine_label_frequency;
+
+  /// Button label for setting routine goal
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get routine_button_goal;
+
+  /// Button label for setting routine time
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get routine_button_time;
 
   /// Title of Menu page
   ///
