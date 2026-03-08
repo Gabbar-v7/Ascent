@@ -16,7 +16,7 @@ class AppDatabase extends _$AppDatabase {
   //
   // STEP 4 => Generate schema => dart run drift_dev schema dump lib/database/app_database.dart lib/database/schemas
   //
-  // STEP 5 => Generate steps => dart run drift_dev schema steps lib/database/schemas lib/database/schemas/schema_versions.dart
+  // STEP 5 => Generate steps => dart run drift_dev schema steps lib/database/schemas lib/database/schemas/index.dart
   //
   // STEP 6 => Add migration steps to migration strategy by create new file in migrations folder. See previous migrations for help
 
