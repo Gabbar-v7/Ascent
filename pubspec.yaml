@@ -3,7 +3,7 @@ description: "A blazing-fast Flutter mobile app for managing tasks, routines and
 homepage: https://github.com/Gabbar-v7/Ascent
 publish_to: "none"
 
-version: 0.0.02
+version: 0.0.03
 
 environment:
   sdk: ^3.10.1
@@ -24,12 +24,12 @@ dependencies:
   animated_flip_counter: ^0.3.4
 
   # Database/Storage
-  sqlite3: ^2.4.6
+  sqlite3: ^3.3.1
   drift: ^2.29.0
-  drift_flutter: ^0.2.7
+  drift_flutter: ^0.3.0
   shared_preferences: ^2.5.3
   path_provider: ^2.1.5
-  file_picker: 10.3.8
+  file_picker: ^11.0.2
   path: ^1.9.1
 
   # Utils
