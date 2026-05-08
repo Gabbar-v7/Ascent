@@ -121,7 +121,7 @@ class _DatabaseIndexState extends State<DatabaseIndex> {
 
       /// Original DB file
       final originalDbFile = File(await getDatabasePath());
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         compressionQuality: 0,
         type: FileType.custom,
         allowedExtensions: ['bak'],
@@ -171,7 +171,7 @@ class _DatabaseIndexState extends State<DatabaseIndex> {
 
       final dbFileBytes = await dbFile.readAsBytes();
 
-      final resultPath = await FilePicker.platform.saveFile(
+      final resultPath = await FilePicker.saveFile(
         fileName: "Ascent (1).bak",
         bytes: Uint8List.fromList(dbFileBytes),
         type: FileType.custom,
