@@ -35,41 +35,7 @@ Try it now and boost your workflow! Contributions welcome.
 
 ## Screenshots
 
-[Add screenshots of your app here]
-
-## Getting Started
-
-### Prerequisites
-
-- Flutter SDK (latest stable version)
-- Dart SDK (latest stable version)
-- Android Studio / VS Code with Flutter extensions
-
-### Installation
-
-1. Clone the repository
-
-```bash
-git clone https://github.com/Gabbar-v7/Ascent.git
-```
-
-2. Navigate to the project directory
-
-```bash
-cd Ascent
-```
-
-3. Install dependencies
-
-```bash
-flutter pub get
-```
-
-4. Run the app
-
-```bash
-flutter run
-```
+<!-- TODO: Add screenshots -->
 
 ## Project Structure
 
@@ -88,49 +54,11 @@ lib/
     └── themes.dart        # App theming
 ```
 
-## Development
-
-### Database
-
-The app uses Drift (SQLite) for local storage. To generate database code:
-
-```bash
-dart run build_runner build
-```
-
-For more information refer [Drift Documentation](https://drift.simonbinder.eu/setup/).
-
-### Code Style
-
-This project follows the official [Dart Style Guide](https://dart.dev/guides/language/effective-dart/style).
-
 ## Contributing
 
-1. **Fork the Repository:**
+Contributions are always welcome, whether it’s fixing bugs, improving documentation, or building new features. Help make Ascent faster, cleaner, and better for everyone.
 
-   ```bash
-   git fork https://github.com/Gabbar-v7/Ascent.git
-   ```
-
-2. **Create a Feature Branch:**
-
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-3. **Commit Your Changes:**
-
-   ```bash
-   git commit -m "Your concise commit message"
-   ```
-
-4. **Push the Branch:**
-
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-5. **Submit a Pull Request on GitHub.**
+> Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a Pull Request.
 
 ## Support
 
