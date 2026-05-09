@@ -37,23 +37,6 @@ Try it now and boost your workflow! Contributions welcome.
 
 <!-- TODO: Add screenshots -->
 
-## Project Structure
-
-```
-lib/
-├── app_index.dart         # App entry and state management
-├── main.dart              # Main entry point
-├── database/              # Database setup, tables, converters
-├── l10n/                  # Localization files and generated code
-├── services/              # Service layer (e.g., Drift integration)
-├── utils/                 # Utility functions and helpers
-└── visuals/               # UI and presentation layer
-    ├── components/        # Reusable widgets and layout components
-    ├── home/              # Home, routines, tasks, timer views
-    ├── settings/          # Settings screens and providers
-    └── themes.dart        # App theming
-```
-
 ## Contributing
 
 Contributions are always welcome, whether it’s fixing bugs, improving documentation, or building new features. Help make Ascent faster, cleaner, and better for everyone.
