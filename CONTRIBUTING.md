@@ -1,6 +1,8 @@
 # Contributing to Ascent
 
-All contributions, including bug fixes, new features, documentation improvements, or translations, are welcome.
+Thank you for taking the time to contribute! This guide will help you get up to speed with the codebase conventions, workflow, and quality standards expected for Ascent.
+
+All contributions are welcome, including bug fixes, features, documentation improvements, and translations.
 
 ## Getting Started
 
@@ -45,7 +47,7 @@ All contributions, including bug fixes, new features, documentation improvements
 Always branch off `master`:
 
 ```bash
-git checkout -b feat/<feature-name>
+git checkout -b feat/<name>
 ```
 
 ## Commit Specification
@@ -72,3 +74,27 @@ chore(deps): upgrade drift to 2.x
 ```
 
 - Use the **imperative mood** in the summary ("add", not "added" or "adds").
+
+## Code Style
+
+Ascent follows the official [Effective Dart: Style Guide](https://dart.dev/effective-dart/style) and general Flutter best practices. Please keep contributions consistent with the existing codebase.
+
+### Formatting
+
+- Run `dart format .` before every commit. The project follows an **80-character line length** convention.
+- Use `flutter analyze` to catch lint issues before opening a PR.
+- Do not suppress lint warnings with `// ignore:` comments unless absolutely necessary; if you do, always explain why.
+
+```bash
+dart format .
+flutter analyze
+```
+
+### Comments & Documentation
+
+- Write [documentation comments](https://dart.dev/language/comments#documentation-comments) (`///`) for all public APIs such as classes, methods, and top-level functions.
+- Use plain `//` comments for inline implementation notes.
+- Documentation comments should explain **what** the code does and **why** it exists, rather than describing **how** it works.
+- Prefer self-documenting code instead of excessive comments.
+- Omit obvious doc comments such as `/// The title of the task.` on a field named `taskTitle`.
+- Start doc comments with a **brief, single-sentence summary** ending with a period. Add further detail after a blank line if needed.
