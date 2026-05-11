@@ -10,7 +10,7 @@ Built for **speed** and **efficiency**. Perfect for productivity on the go!
 - **Lightweight & optimized** (no lag, fast startup)
 - **Clean UI** with dark/light mode
 
-Try it now and boost your workflow! Contributions welcome.
+Try it now and boost your workflow! Contributions are welcome.
 
 ## Stats
 
