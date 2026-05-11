@@ -35,13 +35,12 @@ Try it now and boost your workflow! Contributions are welcome.
 
 ## Screenshots
 
-<table>
-    <tr>
-        <td> <img src="./assets/canvas/canvas-1.png"> </td>
-        <td> <img src="./assets/canvas/canvas-2.png"> </td>
-        <td> <img src="./assets/canvas/canvas-3.png"> </td>
-    </tr>
-</table>
+<table><tr><td>
+
+| ![Canvas 1](./assets/canvas/canvas-1.png) | ![Canvas 1](./assets/canvas/canvas-2.png) | ![Canvas 1](./assets/canvas/canvas-3.png) |
+| ----------------------------------------- | ----------------------------------------- | ----------------------------------------- |
+
+</td></tr></table>
 <!-- TODO: Add screenshots -->
 
 ## Contributing
