@@ -35,11 +35,13 @@ Try it now and boost your workflow! Contributions are welcome.
 
 ## Screenshots
 
-<tr>
-    <td> <img src="./assets/canvas/canvas-1.png"> </td>
-    <td> <img src="./assets/canvas/canvas-2.png"> </td>
-    <td> <img src="./assets/canvas/canvas-3.png"> </td>
-</tr>
+<table>
+    <tr>
+        <td> <img src="./assets/canvas/canvas-1.png"> </td>
+        <td> <img src="./assets/canvas/canvas-2.png"> </td>
+        <td> <img src="./assets/canvas/canvas-3.png"> </td>
+    </tr>
+</table>
 <!-- TODO: Add screenshots -->
 
 ## Contributing
