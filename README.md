@@ -35,6 +35,11 @@ Try it now and boost your workflow! Contributions are welcome.
 
 ## Screenshots
 
+<tr>
+    <td> <img src="./temp/ui/canvas-1.png"> </td>
+    <td> <img src="./temp/ui/canvas-2.png"> </td>
+    <td> <img src="./temp/ui/canvas-3.png"> </td>
+</tr>
 <!-- TODO: Add screenshots -->
 
 ## Contributing
